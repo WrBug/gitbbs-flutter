@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gitbbs/nativebirdge/MmkvChannel.dart';
 import 'home.dart';
 import 'package:gitbbs/network/github/GithubHttpRequest.dart';
+import 'package:flutter/services.dart';
 
 void main() => runApp(MyApp());
 
@@ -30,10 +32,12 @@ class _MyHomePageState extends State<MyHomePage> {
   var index = 0;
   final items = [
     BottomNavigationBarItem(icon: Icon(Icons.home), title: Text("主页")),
+    BottomNavigationBarItem(
+        icon: Icon(Icons.question_answer), title: Text("问答")),
     BottomNavigationBarItem(icon: Icon(Icons.favorite), title: Text("收藏")),
     BottomNavigationBarItem(icon: Icon(Icons.people), title: Text("我的"))
   ];
-  final bodies = [HomePage(), Text("2"), Text("3")];
+  final bodies = [HomePage(), Text("2"), Text("3"), Text("3")];
 
   @override
   Widget build(BuildContext context) {
