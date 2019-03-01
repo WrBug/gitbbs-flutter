@@ -34,6 +34,19 @@ class GithubUser {
   @JsonKey(name: 'site_admin')
   bool siteAdmin;
   String type;
+  String name;
+  String company;
+  String blog;
+  String location;
+  String email;
+  bool hireable;
+  String bio;
+  @JsonKey(name: 'public_repos')
+  int publicRepos;
+  int following;
+  int followers;
+  @JsonKey(name: 'disk_usage')
+  int diskUsage;
 
   GithubUser();
 

@@ -1,9 +1,9 @@
-import 'package:gitbbs/network/Request.dart';
+import 'package:gitbbs/network/GitHttpClient.dart';
 import 'package:gitbbs/network/github/model/GithubComment.dart';
 import 'package:gitbbs/network/github/model/GithubIssue.dart';
+import 'package:gitbbs/network/github/model/GithubUser.dart';
 import '../GitHttpRequest.dart';
 import 'GitHubNetWorkAdapter.dart';
-import 'package:dio/dio.dart';
 
 class GithubHttpRequest implements GitHttpRequest {
   GitHttpClient client;
@@ -21,7 +21,9 @@ class GithubHttpRequest implements GitHttpRequest {
       response.data.forEach((item) {
         list.add(GithubComment.fromJson(item));
       });
-      callback(list);
+      callback(true, list);
+    }).catchError((err) {
+      callback(false, '');
     });
   }
 
@@ -29,6 +31,8 @@ class GithubHttpRequest implements GitHttpRequest {
   getIssue(int number, Function callback) {
     client.execute(adapter.getIssue(number)).then((response) {
       callback(GithubIssue.fromJson(response.data));
+    }).catchError((err) {
+      callback(false, '');
     });
   }
 
@@ -36,27 +40,18 @@ class GithubHttpRequest implements GitHttpRequest {
   createIssue(String title, String body, String label, Function callback) {
     client.execute(adapter.createIssue(title, body, label)).then((response) {
       callback(GithubIssue.fromJson(response.data));
+    }).catchError((err) {
+      callback(false, '');
     });
   }
-}
 
-class GitHttpClient {
-  Dio dio;
-  String baseUrl;
-
-  GitHttpClient(this.baseUrl) {
-    dio = Dio(
-        BaseOptions(baseUrl: baseUrl, headers: {'Authorization': 'token xxx'}));
-  }
-
-  Future<Response> execute(Request request) async {
-    if (request.method == Method.GET) {
-      var response =
-          await dio.get(request.path, queryParameters: request.params);
-      return response;
-    } else {
-      var response = await dio.post(request.path, data: request.params);
-      return response;
-    }
+  @override
+  doAuthenticated(String token, Function callback) {
+    client.execute(adapter.doAuthenticated(token)).then((response) {
+      callback(true, GithubUser.fromJson(response.data));
+      client.setToken(token);
+    }).catchError((err) {
+      callback(false, '');
+    });
   }
 }

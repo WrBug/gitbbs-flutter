@@ -15,4 +15,5 @@ abstract class GitNetworkRequestAdapter {
 
   Request getComments(int number);
 
+  Request doAuthenticated(String token);
 }

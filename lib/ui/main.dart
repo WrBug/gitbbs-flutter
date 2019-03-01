@@ -47,8 +47,6 @@ class _MyHomePageState extends State<MyHomePage> {
           setState(() {
             this.index = index;
           });
-          var request = GithubHttpRequest();
-          request.createIssue("测试", "测试测试！@#", "bbs", () {});
         },
         type: BottomNavigationBarType.fixed,
         currentIndex: index,

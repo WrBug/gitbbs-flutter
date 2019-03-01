@@ -24,7 +24,18 @@ GithubUser _$GithubUserFromJson(Map<String, dynamic> json) {
     ..eventsUrl = json['events_url'] as String
     ..receivedEventsUrl = json['received_events_url'] as String
     ..siteAdmin = json['site_admin'] as bool
-    ..type = json['type'] as String;
+    ..type = json['type'] as String
+    ..name = json['name'] as String
+    ..company = json['company'] as String
+    ..blog = json['blog'] as String
+    ..location = json['location'] as String
+    ..email = json['email'] as String
+    ..hireable = json['hireable'] as bool
+    ..bio = json['bio'] as String
+    ..publicRepos = json['public_repos'] as int
+    ..following = json['following'] as int
+    ..followers = json['followers'] as int
+    ..diskUsage = json['disk_usage'] as int;
 }
 
 Map<String, dynamic> _$GithubUserToJson(GithubUser instance) =>
@@ -45,5 +56,16 @@ Map<String, dynamic> _$GithubUserToJson(GithubUser instance) =>
       'events_url': instance.eventsUrl,
       'received_events_url': instance.receivedEventsUrl,
       'site_admin': instance.siteAdmin,
-      'type': instance.type
+      'type': instance.type,
+      'name': instance.name,
+      'company': instance.company,
+      'blog': instance.blog,
+      'location': instance.location,
+      'email': instance.email,
+      'hireable': instance.hireable,
+      'bio': instance.bio,
+      'public_repos': instance.publicRepos,
+      'following': instance.following,
+      'followers': instance.followers,
+      'disk_usage': instance.diskUsage
     };
