@@ -1,7 +1,9 @@
 import 'package:gitbbs/model/GitUser.dart';
+import 'package:gitbbs/model/event/UserUpdatedEvent.dart';
 import 'package:gitbbs/nativebirdge/MmkvChannel.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
 import 'package:gitbbs/network/github/GithubHttpRequest.dart';
+import 'package:gitbbs/util/EventBusHelper.dart';
 
 class UserCacheManager {
   static String _token = '';
@@ -15,6 +17,7 @@ class UserCacheManager {
       _token = token;
       _mmkvChannel.getUser().then((user) {
         _user = user;
+        EventBusHelper.fire(UserUpdatedEvent(user));
         _checkToken();
       });
     });
@@ -39,11 +42,15 @@ class UserCacheManager {
   }
 
   static _checkToken() {
-    _request.doAuthenticated(_token, (success, user) {
+    _request.doAuthenticated(_token, (success, GitUser user) {
       _authFailed = !success;
       if (success) {
+        if (user.isEqual(_user)) {
+          return;
+        }
         _user = user;
         _mmkvChannel.saveUser(user);
+        EventBusHelper.fire(UserUpdatedEvent(user));
       }
     });
   }

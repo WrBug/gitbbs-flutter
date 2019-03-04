@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gitbbs/constant/ColorConstant.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
 import 'package:gitbbs/network/github/GithubHttpRequest.dart';
 
@@ -7,7 +8,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: app_primary,
       ),
       home: LoginPageContent(),
     );
@@ -91,7 +92,7 @@ class _LoginPage extends State<LoginPageContent> {
         Expanded(
             child: RaisedButton(
           onPressed: _onClick(context),
-          color: Colors.blue,
+          color: app_primary,
           textColor: Colors.white,
           child: _loading
               ? Container(

@@ -1,11 +1,17 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:gitbbs/constant/ColorConstant.dart';
+import 'package:gitbbs/model/GitUser.dart';
 import 'package:gitbbs/model/UserCacheManager.dart';
-import 'package:gitbbs/ui/login/LoginPage.dart';
+import 'package:gitbbs/model/event/UserUpdatedEvent.dart';
 import 'package:gitbbs/ui/main/home.dart';
+import 'package:gitbbs/ui/main/user.dart';
+import 'package:gitbbs/util/EventBusHelper.dart';
 
 void main() {
   UserCacheManager.init();
-  runApp(LoginPage());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -14,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: app_primary,
       ),
       home: MyHomePage(title: 'Gitbbs'),
     );
@@ -38,13 +44,51 @@ class _MyHomePageState extends State<MyHomePage> {
     BottomNavigationBarItem(icon: Icon(Icons.favorite), title: Text("收藏")),
     BottomNavigationBarItem(icon: Icon(Icons.face), title: Text("我的"))
   ];
-  final bodies = [HomePage(), Text("2"), Text("3"), Text('')];
+  final title = ['主页', '问答', '收藏', '我的'];
+  final bodies = [HomeTab(), Text("2"), Text("3"), UserTab()];
+  GitUser _user;
+  StreamSubscription subscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _user = UserCacheManager.getUser();
+    subscription = EventBusHelper.on<UserUpdatedEvent>().listen((event) {
+      setState(() {
+        _user = event.user;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    subscription.cancel();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: index != 3
+            ? Text(title[index])
+            : Stack(
+                alignment: Alignment.centerLeft,
+                children: <Widget>[
+                  GestureDetector(
+                    child: Icon(
+                      Icons.settings,
+                      color: Colors.white,
+                    ),
+                    onTap: () {},
+                  ),
+                  Center(
+                    child: Text(_user == null ? '请登录' : _user.name),
+                  )
+                ],
+              ),
+        elevation: 0,
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: items,

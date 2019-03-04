@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
+class HomeTab extends StatefulWidget {
   var size = 100;
 
   @override
-  State<StatefulWidget> createState() => _HomePage();
+  State<StatefulWidget> createState() => _HomeTab();
 }
 
-class _HomePage extends State<HomePage> {
+class _HomeTab extends State<HomeTab> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
