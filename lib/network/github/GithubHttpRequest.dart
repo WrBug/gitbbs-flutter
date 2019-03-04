@@ -1,3 +1,4 @@
+import 'package:gitbbs/model/UserCacheManager.dart';
 import 'package:gitbbs/nativebirdge/MmkvChannel.dart';
 import 'package:gitbbs/network/GitHttpClient.dart';
 import 'package:gitbbs/network/github/model/GithubComment.dart';
@@ -70,7 +71,7 @@ class GithubHttpRequest implements GitHttpRequest {
         callback(false);
         return;
       }
-      MmkvChannel.getInstance().saveToken(str);
+      UserCacheManager.saveToken(str);
       callback(true);
     }).catchError((err) {
       callback(false);

@@ -14,15 +14,5 @@ class MainActivity : FlutterActivity() {
         super.onCreate(savedInstanceState)
         GeneratedPluginRegistrant.registerWith(this)
         FlutterBridge(flutterView).inject()
-//        MethodChannel(flutterView, CHANNEL).setMethodCallHandler { methodCall, result ->
-//            when (methodCall.method) {
-//                "get" -> {
-//                    result.success("hehe")
-//                }
-//                else -> {
-//                    result.notImplemented()
-//                }
-//            }
-//        }
     }
 }

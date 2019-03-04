@@ -1,9 +1,10 @@
+import 'package:gitbbs/model/GitUser.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'GithubUser.g.dart';
 
 @JsonSerializable()
-class GithubUser {
+class GithubUser extends GitUser {
   String login;
   int id;
   @JsonKey(name: 'node_id')

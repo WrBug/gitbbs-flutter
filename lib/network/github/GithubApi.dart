@@ -14,10 +14,10 @@ class GithubApi {
     _dio = Dio();
     (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (HttpClient client) {
-      client.findProxy = (uri) {
-        //proxy all request to localhost:8888
-        return "PROXY 10.1.133.14:8888";
-      };
+//      client.findProxy = (uri) {
+//        //proxy all request to localhost:8888
+//        return "PROXY 10.1.133.14:8888";
+//      };
       client.badCertificateCallback =
           (X509Certificate cert, String host, int port) => true;
     };
