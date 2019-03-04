@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gitbbs/ui/login/LoginPage.dart';
 import 'package:gitbbs/ui/main/home.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(LoginPage());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

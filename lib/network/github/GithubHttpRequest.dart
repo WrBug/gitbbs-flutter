@@ -71,7 +71,7 @@ class GithubHttpRequest implements GitHttpRequest {
         return;
       }
       MmkvChannel.getInstance().saveToken(str);
-      callback(true, str);
+      callback(true);
     }).catchError((err) {
       callback(false);
     });
