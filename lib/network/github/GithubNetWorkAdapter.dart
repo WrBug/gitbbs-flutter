@@ -3,7 +3,7 @@ import 'package:gitbbs/network/Request.dart';
 import '../GitNetworkRequestAdapter.dart';
 import 'dart:convert';
 
-class GitHubNetWorkAdapter extends GitNetworkRequestAdapter {
+class GithubNetWorkAdapter extends GitNetworkRequestAdapter {
   @override
   String getApiUrl() => 'https://api.github.com';
 

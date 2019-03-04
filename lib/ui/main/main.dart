@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gitbbs/ui/LoginPage.dart';
-import 'home.dart';
+import 'package:gitbbs/ui/login/LoginPage.dart';
+import 'package:gitbbs/ui/main/home.dart';
 
 void main() => runApp(MyApp());
 
@@ -9,7 +9,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -35,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
     BottomNavigationBarItem(icon: Icon(Icons.favorite), title: Text("收藏")),
     BottomNavigationBarItem(icon: Icon(Icons.face), title: Text("我的"))
   ];
-  final bodies = [HomePage(), Text("2"), Text("3"), LoginPage()];
+  final bodies = [HomePage(), Text("2"), Text("3"), Text('')];
 
   @override
   Widget build(BuildContext context) {
