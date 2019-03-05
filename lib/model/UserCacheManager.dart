@@ -17,7 +17,7 @@ class UserCacheManager {
       _token = token;
       _mmkvChannel.getUser().then((user) {
         _user = user;
-        EventBusHelper.fire(UserUpdatedEvent(user));
+        EventBusHelper.fire(UserUpdatedEvent(user, _authFailed));
         _checkToken();
       });
     });
@@ -25,8 +25,13 @@ class UserCacheManager {
 
   static saveToken(String token) {
     _token = token;
+    _user = null;
     _mmkvChannel.saveToken(token);
     _checkToken();
+  }
+
+  static Stream<UserUpdatedEvent> addUserChangedListener() {
+    return EventBusHelper.on<UserUpdatedEvent>();
   }
 
   static GitUser getUser() {
@@ -42,16 +47,19 @@ class UserCacheManager {
   }
 
   static _checkToken() {
-    _request.doAuthenticated(_token, (success, GitUser user) {
-      _authFailed = !success;
-      if (success) {
-        if (user.isEqual(_user)) {
-          return;
-        }
+    if (_token == '' || _token == null) {
+      return;
+    }
+    _request.doAuthenticated(_token).then((user) {
+      _authFailed = false;
+      if (!user.isEqual(_user)) {
         _user = user;
         _mmkvChannel.saveUser(user);
-        EventBusHelper.fire(UserUpdatedEvent(user));
+        EventBusHelper.fire(UserUpdatedEvent(user, _authFailed));
       }
+    }).catchError((e) {
+      _authFailed = true;
+      EventBusHelper.fire(UserUpdatedEvent(null, true));
     });
   }
 }

@@ -53,16 +53,17 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _user = UserCacheManager.getUser();
-    subscription = EventBusHelper.on<UserUpdatedEvent>().listen((event) {
-      setState(() {
-        _user = event.user;
-      });
+    subscription = UserCacheManager.addUserChangedListener().listen((event) {
+      if (!event.authFailed) {
+        setState(() {
+          _user = event.user;
+        });
+      }
     });
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     subscription.cancel();
   }

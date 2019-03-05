@@ -1,7 +1,10 @@
+import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gitbbs/constant/ColorConstant.dart';
 import 'package:gitbbs/model/GitUser.dart';
 import 'package:gitbbs/model/UserCacheManager.dart';
+import 'package:gitbbs/ui/login/LoginPage.dart';
 
 class UserTab extends StatefulWidget {
   @override
@@ -10,12 +13,26 @@ class UserTab extends StatefulWidget {
 
 class _UserTab extends State<UserTab> {
   GitUser _user;
+  bool _authFailed = false;
+  StreamSubscription _subscription;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _user = UserCacheManager.getUser();
+    _authFailed = UserCacheManager.isAuthFailed();
+    _subscription = UserCacheManager.addUserChangedListener().listen((event) {
+      setState(() {
+        _authFailed = event.authFailed;
+        _user = event.user;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _subscription.cancel();
   }
 
   @override
@@ -34,34 +51,54 @@ class _UserTab extends State<UserTab> {
 
   _headerBuild() {
     return Container(
-      color: app_primary,
-      height: 130,
-      child: Column(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.all(6),
-          ),
-          Center(
-              child: ClipOval(
-            child: FadeInImage.assetNetwork(
-              placeholder: "assets/github.png",
-              //预览图
-              fit: BoxFit.fitWidth,
-              image: _user.avatarUrl,
-              width: 60.0,
-              height: 60.0,
-            ),
-          )),
-          Padding(
-            padding: EdgeInsets.all(8),
-          ),
-          Center(
-              child: Text(
-            _user.bio,
-            style: TextStyle(color: Colors.white, fontSize: 14),
-          ))
-        ],
+        color: app_primary,
+        height: 130,
+        child: _authFailed || _user == null
+            ? _noUserHeaderBuild()
+            : _normalHeaderBuild());
+  }
+
+  _noUserHeaderBuild() {
+    return Center(
+        child: GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => LoginPage()));
+      },
+      child: Text(
+        '点击登录>>',
+        style: TextStyle(color: Colors.white, fontSize: 24),
       ),
+    ));
+  }
+
+  _normalHeaderBuild() {
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.all(6),
+        ),
+        Center(
+            child: ClipOval(
+          child: CachedNetworkImage(
+              width: 60,
+              height: 60,
+              imageUrl: _user.avatarUrl,
+              placeholder: (context, url) {
+                return CircularProgressIndicator();
+              },
+              errorWidget: (context, url, error) =>
+                  Image.asset('assets/user_avatar_default.png')),
+        )),
+        Padding(
+          padding: EdgeInsets.all(8),
+        ),
+        Center(
+            child: Text(
+          _user.bio,
+          style: TextStyle(color: Colors.white, fontSize: 14),
+        ))
+      ],
     );
   }
 }

@@ -3,26 +3,14 @@ import 'package:gitbbs/constant/ColorConstant.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
 import 'package:gitbbs/network/github/GithubHttpRequest.dart';
 
-class LoginPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: app_primary,
-      ),
-      home: LoginPageContent(),
-    );
-  }
-}
-
-class LoginPageContent extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   final GitHttpRequest request = GithubHttpRequest.getInstance();
 
   @override
   State<StatefulWidget> createState() => _LoginPage();
 }
 
-class _LoginPage extends State<LoginPageContent> {
+class _LoginPage extends State<LoginPage> {
   var _loading = false;
   var _formKey = new GlobalKey<FormState>();
   var _username = '';
@@ -124,19 +112,25 @@ class _LoginPage extends State<LoginPageContent> {
             .showSnackBar(SnackBar(content: Text('GITHUB密码不得为空')));
         return;
       }
+      Scaffold.of(context).showSnackBar(SnackBar(content: Text('正在验证密码，请稍后')));
       setState(() {
         _loading = true;
       });
-      widget.request.signIn(_username, _password, (success) {
+      widget.request.signIn(_username, _password).then((success) {
         if (success) {
           Scaffold.of(context).showSnackBar(SnackBar(content: Text('登录成功')));
+          Navigator.pop(this.context);
         } else {
           Scaffold.of(context).showSnackBar(SnackBar(content: Text('登录失败')));
+          setState(() {
+            _loading = false;
+          });
         }
+      }).catchError((e) {
+        Scaffold.of(context).showSnackBar(SnackBar(content: Text('登录失败')));
         setState(() {
           _loading = false;
         });
-        print('登录状态：' + success.toString());
       });
     };
   }

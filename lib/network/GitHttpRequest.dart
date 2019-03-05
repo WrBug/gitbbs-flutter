@@ -1,11 +1,15 @@
+import 'package:gitbbs/model/GitUser.dart';
+import 'package:gitbbs/network/github/model/GithubComment.dart';
+import 'package:gitbbs/network/github/model/GithubIssue.dart';
+
 abstract class GitHttpRequest {
-  getComments(int number, Function callback);
+  Future<List<GithubComment>> getComments(int number);
 
-  getIssue(int number, Function callback);
+  Future<GithubIssue> getIssue(int number);
 
-  createIssue(String title, String body, String label, Function callback);
+  Future<GithubIssue> createIssue(String title, String body, String label);
 
-  doAuthenticated(String token, Function callback);
+  Future<GitUser> doAuthenticated(String token);
 
-  signIn(String username, String password, Function callback);
+  Future<bool> signIn(String username, String password);
 }

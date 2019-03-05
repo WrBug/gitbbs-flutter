@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:gitbbs/constant/Constant.dart';
+import 'package:gitbbs/constant/NetworkConstant.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 
@@ -14,10 +15,12 @@ class GithubApi {
     _dio = Dio();
     (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (HttpClient client) {
-//      client.findProxy = (uri) {
-//        //proxy all request to localhost:8888
-//        return "PROXY 10.1.133.14:8888";
-//      };
+      if (ENABLE_PROXY) {
+        client.findProxy = (uri) {
+          //proxy all request to localhost:8888
+          return "PROXY $PROXY_ADDRESS:$PROXY_PORT";
+        };
+      }
       client.badCertificateCallback =
           (X509Certificate cert, String host, int port) => true;
     };
@@ -116,3 +119,6 @@ class GithubApi {
     });
   }
 }
+
+
+

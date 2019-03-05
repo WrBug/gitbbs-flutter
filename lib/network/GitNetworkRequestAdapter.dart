@@ -1,17 +1,17 @@
+import 'package:gitbbs/constant/GitConstant.dart';
+
 import 'Request.dart';
 
 abstract class GitNetworkRequestAdapter {
-  final owner="wrbug";
-  var assignees = "wrbug";
-
-  final repoName = "gitbbstest";
+  final owner = REPO_OWNER;
+  var assignees = REPO_ASSIGNEES;
+  final repoName = REPO_NAME;
 
   String getApiUrl();
 
   Request createIssue(String title, String body, String label);
 
   Request getIssue(int number);
-
 
   Request getComments(int number);
 

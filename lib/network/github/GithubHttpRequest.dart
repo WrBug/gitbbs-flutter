@@ -1,3 +1,4 @@
+import 'package:gitbbs/model/GitUser.dart';
 import 'package:gitbbs/model/UserCacheManager.dart';
 import 'package:gitbbs/nativebirdge/MmkvChannel.dart';
 import 'package:gitbbs/network/GitHttpClient.dart';
@@ -23,58 +24,43 @@ class GithubHttpRequest implements GitHttpRequest {
   }
 
   @override
-  getComments(int number, Function callback) {
-    _client.execute(_adapter.getComments(number)).then((response) {
-      List<GithubComment> list = List<GithubComment>();
-      response.data.forEach((item) {
-        list.add(GithubComment.fromJson(item));
-      });
-      callback(true, list);
-    }).catchError((err) {
-      callback(false, '');
+  getComments(int number) async {
+    var response = await _client.execute(_adapter.getComments(number));
+    List<GithubComment> list = List<GithubComment>();
+    response.data.forEach((item) {
+      list.add(GithubComment.fromJson(item));
     });
+    return list;
   }
 
   @override
-  getIssue(int number, Function callback) {
-    _client.execute(_adapter.getIssue(number)).then((response) {
-      callback(GithubIssue.fromJson(response.data));
-    }).catchError((err) {
-      callback(false, '');
-    });
+  getIssue(int number) async {
+    var response = await _client.execute(_adapter.getIssue(number));
+    return GithubIssue.fromJson(response.data);
   }
 
   @override
-  createIssue(String title, String body, String label, Function callback) {
-    _client.execute(_adapter.createIssue(title, body, label)).then((response) {
-      callback(GithubIssue.fromJson(response.data));
-    }).catchError((err) {
-      callback(false, '');
-    });
+  Future<GithubIssue> createIssue(
+      String title, String body, String label) async {
+    var response =
+        await _client.execute(_adapter.createIssue(title, body, label));
+    return GithubIssue.fromJson(response.data);
   }
 
   @override
-  doAuthenticated(String token, Function callback) {
-    _client.execute(_adapter.doAuthenticated(token)).then((response) {
-      callback(true, GithubUser.fromJson(response.data));
-      _client.setToken(token);
-    }).catchError((err) {
-      callback(false, '');
-    });
+  Future<GitUser> doAuthenticated(String token) async {
+    var response = await _client.execute(_adapter.doAuthenticated(token));
+    return GithubUser.fromJson(response.data);
   }
 
   @override
-  signIn(String username, String password, Function callback) {
+  Future<bool> signIn(String username, String password) async {
     var _githubApi = GithubApi();
-    _githubApi.signIn(username, password).then((str) {
-      if (str == '') {
-        callback(false);
-        return;
-      }
-      UserCacheManager.saveToken(str);
-      callback(true);
-    }).catchError((err) {
-      callback(false);
-    });
+    var str = await _githubApi.signIn(username, password);
+    if (str == '') {
+      return false;
+    }
+    UserCacheManager.saveToken(str);
+    return true;
   }
 }

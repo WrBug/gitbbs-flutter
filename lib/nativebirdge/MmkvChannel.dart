@@ -34,6 +34,9 @@ class MmkvChannel {
   Future<GitUser> getUser() async {
     try {
       String json = await platform.invokeMethod('getUser');
+      if (json == null || json == '') {
+        return Future.value(null);
+      }
       return GithubUser.fromJson(jsonDecode(json));
     } on PlatformException catch (e) {
       return Future.value(null);
