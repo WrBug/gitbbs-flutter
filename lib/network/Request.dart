@@ -1,10 +1,10 @@
 class Request {
   String path;
-  Map<String,dynamic> params;
+  Map<String, dynamic> params;
   Method method;
-  Map<String,dynamic> header;
+  Map<String, dynamic> header;
 
-  Request(this.path, this.params, this.method,this.header);
+  Request(this.path, this.params, this.method, {this.header});
 
   String toParams() {
     String paramStr = '?';

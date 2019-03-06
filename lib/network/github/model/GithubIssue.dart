@@ -1,3 +1,5 @@
+import 'package:gitbbs/model/GitIssue.dart';
+import 'package:gitbbs/model/GitUser.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'GithubUser.dart';
 import 'GithubLabel.dart';
@@ -5,7 +7,7 @@ import 'GithubLabel.dart';
 part 'GithubIssue.g.dart';
 
 @JsonSerializable()
-class GithubIssue {
+class GithubIssue implements GitIssue {
   GithubIssue();
 
   String url;
@@ -48,4 +50,56 @@ class GithubIssue {
       _$GithubIssueFromJson(json);
 
   Map<String, dynamic> toJson() => _$GithubIssueToJson(this);
+
+  @override
+  GitUser getAuthor() {
+    // TODO: implement getAuthor
+    return user;
+  }
+
+  @override
+  int getCommentsCount() {
+    // TODO: implement getCommentsCount
+    return comments;
+  }
+
+  @override
+  String getClosedAt() {
+    return closedAt;
+  }
+
+  @override
+  String getCreateTime() {
+    return createAt;
+  }
+
+  @override
+  int getNumber() {
+    return number;
+  }
+
+  @override
+  String getTitle() {
+    return title;
+  }
+
+  @override
+  String getUpdateTime() {
+    return updatedAt;
+  }
+
+  @override
+  bool isClosed() {
+    return closedAt == null || createAt == '';
+  }
+
+  @override
+  bool isLocked() {
+    return locked;
+  }
+
+  @override
+  String getCursor() {
+    return '';
+  }
 }

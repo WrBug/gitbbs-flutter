@@ -5,6 +5,7 @@ import 'package:gitbbs/constant/ColorConstant.dart';
 import 'package:gitbbs/model/GitUser.dart';
 import 'package:gitbbs/model/UserCacheManager.dart';
 import 'package:gitbbs/ui/login/LoginPage.dart';
+import 'package:gitbbs/ui/widget/AvatarImg.dart';
 
 class UserTab extends StatefulWidget {
   @override
@@ -78,18 +79,7 @@ class _UserTab extends State<UserTab> {
         Padding(
           padding: EdgeInsets.all(6),
         ),
-        Center(
-            child: ClipOval(
-          child: CachedNetworkImage(
-              width: 60,
-              height: 60,
-              imageUrl: _user.avatarUrl,
-              placeholder: (context, url) {
-                return CircularProgressIndicator();
-              },
-              errorWidget: (context, url, error) =>
-                  Image.asset('assets/user_avatar_default.png')),
-        )),
+        Center(child: AvatarImg(_user.getAvatarUrl())),
         Padding(
           padding: EdgeInsets.all(8),
         ),

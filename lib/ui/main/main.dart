@@ -4,17 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:gitbbs/constant/ColorConstant.dart';
 import 'package:gitbbs/model/GitUser.dart';
 import 'package:gitbbs/model/UserCacheManager.dart';
-import 'package:gitbbs/model/event/UserUpdatedEvent.dart';
-import 'package:gitbbs/ui/main/home.dart';
-import 'package:gitbbs/ui/main/user.dart';
-import 'package:gitbbs/util/EventBusHelper.dart';
+import 'package:gitbbs/ui/main/HomeTab.dart';
+import 'package:gitbbs/ui/main/UserTab.dart';
 
 void main() {
   UserCacheManager.init();
-  runApp(MyApp());
+  runApp(App());
 }
 
-class MyApp extends StatelessWidget {
+class App extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -22,21 +20,19 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: app_primary,
       ),
-      home: MyHomePage(title: 'Gitbbs'),
+      home: MainPage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
+class MainPage extends StatefulWidget {
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MainPageState createState() => _MainPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  var index = 0;
+class _MainPageState extends State<MainPage> {
+  var _currentPageIndex = 0;
   final items = [
     BottomNavigationBarItem(icon: Icon(Icons.home), title: Text("主页")),
     BottomNavigationBarItem(
@@ -44,10 +40,11 @@ class _MyHomePageState extends State<MyHomePage> {
     BottomNavigationBarItem(icon: Icon(Icons.favorite), title: Text("收藏")),
     BottomNavigationBarItem(icon: Icon(Icons.face), title: Text("我的"))
   ];
-  final title = ['主页', '问答', '收藏', '我的'];
   final bodies = [HomeTab(), Text("2"), Text("3"), UserTab()];
+  final title = ['主页', '问答', '收藏', '我的'];
   GitUser _user;
   StreamSubscription subscription;
+  PageController _controller = PageController();
 
   @override
   void initState() {
@@ -72,8 +69,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: index != 3
-            ? Text(title[index])
+        title: _currentPageIndex != 3
+            ? Text(title[_currentPageIndex])
             : Stack(
                 alignment: Alignment.centerLeft,
                 children: <Widget>[
@@ -85,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     onTap: () {},
                   ),
                   Center(
-                    child: Text(_user == null ? '请登录' : _user.name),
+                    child: Text(_user == null ? '请登录' : _user.getName()),
                   )
                 ],
               ),
@@ -94,14 +91,26 @@ class _MyHomePageState extends State<MyHomePage> {
       bottomNavigationBar: BottomNavigationBar(
         items: items,
         onTap: (index) {
-          setState(() {
-            this.index = index;
-          });
+          _controller.jumpToPage(index);
         },
         type: BottomNavigationBarType.fixed,
-        currentIndex: index,
+        currentIndex: _currentPageIndex,
       ),
-      body: bodies[index],
+      body: PageView.builder(
+        controller: _controller,
+        itemBuilder: (context, index) => bodies[index],
+        itemCount: bodies.length,
+        onPageChanged: _pageChange,
+      ),
     );
+  }
+
+  void _pageChange(int index) {
+    print('_pageChange $index');
+    setState(() {
+      if (_currentPageIndex != index) {
+        _currentPageIndex = index;
+      }
+    });
   }
 }

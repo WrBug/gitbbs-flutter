@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 abstract class GitUser {
-  String avatarUrl;
-  String name;
+  String getAvatarUrl();
+
+  String getName();
+
   String bio;
 
   bool isEqual(GitUser other) {

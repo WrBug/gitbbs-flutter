@@ -55,4 +55,14 @@ class GithubUser extends GitUser {
       _$GithubUserFromJson(json);
 
   Map<String, dynamic> toJson() => _$GithubUserToJson(this);
+
+  @override
+  String getAvatarUrl() {
+    return avatarUrl;
+  }
+
+  @override
+  String getName() {
+    return name == null || name == '' ? login : name;
+  }
 }

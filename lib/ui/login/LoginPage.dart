@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gitbbs/constant/AssetsConstant.dart';
 import 'package:gitbbs/constant/ColorConstant.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
 import 'package:gitbbs/network/github/GithubHttpRequest.dart';
@@ -32,7 +33,7 @@ class _LoginPage extends State<LoginPage> {
               children: <Widget>[
                 Center(
                   child: Image.asset(
-                    'assets/github.png',
+                    ic_github,
                     width: 100,
                   ),
                 ),
