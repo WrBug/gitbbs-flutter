@@ -102,4 +102,9 @@ class GithubIssue implements GitIssue {
   String getCursor() {
     return '';
   }
+
+  @override
+  GitIssue clone() {
+    return GithubIssue.fromJson(toJson());
+  }
 }

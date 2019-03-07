@@ -3,7 +3,7 @@ import 'package:gitbbs/model/event/UserUpdatedEvent.dart';
 import 'package:gitbbs/nativebirdge/MmkvChannel.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
 import 'package:gitbbs/network/github/GithubHttpRequest.dart';
-import 'package:gitbbs/util/EventBusHelper.dart';
+import 'package:gitbbs/util/event_bus_helper.dart';
 
 class UserCacheManager {
   static String _token = '';

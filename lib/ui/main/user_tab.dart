@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:gitbbs/constant/ColorConstant.dart';
 import 'package:gitbbs/model/GitUser.dart';
 import 'package:gitbbs/model/UserCacheManager.dart';
-import 'package:gitbbs/ui/login/LoginPage.dart';
-import 'package:gitbbs/ui/widget/AvatarImg.dart';
+import 'package:gitbbs/ui/login/login_page.dart';
+import 'package:gitbbs/ui/widget/avatar_img.dart';
 
 class UserTab extends StatefulWidget {
   @override

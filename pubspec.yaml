@@ -27,6 +27,8 @@ dependencies:
   cached_network_image: ^0.6.2
   common_utils: ^1.0.9
   flutter_easyrefresh: ^1.2.7
+  fish_redux:
+    path: fish-redux
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,6 +1,7 @@
 import 'package:gitbbs/model/GitUser.dart';
+import 'package:fish_redux/fish_redux.dart';
 
-abstract class GitIssue {
+abstract class GitIssue implements Cloneable<GitIssue>{
   String getTitle();
 
   int getNumber();

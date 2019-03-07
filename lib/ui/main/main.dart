@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:gitbbs/constant/ColorConstant.dart';
 import 'package:gitbbs/model/GitUser.dart';
 import 'package:gitbbs/model/UserCacheManager.dart';
-import 'package:gitbbs/ui/main/HomeTab.dart';
-import 'package:gitbbs/ui/main/UserTab.dart';
+import 'package:gitbbs/ui/main/home/home_page.dart';
+import 'package:gitbbs/ui/main/user_tab.dart';
 
 void main() {
   UserCacheManager.init();
@@ -26,7 +26,6 @@ class App extends StatelessWidget {
 }
 
 class MainPage extends StatefulWidget {
-
   @override
   _MainPageState createState() => _MainPageState();
 }
@@ -40,7 +39,12 @@ class _MainPageState extends State<MainPage> {
     BottomNavigationBarItem(icon: Icon(Icons.favorite), title: Text("收藏")),
     BottomNavigationBarItem(icon: Icon(Icons.face), title: Text("我的"))
   ];
-  final bodies = [HomeTab(), Text("2"), Text("3"), UserTab()];
+  final bodies = [
+    HomePage().buildPage(<String, dynamic>{}, wantKeepAlive: true),
+    Text("2"),
+    Text("3"),
+    UserTab()
+  ];
   final title = ['主页', '问答', '收藏', '我的'];
   GitUser _user;
   StreamSubscription subscription;

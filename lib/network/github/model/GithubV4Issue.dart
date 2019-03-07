@@ -72,10 +72,15 @@ class GithubV4Issue implements GitIssue {
   String getCursor() {
     return cursor;
   }
+
   factory GithubV4Issue.fromJson(Map<String, dynamic> json) =>
       _$GithubV4IssueFromJson(json);
 
   Map<String, dynamic> toJson() => _$GithubV4IssueToJson(this);
 
-
+  @override
+  GitIssue clone() {
+    // TODO: implement clone
+    return GithubV4Issue.fromJson(toJson());
+  }
 }
