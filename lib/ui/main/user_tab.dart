@@ -85,7 +85,7 @@ class _UserTab extends State<UserTab> {
         ),
         Center(
             child: Text(
-          _user.bio,
+              _user.bio==null?"暂无签名":_user.bio,
           style: TextStyle(color: Colors.white, fontSize: 14),
         ))
       ],
