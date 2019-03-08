@@ -1,5 +1,6 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:gitbbs/model/GitIssue.dart';
+import 'package:gitbbs/model/PagingData.dart';
 import 'package:gitbbs/model/db/gitissue_data_base.dart';
 import 'package:gitbbs/model/entry/midddle_issues_data.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
@@ -20,8 +21,8 @@ Effect<PageState> buildEffect() {
 
 void _init(Action action, Context<PageState> ctx) {
   var db = GitIssueDataBase.createInstance();
-  db.getList().then((initToDos) {
-    ctx.dispatch(PageInnerActionCreator.loadInitData(initToDos));
+  db.getList(size: 10).then((initToDos) {
+    ctx.dispatch(PageInnerActionCreator.loadInitData(initToDos.data));
   });
 }
 
@@ -52,10 +53,19 @@ void _onLoadData(Action action, Context<PageState> ctx) {
   });
 }
 
-void _onLoadMoreData(Action action, Context<PageState> ctx) {
+void _onLoadMoreData(Action action, Context<PageState> ctx) async {
   String cursor = '';
+  int number;
   if (ctx.state.list.isNotEmpty == true) {
     cursor = ctx.state.list.last.getCursor();
+    number = ctx.state.list.last.getNumber();
+  }
+  PagingData<GitIssue> data = await GitIssueDataBase.createInstance()
+      .getList(beforeNumber: number, size: 30);
+  if (data.data.isNotEmpty == true) {
+    ctx.dispatch(PageInnerActionCreator.onLoadMoreDataAction(
+        PagingData(true, data.data)));
+    return;
   }
   GitHttpRequest request = GithubHttpRequest.getInstance();
   request.getMoreIssues(state: IssueState.ALL, after: cursor).then((data) {

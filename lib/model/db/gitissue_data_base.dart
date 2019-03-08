@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
 import 'package:gitbbs/model/GitIssue.dart';
+import 'package:gitbbs/model/PagingData.dart';
 import 'package:gitbbs/model/db/transaction_info.dart';
 import 'package:gitbbs/network/github/model/GithubLabel.dart';
 import 'package:gitbbs/network/github/model/GithubUser.dart';
@@ -144,7 +145,8 @@ class GitIssueDataBase {
     return false;
   }
 
-  Future<List<GitIssue>> getList({int beforeNumber, int size = 50}) async {
+  Future<PagingData<GitIssue>> getList(
+      {int beforeNumber, int size = 50}) async {
     Database database = await db;
     List<GitIssue> issues = List();
     try {
@@ -165,7 +167,7 @@ class GitIssueDataBase {
     } finally {
       database.close();
     }
-    return issues;
+    return PagingData(issues.length == size, issues);
   }
 
   Future<Map<String, dynamic>> _findByNumber(int number) async {
