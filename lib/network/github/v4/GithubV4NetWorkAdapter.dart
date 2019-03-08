@@ -30,8 +30,9 @@ class GithubV4NetWorkAdapter extends GitNetworkRequestAdapter {
 
   @override
   Request getIssue(int number) {
-    var path = "/repos/$owner/$repoName/issues/$number";
-    return Request(path, null, Method.GET);
+    String query = getIssueQuery(number);
+    var map = {'query': query};
+    return V4Request(map);
   }
 
   @override
@@ -72,32 +73,7 @@ class GithubV4NetWorkAdapter extends GitNetworkRequestAdapter {
           edges {
             cursor
             node {
-              title
-              publishedAt
-              updatedAt
-              id
-              number
-              closed
-              closedAt
-              locked
-              author{
-                login
-                avatarUrl
-              }
-              comments{
-                totalCount
-              }
-              labels(first:100) {
-                edges {
-                  node {
-                    name
-                    id
-                    url
-                    color
-                    isDefault
-                  }
-                }
-              }
+              ${getIssueContent()}
             }
           }
         }
@@ -107,5 +83,54 @@ class GithubV4NetWorkAdapter extends GitNetworkRequestAdapter {
         .replaceAll("\t", " ")
         .replaceAll('\n', ' ')
         .replaceAll(RegExp(r' +'), ' ');
+  }
+
+  String getIssueQuery(int number) {
+    return '''
+    {
+  repository(owner: "$owner", name: "$repoName") {
+    issue(number:$number){
+        ${getIssueContent(fields: ['body', 'bodyHTML'])}
+    }
+  }
+}
+
+    '''
+        .replaceAll("\t", " ")
+        .replaceAll('\n', ' ')
+        .replaceAll(RegExp(r' +'), ' ');
+    ;
+  }
+
+  getIssueContent({List<String> fields}) {
+    return '''
+    title
+    publishedAt
+    updatedAt
+    id
+    number
+    closed
+    ${fields == null ? "" : fields.join('\n')}
+    closedAt
+    locked
+    author{
+      login
+      avatarUrl
+    }
+    comments{
+      totalCount
+    }
+    labels(first:100) {
+      edges {
+        node {
+          name
+          id
+          url
+          color
+          isDefault
+        }
+      }
+    }
+    ''';
   }
 }

@@ -26,49 +26,44 @@ void _init(Action action, Context<PageState> ctx) {
   });
 }
 
-void _onLoadMiddleData(Action action, Context<PageState> ctx) {
+void _onLoadMiddleData(Action action, Context<PageState> ctx) async {
   GitHttpRequest request = GithubHttpRequest.getInstance();
   MiddleIssuesData issuesData = action.payload;
   issuesData.refreshing = true;
   ctx.dispatch(PageInnerActionCreator.showMiddleProgress(issuesData));
-  request
-      .getMoreIssues(
-          state: IssueState.ALL,
-          before: issuesData.beforeIssue.getCursor(),
-          after: issuesData.afterIssue.getCursor())
-      .then((data) {
-    ctx.dispatch(
-        PageInnerActionCreator.refreshMiddleDataAction(issuesData, data));
-  });
+  var data = await request.getMoreIssues(
+      state: IssueState.ALL,
+      before: issuesData.beforeIssue.getCursor(),
+      after: issuesData.afterIssue.getCursor());
+  ctx.dispatch(
+      PageInnerActionCreator.refreshMiddleDataAction(issuesData, data));
 }
 
-void _onLoadData(Action action, Context<PageState> ctx) {
+void _onLoadData(Action action, Context<PageState> ctx) async {
   GitHttpRequest request = GithubHttpRequest.getInstance();
   String cursor = '';
-  if (ctx.state.list.isNotEmpty == true) {
+  if (ctx.state.list?.isNotEmpty == true) {
     cursor = ctx.state.list.first.getCursor();
   }
-  request.getMoreIssues(state: IssueState.ALL, before: cursor).then((data) {
-    ctx.dispatch(PageInnerActionCreator.refreshDataAction(data));
-  });
+  var data = await request.getMoreIssues(state: IssueState.ALL, before: cursor);
+  ctx.dispatch(PageInnerActionCreator.refreshDataAction(data));
 }
 
 void _onLoadMoreData(Action action, Context<PageState> ctx) async {
   String cursor = '';
   int number;
-  if (ctx.state.list.isNotEmpty == true) {
+  if (ctx.state.list?.isNotEmpty == true) {
     cursor = ctx.state.list.last.getCursor();
     number = ctx.state.list.last.getNumber();
   }
-  PagingData<GitIssue> data = await GitIssueDataBase.createInstance()
+  PagingData<GitIssue> dbData = await GitIssueDataBase.createInstance()
       .getList(beforeNumber: number, size: 30);
-  if (data.data.isNotEmpty == true) {
+  if (dbData.data?.isNotEmpty == true) {
     ctx.dispatch(PageInnerActionCreator.onLoadMoreDataAction(
-        PagingData(true, data.data)));
+        PagingData(true, dbData.data)));
     return;
   }
   GitHttpRequest request = GithubHttpRequest.getInstance();
-  request.getMoreIssues(state: IssueState.ALL, after: cursor).then((data) {
-    ctx.dispatch(PageInnerActionCreator.onLoadMoreDataAction(data));
-  });
+  var data = await request.getMoreIssues(state: IssueState.ALL, after: cursor);
+  ctx.dispatch(PageInnerActionCreator.onLoadMoreDataAction(data));
 }

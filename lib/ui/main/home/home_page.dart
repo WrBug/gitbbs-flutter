@@ -28,12 +28,12 @@ GlobalKey<RefreshFooterState> _footerKey = new GlobalKey<RefreshFooterState>();
 
 Widget _buildView(PageState state, Dispatch dispatch, ViewService viewService) {
   final ListAdapter adapter = viewService.buildAdapter();
-  if (_easyRefreshKey.currentState != null) {
-    _easyRefreshKey.currentState.callRefreshFinish();
-  }
-  if (_footerKey.currentState != null) {
-    _footerKey.currentState.onLoadReady();
-  }
+//  if (_easyRefreshKey.currentState != null) {
+//    _easyRefreshKey.currentState.callRefreshFinish();
+//  }
+//  if (_footerKey.currentState != null && state.hasNext) {
+//    _footerKey.currentState.onLoaded();
+//  }
   return EasyRefresh(
     key: _easyRefreshKey,
     child: ListView.builder(
@@ -49,12 +49,9 @@ Widget _buildView(PageState state, Dispatch dispatch, ViewService viewService) {
       key: _footerKey,
       color: Theme.of(viewService.context).scaffoldBackgroundColor,
     ),
-    autoControl: false,
+    autoControl: true,
     onRefresh: () {
       dispatch(PageActionCreator.onRefreshDataAction());
-    },
-    headerStatusChanged: (status) {
-      print(status);
     },
     loadMore: state.hasNext
         ? () {

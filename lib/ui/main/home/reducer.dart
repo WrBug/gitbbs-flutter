@@ -26,7 +26,7 @@ PageState _loadInitData(PageState state, Action action) {
 PageState _refreshData(PageState state, Action action) {
   final PageState newState = state.clone();
   final PagingData<GitIssue> data = action.payload ?? PagingData;
-  if (state.list.isNotEmpty == true && data.hasNext) {
+  if (state?.list?.isNotEmpty == true && data.hasNext) {
     data.data.last.setMore(true);
   }
   data.data.addAll(newState.list);

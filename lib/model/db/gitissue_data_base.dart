@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:gitbbs/model/GitIssue.dart';
 import 'package:gitbbs/model/PagingData.dart';
 import 'package:gitbbs/model/db/transaction_info.dart';
+import 'package:gitbbs/network/github/model/GithubIssue.dart';
 import 'package:gitbbs/network/github/model/GithubLabel.dart';
 import 'package:gitbbs/network/github/model/GithubUser.dart';
 import 'package:gitbbs/network/github/model/GithubV4Issue.dart';
@@ -100,7 +101,7 @@ class GitIssueDataBase {
 
   Future<bool> save({GitIssue gitIssue, List<GitIssue> list}) async {
     List<GitIssue> issues = List();
-    if (list.isNotEmpty == true) {
+    if (list?.isNotEmpty == true) {
       issues.addAll(List.of(list));
     } else if (gitIssue != null) {
       issues.add(gitIssue.clone());
@@ -174,7 +175,7 @@ class GitIssueDataBase {
     Database database = await db;
     var query = await database
         .query(tableName, where: '$column_number=?', whereArgs: [number]);
-    if (query.isNotEmpty == true) {
+    if (query?.isNotEmpty == true) {
       return query.first;
     }
     return null;
@@ -183,19 +184,37 @@ class GitIssueDataBase {
   Map<String, dynamic> _toMap(GitIssue issue) {
     if (issue is GithubV4Issue) {
       Map<String, dynamic> map = Map();
-      map[column_title] = issue.title;
+      if (issue.title != null) {
+        map[column_title] = issue.title;
+      }
+      if (issue.cursor != null) {
+        map[column_cursor] = issue.cursor;
+      }
       map[column_number] = issue.number;
-      map[column_cursor] = issue.cursor;
       map[column_publishedAt] = issue.publishedAt;
       map[column_updatedAt] = issue.updatedAt;
       map[column_issue_id] = issue.id;
-      map[column_closed] = issue.closed == true ? 1 : 0;
+      map[column_closed] = issue?.closed == true ? 1 : 0;
       map[column_closedAt] = issue.closedAt;
-      map[column_locked] = issue.locked == true ? 1 : 0;
+      map[column_locked] = issue?.locked == true ? 1 : 0;
       map[column_author] = jsonEncode(issue.author);
       map[column_labels] = jsonEncode(issue.labels);
       map[column_comments] = issue.comments;
-      map[column_hasMore] = issue.hasMore == true ? 1 : 0;
+      map[column_hasMore] = issue?.hasMore == true ? 1 : 0;
+      return map;
+    } else if (issue is GithubIssue) {
+      Map<String, dynamic> map = Map();
+      map[column_title] = issue.title;
+      map[column_number] = issue.number;
+      map[column_publishedAt] = issue.getCreateTime();
+      map[column_updatedAt] = issue.updatedAt;
+      map[column_issue_id] = issue.id;
+      map[column_closed] = issue.isClosed() == true ? 1 : 0;
+      map[column_closedAt] = issue.closedAt;
+      map[column_locked] = issue?.locked == true ? 1 : 0;
+      map[column_author] = jsonEncode(issue.user);
+      map[column_labels] = jsonEncode(issue.labels);
+      map[column_comments] = issue.comments;
       return map;
     }
     return null;

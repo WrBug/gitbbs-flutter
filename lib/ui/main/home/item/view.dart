@@ -3,6 +3,7 @@ import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:gitbbs/constant/ColorConstant.dart';
 import 'package:gitbbs/model/GitIssue.dart';
+import 'package:gitbbs/ui/main/home/item/action.dart';
 import 'package:gitbbs/ui/widget/avatar_img.dart';
 
 Widget buildView(
@@ -10,23 +11,27 @@ Widget buildView(
   Dispatch dispatch,
   ViewService viewService,
 ) {
-  return Padding(
-    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          gitIssue.getTitle(),
-          maxLines: 2,
-          style: TextStyle(
-              color: text_title_color,
-              fontSize: 16,
-              fontWeight: FontWeight.bold),
+  return GestureDetector(
+      onTap: () {
+        dispatch(IssueItemActionCreator.onGetDetailAction(gitIssue));
+      },
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              gitIssue.getTitle(),
+              maxLines: 2,
+              style: TextStyle(
+                  color: text_title_color,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold),
+            ),
+            _bottomInfoBuild(gitIssue)
+          ],
         ),
-        _bottomInfoBuild(gitIssue)
-      ],
-    ),
-  );
+      ));
 }
 
 _bottomInfoBuild(GitIssue gitIssue) {

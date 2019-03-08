@@ -41,7 +41,9 @@ GithubIssue _$GithubIssueFromJson(Map<String, dynamic> json) {
     ..closedAt = json['closed_at'] as String
     ..authorAssociation = json['author_association'] as String
     ..body = json['body'] as String
-    ..closedBy = json['closed_by'] as String;
+    ..closedBy = json['closed_by'] == null
+        ? null
+        : GithubUser.fromJson(json['closed_by'] as Map<String, dynamic>);
 }
 
 Map<String, dynamic> _$GithubIssueToJson(GithubIssue instance) =>

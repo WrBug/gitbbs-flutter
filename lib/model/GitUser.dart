@@ -1,6 +1,8 @@
 import 'dart:convert';
 
-abstract class GitUser {
+import 'package:fish_redux/fish_redux.dart';
+
+abstract class GitUser implements Cloneable<GitUser> {
   String getAvatarUrl();
 
   String getName();

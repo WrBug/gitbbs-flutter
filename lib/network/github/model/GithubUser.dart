@@ -65,4 +65,9 @@ class GithubUser extends GitUser {
   String getName() {
     return name == null || name == '' ? login : name;
   }
+
+  @override
+  GitUser clone() {
+    return GithubUser.fromJson(toJson());
+  }
 }

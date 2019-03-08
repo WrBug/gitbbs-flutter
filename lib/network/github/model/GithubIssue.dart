@@ -3,6 +3,7 @@ import 'package:gitbbs/model/GitUser.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'GithubUser.dart';
 import 'GithubLabel.dart';
+import 'dart:convert';
 
 part 'GithubIssue.g.dart';
 
@@ -44,7 +45,7 @@ class GithubIssue implements GitIssue {
   String authorAssociation;
   String body;
   @JsonKey(name: 'closed_by')
-  String closedBy;
+  GithubUser closedBy;
 
   factory GithubIssue.fromJson(Map<String, dynamic> json) =>
       _$GithubIssueFromJson(json);
@@ -105,15 +106,25 @@ class GithubIssue implements GitIssue {
 
   @override
   GitIssue clone() {
-    return GithubIssue.fromJson(toJson());
+    return GithubIssue.fromJson(jsonDecode(jsonEncode(this)));
   }
 
   @override
-  void setMore(bool more) {
-  }
+  void setMore(bool more) {}
 
   @override
   bool getMore() {
     return false;
+  }
+
+
+  @override
+  String getBody() {
+    return body;
+  }
+
+  @override
+  String getShowBody() {
+    return body;
   }
 }

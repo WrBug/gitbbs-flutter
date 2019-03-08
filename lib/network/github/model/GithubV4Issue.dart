@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:gitbbs/model/GitIssue.dart';
 import 'package:gitbbs/model/GitUser.dart';
 import 'package:gitbbs/network/github/model/GithubLabel.dart';
@@ -23,6 +25,9 @@ class GithubV4Issue implements GitIssue {
   int comments;
   List<GithubLabel> labels;
   bool hasMore;
+  String body;
+  @JsonKey(name: 'bodyHTML')
+  String bodyHtml;
 
   @override
   GitUser getAuthor() {
@@ -81,7 +86,7 @@ class GithubV4Issue implements GitIssue {
 
   @override
   GitIssue clone() {
-    return GithubV4Issue.fromJson(toJson());
+    return GithubV4Issue.fromJson(jsonDecode(jsonEncode(this)));
   }
 
   @override
@@ -91,6 +96,16 @@ class GithubV4Issue implements GitIssue {
 
   @override
   bool getMore() {
-    return hasMore == true;
+    return hasMore == null ? false : hasMore;
+  }
+
+  @override
+  String getBody() {
+    return body;
+  }
+
+  @override
+  String getShowBody() {
+    return bodyHtml;
   }
 }

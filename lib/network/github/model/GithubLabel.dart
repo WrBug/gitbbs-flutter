@@ -1,9 +1,10 @@
+import 'package:fish_redux/fish_redux.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'GithubLabel.g.dart';
 
 @JsonSerializable()
-class GithubLabel {
+class GithubLabel implements Cloneable<GithubLabel>{
   int id;
   @JsonKey(name: 'node_id')
   String nodeId;
@@ -19,4 +20,9 @@ class GithubLabel {
   Map<String, dynamic> toJson() => _$GithubLabelToJson(this);
 
   GithubLabel();
+
+  @override
+  GithubLabel clone() {
+    return GithubLabel.fromJson(toJson());
+  }
 }
