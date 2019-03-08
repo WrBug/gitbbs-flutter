@@ -22,6 +22,7 @@ class GithubV4Issue implements GitIssue {
   GithubUser author;
   int comments;
   List<GithubLabel> labels;
+  bool hasMore;
 
   @override
   GitUser getAuthor() {
@@ -82,5 +83,15 @@ class GithubV4Issue implements GitIssue {
   GitIssue clone() {
     // TODO: implement clone
     return GithubV4Issue.fromJson(toJson());
+  }
+
+  @override
+  void setMore(bool more) {
+    hasMore = more;
+  }
+
+  @override
+  bool getMore() {
+    return hasMore == true;
   }
 }

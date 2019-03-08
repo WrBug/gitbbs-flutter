@@ -18,19 +18,22 @@ class HomePage extends Page<PageState, Map<String, dynamic>> {
           view: _buildView,
           dependencies: Dependencies<PageState>(
               adapter: IssueListAdapter(),
-              slots: <String, Dependent<PageState>>{
-              }),
+              slots: <String, Dependent<PageState>>{}),
         );
 }
-GlobalKey<EasyRefreshState> _easyRefreshKey =
-new GlobalKey<EasyRefreshState>();
-GlobalKey<RefreshHeaderState> _headerKey =
-new GlobalKey<RefreshHeaderState>();
-GlobalKey<RefreshFooterState> _footerKey =
-new GlobalKey<RefreshFooterState>();
-Widget _buildView(PageState state, Dispatch dispatch, ViewService viewService) {
 
+GlobalKey<EasyRefreshState> _easyRefreshKey = new GlobalKey<EasyRefreshState>();
+GlobalKey<RefreshHeaderState> _headerKey = new GlobalKey<RefreshHeaderState>();
+GlobalKey<RefreshFooterState> _footerKey = new GlobalKey<RefreshFooterState>();
+
+Widget _buildView(PageState state, Dispatch dispatch, ViewService viewService) {
   final ListAdapter adapter = viewService.buildAdapter();
+  if (_easyRefreshKey.currentState != null) {
+    _easyRefreshKey.currentState.callRefreshFinish();
+  }
+  if (_footerKey.currentState != null) {
+    _footerKey.currentState.onLoadReady();
+  }
   return EasyRefresh(
     key: _easyRefreshKey,
     child: ListView.builder(
@@ -46,8 +49,12 @@ Widget _buildView(PageState state, Dispatch dispatch, ViewService viewService) {
       key: _footerKey,
       color: Theme.of(viewService.context).scaffoldBackgroundColor,
     ),
+    autoControl: false,
     onRefresh: () {
       dispatch(PageActionCreator.onRefreshDataAction());
+    },
+    headerStatusChanged: (status) {
+      print(status);
     },
     loadMore: state.hasNext
         ? () {

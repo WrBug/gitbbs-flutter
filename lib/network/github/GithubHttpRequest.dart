@@ -32,14 +32,15 @@ class GithubHttpRequest implements GitHttpRequest {
   }
 
   @override
-  Future<PagingData<GitIssue>> getIssues(
+  Future<PagingData<GitIssue>> getMoreIssues(
       {List<String> label,
       String creator,
       IssueState state,
+      String before,
       String after}) async {
-    final size = 40;
-    var response = await _client
-        .execute(_adapter.getIssues(label, creator, state, after, size));
+    final size = 4;
+    var response = await _client.execute(
+        _adapter.getMoreIssues(label, creator, state, before, after, size));
     var issues = List<GitIssue>();
     List list = response.data['data']['repository']['issues']['edges'];
     list.forEach((map) {
@@ -74,7 +75,7 @@ class GithubHttpRequest implements GitHttpRequest {
       issue.labels = labels;
       issues.add(issue);
     });
-    return PagingData(issues.length==size,issues);
+    return PagingData(issues.length == size, issues);
   }
 
   @override

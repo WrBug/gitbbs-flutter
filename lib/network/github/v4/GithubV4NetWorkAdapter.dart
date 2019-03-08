@@ -10,15 +10,65 @@ class GithubV4NetWorkAdapter extends GitNetworkRequestAdapter {
   String getApiUrl() => 'https://api.github.com';
 
   @override
-  Request getIssues(List<String> label, String creator, IssueState issueState,
-      String after, int size) {
+  Request getMoreIssues(List<String> label, String creator,
+      IssueState issueState, String before, String after, int size) {
+    String query = getIssuesQuery(issueState, size,
+        label: label, creator: creator, before: before, after: after);
+    var map = {'query': query};
+    return V4Request(map);
+  }
+
+  @override
+  Request createIssue(String title, String body, String label) {
+    var path = "/repos/$owner/$repoName/issues";
+    var map = Map<String, dynamic>();
+    map['title'] = title;
+    map['body'] = body;
+    map['labels'] = [label];
+    return Request(path, map, Method.POST);
+  }
+
+  @override
+  Request getIssue(int number) {
+    var path = "/repos/$owner/$repoName/issues/$number";
+    return Request(path, null, Method.GET);
+  }
+
+  @override
+  Request getComments(int number) {
+    var path = "/repos/$owner/$repoName/issues/$number/comments";
+    return Request(path, null, Method.GET);
+  }
+
+  @override
+  Request doAuthenticated(String token) {
+    return Request('/user', null, Method.GET,
+        header: {"Authorization": 'token $token'});
+  }
+
+  String getIssuesQuery(IssueState issueState, int size,
+      {List<String> label, String creator, String before, String after}) {
     String labels = label == null || label.isEmpty
         ? "null"
         : '["' + label.join('","') + '"]';
-    String query = """
+    String states = '[OPEN,CLOSED]';
+    if (issueState == IssueState.OPEN) {
+      states = '[OPEN]';
+    } else if (issueState == IssueState.CLOSED) {
+      states = '[CLOSED]';
+    }
+    String beforeStr = 'null';
+    if (before != null && before != '') {
+      beforeStr = '"$before"';
+    }
+    String afterStr = 'null';
+    if (after != null && after != '') {
+      afterStr = '"$after"';
+    }
+    return """
           {
       repository(owner: "$owner", name: "$repoName") {
-        issues(first: $size,labels:$labels, states: [OPEN,CLOSED],orderBy:{field: CREATED_AT, direction: DESC},after:${after == null || after == '' ? "null" : '"$after"'}) {
+        issues(first: $size,labels:$labels, states: $states,orderBy:{field: CREATED_AT, direction: DESC},before:$beforeStr,after:$afterStr) {
           edges {
             cursor
             node {
@@ -54,36 +104,8 @@ class GithubV4NetWorkAdapter extends GitNetworkRequestAdapter {
       }
     }
     """
-        .replaceAll('\n', ' ');
-    var map = {'query': query};
-    return V4Request(map);
-  }
-
-  @override
-  Request createIssue(String title, String body, String label) {
-    var path = "/repos/$owner/$repoName/issues";
-    var map = Map<String, dynamic>();
-    map['title'] = title;
-    map['body'] = body;
-    map['labels'] = [label];
-    return Request(path, map, Method.POST);
-  }
-
-  @override
-  Request getIssue(int number) {
-    var path = "/repos/$owner/$repoName/issues/$number";
-    return Request(path, null, Method.GET);
-  }
-
-  @override
-  Request getComments(int number) {
-    var path = "/repos/$owner/$repoName/issues/$number/comments";
-    return Request(path, null, Method.GET);
-  }
-
-  @override
-  Request doAuthenticated(String token) {
-    return Request('/user', null, Method.GET,
-        header: {"Authorization": 'token $token'});
+        .replaceAll("\t", " ")
+        .replaceAll('\n', ' ')
+        .replaceAll(RegExp(r' +'), ' ');
   }
 }

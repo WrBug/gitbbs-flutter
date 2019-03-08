@@ -9,8 +9,10 @@ abstract class GitNetworkRequestAdapter {
 
   String getApiUrl();
 
-  Request getIssues(List<String> label, String creator, IssueState issueState,
-      String after, int size);
+
+
+  Request getMoreIssues(List<String> label, String creator,
+      IssueState issueState, String before, String after, int size);
 
   Request createIssue(String title, String body, String label);
 

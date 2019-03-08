@@ -6,8 +6,9 @@ import 'package:gitbbs/network/github/model/GithubComment.dart';
 import 'package:gitbbs/network/github/model/GithubIssue.dart';
 
 abstract class GitHttpRequest {
-  Future<PagingData<GitIssue>> getIssues(
-      {List<String> label, String creator, IssueState state, String after});
+
+  Future<PagingData<GitIssue>> getMoreIssues(
+      {List<String> label, String creator, IssueState state,String before, String after});
 
   Future<List<GithubComment>> getComments(int number);
 

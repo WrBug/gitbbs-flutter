@@ -107,4 +107,13 @@ class GithubIssue implements GitIssue {
   GitIssue clone() {
     return GithubIssue.fromJson(toJson());
   }
+
+  @override
+  void setMore(bool more) {
+  }
+
+  @override
+  bool getMore() {
+    return false;
+  }
 }
