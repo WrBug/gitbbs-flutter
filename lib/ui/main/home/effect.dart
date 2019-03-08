@@ -1,5 +1,6 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:gitbbs/model/GitIssue.dart';
+import 'package:gitbbs/model/db/gitissue_data_base.dart';
 import 'package:gitbbs/model/entry/midddle_issues_data.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
 import 'package:gitbbs/network/IssueState.dart';
@@ -18,16 +19,17 @@ Effect<PageState> buildEffect() {
 }
 
 void _init(Action action, Context<PageState> ctx) {
-  final List<GitIssue> initToDos = [];
-  ctx.dispatch(PageInnerActionCreator.loadInitData(initToDos));
+  var db = GitIssueDataBase.createInstance();
+  db.getList().then((initToDos) {
+    ctx.dispatch(PageInnerActionCreator.loadInitData(initToDos));
+  });
 }
 
 void _onLoadMiddleData(Action action, Context<PageState> ctx) {
   GitHttpRequest request = GithubHttpRequest.getInstance();
   MiddleIssuesData issuesData = action.payload;
   issuesData.refreshing = true;
-  ctx.dispatch(
-      PageInnerActionCreator.showMiddleProgress(issuesData));
+  ctx.dispatch(PageInnerActionCreator.showMiddleProgress(issuesData));
   request
       .getMoreIssues(
           state: IssueState.ALL,

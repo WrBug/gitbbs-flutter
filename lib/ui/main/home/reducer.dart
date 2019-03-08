@@ -1,6 +1,7 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:gitbbs/model/GitIssue.dart';
 import 'package:gitbbs/model/PagingData.dart';
+import 'package:gitbbs/model/db/gitissue_data_base.dart';
 import 'package:gitbbs/model/entry/midddle_issues_data.dart';
 import 'package:gitbbs/ui/main/home/inner_action.dart';
 import 'package:gitbbs/ui/main/home/page_state.dart';
@@ -30,22 +31,25 @@ PageState _refreshData(PageState state, Action action) {
   }
   data.data.addAll(newState.list);
   newState.list = data.data;
-  newState.hasNext = data.hasNext;
   return newState;
 }
 
 PageState _refreshMiddleData(PageState state, Action action) {
   final MiddleIssuesData issuesData = action.payload[0] ?? MiddleIssuesData;
+  List<GitIssue> changedList = List();
   issuesData.afterIssue.setMore(false);
+  changedList.add(issuesData.afterIssue);
   issuesData.refreshing = false;
   final PagingData<GitIssue> data = action.payload[1] ?? PagingData;
   var index = state.list.indexOf(issuesData.afterIssue);
   if (state.list.isNotEmpty == true && data.hasNext) {
     data.data.last.setMore(true);
+    changedList.add(data.data.last);
   }
   state.progressingList.remove(issuesData.afterIssue);
   state.list.insertAll(index + 1, data.data);
   final PageState newState = state.clone();
+  GitIssueDataBase.createInstance().save(list: changedList);
   return newState;
 }
 

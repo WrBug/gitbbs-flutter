@@ -4,6 +4,7 @@ import 'package:gitbbs/model/GitIssue.dart';
 import 'package:gitbbs/model/GitUser.dart';
 import 'package:gitbbs/model/PagingData.dart';
 import 'package:gitbbs/model/UserCacheManager.dart';
+import 'package:gitbbs/model/db/gitissue_data_base.dart';
 import 'package:gitbbs/network/GitHttpClient.dart';
 import 'package:gitbbs/network/GitNetworkRequestAdapter.dart';
 import 'package:gitbbs/network/IssueState.dart';
@@ -75,6 +76,7 @@ class GithubHttpRequest implements GitHttpRequest {
       issue.labels = labels;
       issues.add(issue);
     });
+    GitIssueDataBase.createInstance().save(list: issues);
     return PagingData(issues.length == size, issues);
   }
 

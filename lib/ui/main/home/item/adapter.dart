@@ -1,5 +1,6 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:gitbbs/model/GitIssue.dart';
+import 'package:gitbbs/model/db/gitissue_data_base.dart';
 import 'package:gitbbs/model/entry/midddle_issues_data.dart';
 import 'package:gitbbs/ui/main/home/item/middle_component/click_to_load_middle_component.dart';
 import 'package:gitbbs/ui/main/home/item/component.dart';
@@ -27,6 +28,7 @@ class IssueListAdapter extends DynamicFlowAdapter<PageState> {
 }
 
 class _IssueConnector implements Connector<PageState, List<ItemBean>> {
+
   @override
   List<ItemBean> get(PageState state) {
     if (state.list?.isNotEmpty == true) {

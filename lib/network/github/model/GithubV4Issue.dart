@@ -81,7 +81,6 @@ class GithubV4Issue implements GitIssue {
 
   @override
   GitIssue clone() {
-    // TODO: implement clone
     return GithubV4Issue.fromJson(toJson());
   }
 
