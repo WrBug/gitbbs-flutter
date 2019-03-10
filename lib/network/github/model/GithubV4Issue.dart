@@ -9,7 +9,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'GithubV4Issue.g.dart';
 
 @JsonSerializable()
-class GithubV4Issue implements GitIssue {
+class GithubV4Issue extends GitIssue {
   GithubV4Issue();
 
   String cursor;
@@ -43,6 +43,7 @@ class GithubV4Issue implements GitIssue {
   int getCommentsCount() {
     return comments;
   }
+
 
   @override
   String getCreateTime() {

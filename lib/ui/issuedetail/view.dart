@@ -14,18 +14,89 @@ Widget buildView(
     appBar: AppBar(
       title: Text(state.getIssue().getTitle()),
     ),
-    body: SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          children: <Widget>[
-            _headerBuild(state.getIssue()),
-            Padding(
-              padding: EdgeInsets.all(10),
-            ),
-            _bodyBuild(state)
-          ],
+    floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    floatingActionButton: _floatButtonBuild(state, dispatch, viewService),
+    bottomNavigationBar: _commentsBuild(state, viewService),
+    body: _mainBodyBuild(state),
+  );
+}
+
+FloatingActionButton _floatButtonBuild(
+    IssueDetailState state, Dispatch dispatch, ViewService viewService) {
+  return FloatingActionButton(
+    onPressed: () {},
+    child: Icon(Icons.add_comment),
+  );
+}
+
+_commentsBuild(IssueDetailState state, ViewService viewService) {
+  return BottomAppBar(
+    child: tabs(state.getIssue()),
+    color: app_primary_light,
+    shape: CircularNotchedRectangle(),
+  );
+}
+
+Row tabs(GitIssue issue) {
+  return Row(
+    mainAxisSize: MainAxisSize.max,
+    mainAxisAlignment: MainAxisAlignment.spaceAround,
+    children: <Widget>[
+      InkWell(
+        onTap: () {},
+        child: Padding(
+          padding: EdgeInsets.all(8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Icon(
+                Icons.comment,
+                color: Colors.white,
+                size: 14,
+              ),
+              Text(
+                issue.getShowComments(),
+                style: TextStyle(color: Colors.white, fontSize: 12),
+              )
+            ],
+          ),
         ),
+      ),
+      InkWell(
+        onTap: () {},
+        child: Padding(
+            padding: EdgeInsets.all(8),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Icon(
+                  Icons.share,
+                  color: Colors.white,
+                  size: 14,
+                ),
+                Text(
+                  '分享',
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                )
+              ],
+            )),
+      ),
+    ],
+  );
+}
+
+Widget _mainBodyBuild(IssueDetailState state) {
+  return SingleChildScrollView(
+    child: Padding(
+      padding: EdgeInsets.fromLTRB(10, 10, 10, 40),
+      child: Column(
+        children: <Widget>[
+          _headerBuild(state.getIssue()),
+          Padding(
+            padding: EdgeInsets.all(10),
+          ),
+          _bodyBuild(state)
+        ],
       ),
     ),
   );

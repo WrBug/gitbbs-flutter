@@ -8,7 +8,7 @@ import 'dart:convert';
 part 'GithubIssue.g.dart';
 
 @JsonSerializable()
-class GithubIssue implements GitIssue {
+class GithubIssue extends GitIssue {
   GithubIssue();
 
   String url;
@@ -108,15 +108,6 @@ class GithubIssue implements GitIssue {
   GitIssue clone() {
     return GithubIssue.fromJson(jsonDecode(jsonEncode(this)));
   }
-
-  @override
-  void setMore(bool more) {}
-
-  @override
-  bool getMore() {
-    return false;
-  }
-
 
   @override
   String getBody() {
