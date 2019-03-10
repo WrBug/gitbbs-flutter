@@ -22,31 +22,24 @@ class HomePage extends Page<PageState, Map<String, dynamic>> {
         );
 }
 
-GlobalKey<EasyRefreshState> _easyRefreshKey = new GlobalKey<EasyRefreshState>();
-GlobalKey<RefreshHeaderState> _headerKey = new GlobalKey<RefreshHeaderState>();
-GlobalKey<RefreshFooterState> _footerKey = new GlobalKey<RefreshFooterState>();
-
 Widget _buildView(PageState state, Dispatch dispatch, ViewService viewService) {
   final ListAdapter adapter = viewService.buildAdapter();
-//  if (_easyRefreshKey.currentState != null) {
-//    _easyRefreshKey.currentState.callRefreshFinish();
-//  }
-//  if (_footerKey.currentState != null && state.hasNext) {
-//    _footerKey.currentState.onLoaded();
-//  }
+  if (state.easyRefreshKey.currentState != null) {
+    state.easyRefreshKey.currentState.callRefreshFinish();
+  }
   return EasyRefresh(
-    key: _easyRefreshKey,
+    key: state.easyRefreshKey,
     child: ListView.builder(
       itemBuilder: adapter.itemBuilder,
       itemCount: adapter.itemCount,
     ),
     autoLoad: state.hasNext,
     refreshHeader: BezierCircleHeader(
-      key: _headerKey,
+      key: state.headerKey,
       color: Theme.of(viewService.context).scaffoldBackgroundColor,
     ),
     refreshFooter: BezierBounceFooter(
-      key: _footerKey,
+      key: state.footerKey,
       color: Theme.of(viewService.context).scaffoldBackgroundColor,
     ),
     autoControl: true,

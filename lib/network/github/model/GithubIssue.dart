@@ -118,4 +118,5 @@ class GithubIssue extends GitIssue {
   String getShowBody() {
     return body;
   }
+
 }

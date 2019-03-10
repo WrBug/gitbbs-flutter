@@ -29,9 +29,9 @@ abstract class GitIssue implements Cloneable<GitIssue> {
 
   String getCursor();
 
-  void setMore(bool more);
+  void setMore(bool more) {}
 
-  bool getMore();
+  bool getMore() => false;
 
   String getBody();
 

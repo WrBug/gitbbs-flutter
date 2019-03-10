@@ -4,6 +4,7 @@ import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:gitbbs/constant/ColorConstant.dart';
 import 'package:gitbbs/model/GitIssue.dart';
+import 'package:gitbbs/ui/issuedetail/action.dart';
 import 'package:gitbbs/ui/issuedetail/state.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:gitbbs/ui/widget/avatar_img.dart';
@@ -16,7 +17,9 @@ Widget buildView(
     ),
     floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     floatingActionButton: _floatButtonBuild(state, dispatch, viewService),
-    bottomNavigationBar: _commentsBuild(state, viewService),
+    bottomNavigationBar: Builder(
+        builder: (context) =>
+            _commentsBuild(context, state, dispatch, viewService)),
     body: _mainBodyBuild(state),
   );
 }
@@ -24,26 +27,35 @@ Widget buildView(
 FloatingActionButton _floatButtonBuild(
     IssueDetailState state, Dispatch dispatch, ViewService viewService) {
   return FloatingActionButton(
-    onPressed: () {},
-    child: Icon(Icons.add_comment),
+    onPressed: () {
+      if (state.isCommentsShown()) {
+        dispatch(IssueDetailActionCreator.toggleCommentsVisible(null));
+        return;
+      }
+    },
+    child: Icon(state.isCommentsShown() ? Icons.close : Icons.add_comment),
   );
 }
 
-_commentsBuild(IssueDetailState state, ViewService viewService) {
+_commentsBuild(BuildContext context, IssueDetailState state, Dispatch dispatch,
+    ViewService viewService) {
   return BottomAppBar(
-    child: tabs(state.getIssue()),
+    child: tabs(context, state.getIssue(), dispatch, viewService),
     color: app_primary_light,
     shape: CircularNotchedRectangle(),
   );
 }
 
-Row tabs(GitIssue issue) {
+Row tabs(BuildContext context, GitIssue issue, Dispatch dispatch,
+    ViewService viewService) {
   return Row(
     mainAxisSize: MainAxisSize.max,
     mainAxisAlignment: MainAxisAlignment.spaceAround,
     children: <Widget>[
       InkWell(
-        onTap: () {},
+        onTap: () {
+          dispatch(IssueDetailActionCreator.toggleCommentsVisible(context));
+        },
         child: Padding(
           padding: EdgeInsets.all(8),
           child: Column(

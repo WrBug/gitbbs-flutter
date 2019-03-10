@@ -1,13 +1,19 @@
 import 'package:fish_redux/fish_redux.dart';
+import 'package:flutter/material.dart';
 import 'package:gitbbs/model/GitIssue.dart';
 import 'package:gitbbs/model/issue_cache_manager.dart';
 
 class IssueDetailState implements Cloneable<IssueDetailState> {
   GitIssue originIssue;
   GitIssue issue;
+  PersistentBottomSheetController controller;
 
   GitIssue getIssue() {
     return issue == null ? originIssue : issue;
+  }
+
+  bool isCommentsShown() {
+    return controller != null;
   }
 
   String getBody() {
@@ -23,6 +29,7 @@ class IssueDetailState implements Cloneable<IssueDetailState> {
   IssueDetailState clone() {
     return IssueDetailState()
       ..originIssue = originIssue
+      ..controller = controller
       ..issue = issue;
   }
 }
