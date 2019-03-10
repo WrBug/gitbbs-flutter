@@ -1,2 +1,2 @@
 const REPO_OWNER = 'wrbug';
-const REPO_NAME = 'dumpDex';
+const REPO_NAME = 'gitbbstest';

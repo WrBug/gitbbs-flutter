@@ -5,6 +5,7 @@ import 'package:gitbbs/model/GitUser.dart';
 import 'package:gitbbs/model/PagingData.dart';
 import 'package:gitbbs/model/UserCacheManager.dart';
 import 'package:gitbbs/model/db/gitissue_data_base.dart';
+import 'package:gitbbs/model/issue_cache_manager.dart';
 import 'package:gitbbs/network/GitHttpClient.dart';
 import 'package:gitbbs/network/GitNetworkRequestAdapter.dart';
 import 'package:gitbbs/network/IssueState.dart';
@@ -69,6 +70,7 @@ class GithubHttpRequest implements GitHttpRequest {
     var response = await _client.execute(_adapter.getIssue(number));
     Map map = response.data['data']['repository']['issue'];
     var issue = V4Convert.toIssue(map);
+    IssueCacheManager.saveCache(issue.getNumber(), issue.getBody());
     GitIssueDataBase.createInstance().save(gitIssue: issue);
     return issue;
   }

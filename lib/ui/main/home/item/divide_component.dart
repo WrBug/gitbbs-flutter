@@ -10,5 +10,5 @@ Widget _buildView(
   Dispatch dispatch,
   ViewService viewService,
 ) {
-  return Divider();
+  return Divider(height: 2,);
 }

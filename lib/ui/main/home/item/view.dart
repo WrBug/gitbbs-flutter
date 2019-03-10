@@ -11,12 +11,12 @@ Widget buildView(
   Dispatch dispatch,
   ViewService viewService,
 ) {
-  return GestureDetector(
+  return InkWell(
       onTap: () {
         dispatch(IssueItemActionCreator.onGetDetailAction(gitIssue));
       },
       child: Padding(
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+        padding: EdgeInsets.fromLTRB(10, 8, 10, 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[

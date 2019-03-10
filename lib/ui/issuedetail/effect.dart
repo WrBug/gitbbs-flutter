@@ -12,6 +12,6 @@ Effect<IssueDetailState> buildEffect() {
 
 void _init(Action action, Context<IssueDetailState> ctx) async {
   GitHttpRequest request = GithubHttpRequest.getInstance();
-  var issue = await request.getIssue(ctx.state.number);
+  var issue = await request.getIssue(ctx.state.originIssue.getNumber());
   ctx.dispatch(IssueDetailActionCreator.update(issue));
 }
