@@ -2,7 +2,7 @@ import 'package:fish_redux/fish_redux.dart';
 import 'package:gitbbs/model/GitIssue.dart';
 import 'package:flutter/material.dart';
 
-enum IssueDetailAction { update, toggleCommentsVisible, commentsVisibleChanged }
+enum IssueDetailAction { update,addComment, toggleCommentsVisible, commentsVisibleChanged }
 
 class IssueDetailActionCreator {
   static Action update(GitIssue issue) {
@@ -15,5 +15,9 @@ class IssueDetailActionCreator {
 
   static Action toggleCommentsVisible(BuildContext context) {
     return Action(IssueDetailAction.toggleCommentsVisible, payload: context);
+  }
+
+  static Action addCommentAction(GitIssue issue) {
+    return Action(IssueDetailAction.addComment, payload: issue);
   }
 }

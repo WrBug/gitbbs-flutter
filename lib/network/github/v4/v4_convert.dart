@@ -46,8 +46,7 @@ class V4Convert {
     GithubComment comment = GithubComment()
       ..user = user
       ..authorAssociation = node['authorAssociation']
-      ..id = int.parse(
-          String.fromCharCodes(base64.decode(node['id'])).split(':')[0])
+      ..id = node['id']
       ..url = node['url']
       ..createdAt = node['createdAt']
       ..updatedAt = node['lastEditedAt']

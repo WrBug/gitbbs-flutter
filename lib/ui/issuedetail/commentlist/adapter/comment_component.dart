@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:gitbbs/constant/ColorConstant.dart';
 import 'package:gitbbs/model/git_comment.dart';
+import 'package:gitbbs/ui/issuedetail/commentlist/action.dart';
 import 'package:gitbbs/ui/widget/avatar_img.dart';
 
 class CommentComponent extends Component<GitComment> {
@@ -72,14 +73,18 @@ _iconButtonBuild(GitComment comment, Dispatch dispatch) {
     icon: Icon(Icons.comment),
     iconSize: 18,
     color: icon_summary_color,
-    onPressed: () {},
+    onPressed: () {
+      dispatch(CommentListActionCreator.replyCommentAction(comment));
+    },
   ));
   if (comment.viewerCanUpdate) {
     list.add(IconButton(
       icon: Icon(Icons.edit),
       iconSize: 18,
       color: icon_summary_color,
-      onPressed: () {},
+      onPressed: () {
+        dispatch(CommentListActionCreator.editCommentAction(comment));
+      },
     ));
   }
   if (comment.viewerCanDelete) {

@@ -123,3 +123,28 @@ String getCommentsQuery(int number, String before, int size) {
       .replaceAll('\n', ' ')
       .replaceAll(RegExp(r' +'), ' ');
 }
+
+String getAddCommentQuery(String issueId, String body) {
+  return '''
+  mutation {
+  addComment(input:{subjectId:"$issueId",body:"$body"}){
+      clientMutationId
+    }
+  }
+  '''
+      .replaceAll("\t", " ")
+      .replaceAll(RegExp(r' +'), ' ');
+}
+
+String getModifyCommentQuery(String commentId, String body) {
+  return '''
+  mutation {
+  updateIssueComment(input:{id:"$commentId",body:"$body"}){
+      clientMutationId
+    }
+  }
+  '''
+      .replaceAll("\t", " ")
+      .replaceAll(RegExp(r' +'), ' ');
+  ;
+}

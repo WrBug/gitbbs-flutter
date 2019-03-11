@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:gitbbs/network/IssueState.dart';
 import 'package:gitbbs/network/Request.dart';
 import 'package:gitbbs/network/github/v4/V4Request.dart';
+import 'package:gitbbs/network/github/v4/v4_pre_view_request.dart';
 import 'package:gitbbs/network/github/v4/v4_query.dart';
 import '../../GitNetworkRequestAdapter.dart';
 
@@ -37,8 +38,15 @@ class GithubV4NetWorkAdapter extends GitNetworkRequestAdapter {
   }
 
   @override
-  Request getComments(int number, String before,int size) {
-    String query = getCommentsQuery(number,before,size);
+  Request getComments(int number, String before, int size) {
+    String query = getCommentsQuery(number, before, size);
+    var map = {'query': query};
+    return V4Request(map);
+  }
+
+  @override
+  Request addComment(String issueId, String body) {
+    String query = getAddCommentQuery(issueId, body);
     var map = {'query': query};
     return V4Request(map);
   }
@@ -47,5 +55,12 @@ class GithubV4NetWorkAdapter extends GitNetworkRequestAdapter {
   Request doAuthenticated(String token) {
     return Request('/user', null, Method.GET,
         header: {"Authorization": 'token $token'});
+  }
+
+  @override
+  Request modifyComment(String commentId, String body) {
+    String query = getModifyCommentQuery(commentId, body);
+    var map = {'query': query};
+    return V4PreViewRequest(map);
   }
 }

@@ -1,6 +1,7 @@
 import 'package:gitbbs/model/GitUser.dart';
 
 abstract class GitComment {
+  String getId();
   GitUser getAuthor();
 
   String getAuthorAssociation();

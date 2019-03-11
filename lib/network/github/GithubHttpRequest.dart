@@ -12,7 +12,6 @@ import 'package:gitbbs/network/GitNetworkRequestAdapter.dart';
 import 'package:gitbbs/network/IssueState.dart';
 import 'package:gitbbs/network/github/GithubNetWorkAdapter.dart';
 import 'package:gitbbs/network/github/model/GithubComment.dart';
-import 'package:gitbbs/network/github/model/GithubIssue.dart';
 import 'package:gitbbs/network/github/model/GithubLabel.dart';
 import 'package:gitbbs/network/github/model/GithubUser.dart';
 import 'package:gitbbs/network/github/model/GithubV4Issue.dart';
@@ -82,10 +81,31 @@ class GithubHttpRequest implements GitHttpRequest {
   }
 
   @override
-  Future<GitIssue> createIssue(String title, String body, String label) async {
+  Future<bool> addComment(String issueId, String body) async {
+    var response = await _client.execute(_adapter.addComment(issueId, body));
+    Map data = response.data;
+    if (data.containsKey('errors')) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  Future<bool> modifyComment(String commentId, String body) async {
+    var response =
+        await _client.execute(_adapter.modifyComment(commentId, body));
+    Map data = response.data;
+    if (data.containsKey('errors')) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  Future createIssue(String title, String body, String label) async {
     var response =
         await _client.execute(_adapter.createIssue(title, body, label));
-    return GithubIssue.fromJson(response.data);
+    return true;
   }
 
   @override

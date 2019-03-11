@@ -32,6 +32,7 @@ FloatingActionButton _floatButtonBuild(
         dispatch(IssueDetailActionCreator.toggleCommentsVisible(null));
         return;
       }
+      dispatch(IssueDetailActionCreator.addCommentAction(state.getIssue()));
     },
     child: Icon(state.isCommentsShown() ? Icons.close : Icons.add_comment),
   );

@@ -11,7 +11,7 @@ GithubComment _$GithubCommentFromJson(Map<String, dynamic> json) {
     ..url = json['url'] as String
     ..htmlUrl = json['html_url'] as String
     ..issueUrl = json['issue_url'] as String
-    ..id = json['id'] as int
+    ..id = json['id'] as String
     ..nodeId = json['node_id'] as String
     ..user = json['user'] == null
         ? null
@@ -20,7 +20,11 @@ GithubComment _$GithubCommentFromJson(Map<String, dynamic> json) {
     ..updatedAt = json['updated_at'] as String
     ..authorAssociation = json['author_association'] as String
     ..body = json['body'] as String
-    ..cursor = json['cursor'] as String;
+    ..cursor = json['cursor'] as String
+    ..floor = json['floor'] as int
+    ..viewerCanUpdate = json['viewerCanUpdate'] as bool
+    ..viewerCanDelete = json['viewerCanDelete'] as bool
+    ..viewerDidAuthor = json['viewerDidAuthor'] as bool;
 }
 
 Map<String, dynamic> _$GithubCommentToJson(GithubComment instance) =>
@@ -35,5 +39,9 @@ Map<String, dynamic> _$GithubCommentToJson(GithubComment instance) =>
       'updated_at': instance.updatedAt,
       'author_association': instance.authorAssociation,
       'body': instance.body,
-      'cursor': instance.cursor
+      'cursor': instance.cursor,
+      'floor': instance.floor,
+      'viewerCanUpdate': instance.viewerCanUpdate,
+      'viewerCanDelete': instance.viewerCanDelete,
+      'viewerDidAuthor': instance.viewerDidAuthor
     };

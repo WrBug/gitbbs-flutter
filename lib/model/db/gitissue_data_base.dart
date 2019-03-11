@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:gitbbs/model/GitIssue.dart';
 import 'package:gitbbs/model/PagingData.dart';
 import 'package:gitbbs/model/db/transaction_info.dart';
-import 'package:gitbbs/network/github/model/GithubIssue.dart';
 import 'package:gitbbs/network/github/model/GithubLabel.dart';
 import 'package:gitbbs/network/github/model/GithubUser.dart';
 import 'package:gitbbs/network/github/model/GithubV4Issue.dart';
@@ -201,20 +200,6 @@ class GitIssueDataBase {
       map[column_labels] = jsonEncode(issue.labels);
       map[column_comments] = issue.comments;
       map[column_hasMore] = issue?.hasMore == true ? 1 : 0;
-      return map;
-    } else if (issue is GithubIssue) {
-      Map<String, dynamic> map = Map();
-      map[column_title] = issue.title;
-      map[column_number] = issue.number;
-      map[column_publishedAt] = issue.getCreateTime();
-      map[column_updatedAt] = issue.updatedAt;
-      map[column_issue_id] = issue.id;
-      map[column_closed] = issue.isClosed() == true ? 1 : 0;
-      map[column_closedAt] = issue.closedAt;
-      map[column_locked] = issue?.locked == true ? 1 : 0;
-      map[column_author] = jsonEncode(issue.user);
-      map[column_labels] = jsonEncode(issue.labels);
-      map[column_comments] = issue.comments;
       return map;
     }
     return null;

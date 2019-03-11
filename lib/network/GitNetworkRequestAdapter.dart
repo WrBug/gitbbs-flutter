@@ -21,4 +21,7 @@ abstract class GitNetworkRequestAdapter {
   Request getComments(int number,String before,int size);
 
   Request doAuthenticated(String token);
+
+  Request addComment(String issueId, String body);
+  Request modifyComment(String commentId, String body);
 }

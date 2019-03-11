@@ -30,6 +30,9 @@ class GithubV4Issue extends GitIssue {
   String bodyHtml;
 
   @override
+  String getId() => id;
+
+  @override
   GitUser getAuthor() {
     return author;
   }
@@ -43,7 +46,6 @@ class GithubV4Issue extends GitIssue {
   int getCommentsCount() {
     return comments;
   }
-
 
   @override
   String getCreateTime() {

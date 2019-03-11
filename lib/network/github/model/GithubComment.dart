@@ -12,7 +12,7 @@ class GithubComment implements GitComment {
   String htmlUrl;
   @JsonKey(name: 'issue_url')
   String issueUrl;
-  int id;
+  String id;
   @JsonKey(name: 'node_id')
   String nodeId;
   GithubUser user;
@@ -76,4 +76,7 @@ class GithubComment implements GitComment {
   void setFloor(int floor) {
     this.floor = floor;
   }
+
+  @override
+  String getId() => id;
 }
