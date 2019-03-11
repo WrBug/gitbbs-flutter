@@ -5,6 +5,7 @@ import 'package:gitbbs/model/GitUser.dart';
 import 'package:gitbbs/model/PagingData.dart';
 import 'package:gitbbs/model/UserCacheManager.dart';
 import 'package:gitbbs/model/db/gitissue_data_base.dart';
+import 'package:gitbbs/model/git_comment.dart';
 import 'package:gitbbs/model/issue_cache_manager.dart';
 import 'package:gitbbs/network/GitHttpClient.dart';
 import 'package:gitbbs/network/GitNetworkRequestAdapter.dart';
@@ -56,13 +57,18 @@ class GithubHttpRequest implements GitHttpRequest {
   }
 
   @override
-  getComments(int number) async {
-    var response = await _client.execute(_adapter.getComments(number));
-    List<GithubComment> list = List<GithubComment>();
-    response.data.forEach((item) {
-      list.add(GithubComment.fromJson(item));
-    });
-    return list;
+  Future<PagingData<GitComment>> getComments(int number, String before) async {
+    final size = 15;
+    var response =
+        await _client.execute(_adapter.getComments(number, before, size));
+    List list =
+        response.data['data']['repository']['issue']['comments']['edges'];
+    var comments = list.map<GithubComment>((map) {
+      var comment = V4Convert.toComment(map['node']);
+      comment.cursor = map['cursor'];
+      return comment;
+    }).toList();
+    return PagingData(comments.length == size, comments);
   }
 
   @override

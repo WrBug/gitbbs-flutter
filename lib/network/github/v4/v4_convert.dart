@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:gitbbs/network/github/model/GithubComment.dart';
 import 'package:gitbbs/network/github/model/GithubLabel.dart';
 import 'package:gitbbs/network/github/model/GithubUser.dart';
 import 'package:gitbbs/network/github/model/GithubV4Issue.dart';
@@ -36,5 +37,24 @@ class V4Convert {
     }
     issue.labels = labels;
     return issue;
+  }
+
+  static GithubComment toComment(Map node) {
+    GithubUser user = GithubUser();
+    user.login = node['author']['login'];
+    user.avatarUrl = node['author']['avatarUrl'];
+    GithubComment comment = GithubComment()
+      ..user = user
+      ..authorAssociation = node['authorAssociation']
+      ..id = int.parse(
+          String.fromCharCodes(base64.decode(node['id'])).split(':')[0])
+      ..url = node['url']
+      ..createdAt = node['createdAt']
+      ..updatedAt = node['lastEditedAt']
+      ..viewerCanDelete = node['viewerCanDelete']
+      ..viewerCanUpdate = node['viewerCanUpdate']
+      ..viewerDidAuthor = node['viewerDidAuthor']
+      ..body = node['body'];
+    return comment;
   }
 }

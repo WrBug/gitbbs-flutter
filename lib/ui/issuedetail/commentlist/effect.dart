@@ -13,6 +13,6 @@ Effect<CommentListState> buildEffect() {
 
 void _init(Action action, Context<CommentListState> ctx) async {
   GitHttpRequest request = GithubHttpRequest.getInstance();
-  var list = await request.getComments(ctx.state.issue.getNumber());
-  ctx.dispatch(CommentListActionCreator.updateAction(list));
+  var pagingData = await request.getComments(ctx.state.issue.getNumber(), null);
+  ctx.dispatch(CommentListActionCreator.updateAction(pagingData));
 }

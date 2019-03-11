@@ -12,24 +12,21 @@ Widget buildView(
     state.easyRefreshKey.currentState.callRefreshFinish();
   }
   return EasyRefresh(
-    key: state.easyRefreshKey,
-    child: ListView.builder(
-      itemBuilder: adapter.itemBuilder,
-      itemCount: adapter.itemCount,
-    ),
-    autoLoad: state.hasNext,
-    refreshHeader: MaterialHeader(
-      key: state.headerKey,
-    ),
-    refreshFooter: MaterialFooter(key: state.footerKey),
-    autoControl: true,
-    onRefresh: () {},
-    loadMore: state.hasNext
-        ? () {
-            if (!state.hasNext) {
-              return;
-            }
-          }
-        : null,
-  );
+      key: state.easyRefreshKey,
+      child: ListView.builder(
+        itemBuilder: adapter.itemBuilder,
+        itemCount: adapter.itemCount,
+      ),
+      autoLoad: state.hasNext,
+      refreshHeader: MaterialHeader(
+        key: state.headerKey,
+      ),
+      refreshFooter: MaterialFooter(key: state.footerKey),
+      autoControl: false,
+      onRefresh: () {},
+      loadMore: () {
+        if (!state.hasNext) {
+          return;
+        }
+      });
 }

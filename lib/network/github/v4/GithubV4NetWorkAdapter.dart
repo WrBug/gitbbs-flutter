@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:gitbbs/network/IssueState.dart';
 import 'package:gitbbs/network/Request.dart';
 import 'package:gitbbs/network/github/v4/V4Request.dart';
+import 'package:gitbbs/network/github/v4/v4_query.dart';
 import '../../GitNetworkRequestAdapter.dart';
 
 class GithubV4NetWorkAdapter extends GitNetworkRequestAdapter {
@@ -36,101 +37,15 @@ class GithubV4NetWorkAdapter extends GitNetworkRequestAdapter {
   }
 
   @override
-  Request getComments(int number) {
-    var path = "/repos/$owner/$repoName/issues/$number/comments";
-    return Request(path, null, Method.GET);
+  Request getComments(int number, String before,int size) {
+    String query = getCommentsQuery(number,before,size);
+    var map = {'query': query};
+    return V4Request(map);
   }
 
   @override
   Request doAuthenticated(String token) {
     return Request('/user', null, Method.GET,
         header: {"Authorization": 'token $token'});
-  }
-
-  String getIssuesQuery(IssueState issueState, int size,
-      {List<String> label, String creator, String before, String after}) {
-    String labels = label == null || label.isEmpty
-        ? "null"
-        : '["' + label.join('","') + '"]';
-    String states = '[OPEN,CLOSED]';
-    if (issueState == IssueState.OPEN) {
-      states = '[OPEN]';
-    } else if (issueState == IssueState.CLOSED) {
-      states = '[CLOSED]';
-    }
-    String beforeStr = 'null';
-    if (before != null && before != '') {
-      beforeStr = '"$before"';
-    }
-    String afterStr = 'null';
-    if (after != null && after != '') {
-      afterStr = '"$after"';
-    }
-    return """
-          {
-      repository(owner: "$owner", name: "$repoName") {
-        issues(first: $size,labels:$labels, states: $states,orderBy:{field: CREATED_AT, direction: DESC},before:$beforeStr,after:$afterStr) {
-          edges {
-            cursor
-            node {
-              ${getIssueContent()}
-            }
-          }
-        }
-      }
-    }
-    """
-        .replaceAll("\t", " ")
-        .replaceAll('\n', ' ')
-        .replaceAll(RegExp(r' +'), ' ');
-  }
-
-  String getIssueQuery(int number) {
-    return '''
-    {
-  repository(owner: "$owner", name: "$repoName") {
-    issue(number:$number){
-        ${getIssueContent(fields: ['body', 'bodyHTML'])}
-    }
-  }
-}
-
-    '''
-        .replaceAll("\t", " ")
-        .replaceAll('\n', ' ')
-        .replaceAll(RegExp(r' +'), ' ');
-    ;
-  }
-
-  getIssueContent({List<String> fields}) {
-    return '''
-    title
-    publishedAt
-    updatedAt
-    id
-    number
-    closed
-    ${fields == null ? "" : fields.join('\n')}
-    closedAt
-    locked
-    author{
-      login
-      avatarUrl
-    }
-    comments{
-      totalCount
-    }
-    labels(first:100) {
-      edges {
-        node {
-          name
-          id
-          url
-          color
-          isDefault
-        }
-      }
-    }
-    ''';
   }
 }

@@ -28,31 +28,28 @@ Widget _buildView(PageState state, Dispatch dispatch, ViewService viewService) {
     state.easyRefreshKey.currentState.callRefreshFinish();
   }
   return EasyRefresh(
-    key: state.easyRefreshKey,
-    child: ListView.builder(
-      itemBuilder: adapter.itemBuilder,
-      itemCount: adapter.itemCount,
-    ),
-    autoLoad: state.hasNext,
-    refreshHeader: BezierCircleHeader(
-      key: state.headerKey,
-      color: Theme.of(viewService.context).scaffoldBackgroundColor,
-    ),
-    refreshFooter: BezierBounceFooter(
-      key: state.footerKey,
-      color: Theme.of(viewService.context).scaffoldBackgroundColor,
-    ),
-    autoControl: true,
-    onRefresh: () {
-      dispatch(PageActionCreator.onRefreshDataAction());
-    },
-    loadMore: state.hasNext
-        ? () {
-            if (!state.hasNext) {
-              return;
-            }
-            dispatch(PageActionCreator.onLoadMoreDataAction());
-          }
-        : null,
-  );
+      key: state.easyRefreshKey,
+      child: ListView.builder(
+        itemBuilder: adapter.itemBuilder,
+        itemCount: adapter.itemCount,
+      ),
+      autoLoad: state.hasNext,
+      refreshHeader: BezierCircleHeader(
+        key: state.headerKey,
+        color: Theme.of(viewService.context).scaffoldBackgroundColor,
+      ),
+      refreshFooter: BezierBounceFooter(
+        key: state.footerKey,
+        color: Theme.of(viewService.context).scaffoldBackgroundColor,
+      ),
+      autoControl: true,
+      onRefresh: () {
+        dispatch(PageActionCreator.onRefreshDataAction());
+      },
+      loadMore: () {
+        if (!state.hasNext) {
+          return;
+        }
+        dispatch(PageActionCreator.onLoadMoreDataAction());
+      });
 }

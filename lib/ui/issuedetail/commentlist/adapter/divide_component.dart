@@ -6,9 +6,11 @@ class DivideComponent extends Component {
 }
 
 Widget _buildView(
-    Object gitIssue,
-    Dispatch dispatch,
-    ViewService viewService,
-    ) {
-  return Divider(height: 2,);
+  Object gitIssue,
+  Dispatch dispatch,
+  ViewService viewService,
+) {
+  return Divider(
+    height: 16,
+  );
 }

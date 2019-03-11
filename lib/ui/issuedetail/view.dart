@@ -143,7 +143,7 @@ Widget _headerBuild(GitIssue issue) {
               ),
               Text(
                 DateUtil.getDateStrByDateTime(
-                    DateTime.parse(issue.getCreateTime())),
+                    DateTime.parse(issue.getCreateTime()).toLocal()),
                 style: TextStyle(fontSize: 12, color: text_summary_color),
               )
             ],

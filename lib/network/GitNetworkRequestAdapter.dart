@@ -18,7 +18,7 @@ abstract class GitNetworkRequestAdapter {
 
   Request getIssue(int number);
 
-  Request getComments(int number);
+  Request getComments(int number,String before,int size);
 
   Request doAuthenticated(String token);
 }

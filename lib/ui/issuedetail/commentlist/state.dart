@@ -2,11 +2,12 @@ import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:gitbbs/model/GitIssue.dart';
+import 'package:gitbbs/model/git_comment.dart';
 import 'package:gitbbs/network/github/model/GithubComment.dart';
 
 class CommentListState implements Cloneable<CommentListState> {
   GitIssue issue;
-  List<GithubComment> list;
+  List<GitComment> list;
   GlobalKey<EasyRefreshState> easyRefreshKey;
   GlobalKey<RefreshHeaderState> headerKey;
   GlobalKey<RefreshFooterState> footerKey;

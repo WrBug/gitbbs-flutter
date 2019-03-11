@@ -16,10 +16,11 @@ GithubComment _$GithubCommentFromJson(Map<String, dynamic> json) {
     ..user = json['user'] == null
         ? null
         : GithubUser.fromJson(json['user'] as Map<String, dynamic>)
-    ..createAt = json['created_at'] as String
+    ..createdAt = json['created_at'] as String
     ..updatedAt = json['updated_at'] as String
     ..authorAssociation = json['author_association'] as String
-    ..body = json['body'] as String;
+    ..body = json['body'] as String
+    ..cursor = json['cursor'] as String;
 }
 
 Map<String, dynamic> _$GithubCommentToJson(GithubComment instance) =>
@@ -30,8 +31,9 @@ Map<String, dynamic> _$GithubCommentToJson(GithubComment instance) =>
       'id': instance.id,
       'node_id': instance.nodeId,
       'user': instance.user,
-      'created_at': instance.createAt,
+      'created_at': instance.createdAt,
       'updated_at': instance.updatedAt,
       'author_association': instance.authorAssociation,
-      'body': instance.body
+      'body': instance.body,
+      'cursor': instance.cursor
     };
