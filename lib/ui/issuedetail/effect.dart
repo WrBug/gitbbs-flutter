@@ -2,12 +2,14 @@ import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:gitbbs/model/entry/comment_edit_data.dart';
 import 'package:gitbbs/model/entry/comment_list_data.dart';
+import 'package:gitbbs/model/event/comments_count_changed_event.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
 import 'package:gitbbs/network/github/GithubHttpRequest.dart';
 import 'package:gitbbs/ui/editcomment/edit_comment_page.dart';
 import 'package:gitbbs/ui/issuedetail/action.dart';
 import 'package:gitbbs/ui/issuedetail/commentlist/comment_list_page.dart';
 import 'package:gitbbs/ui/issuedetail/state.dart';
+import 'package:gitbbs/util/event_bus_helper.dart';
 
 Effect<IssueDetailState> buildEffect() {
   return combineEffects(<Object, Effect<IssueDetailState>>{
@@ -18,6 +20,10 @@ Effect<IssueDetailState> buildEffect() {
 }
 
 void _init(Action action, Context<IssueDetailState> ctx) async {
+  EventBusHelper.on<CommentCountChangedEvent>().listen((event) {
+    ctx.dispatch(
+        IssueDetailActionCreator.onCommentsCountChangedAction(event));
+  });
   GitHttpRequest request = GithubHttpRequest.getInstance();
   var issue = await request.getIssue(ctx.state.originIssue.getNumber());
   ctx.dispatch(IssueDetailActionCreator.update(issue));

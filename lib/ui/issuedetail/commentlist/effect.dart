@@ -1,11 +1,14 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:gitbbs/model/entry/comment_edit_data.dart';
+import 'package:gitbbs/model/event/comments_count_changed_event.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
 import 'package:gitbbs/network/github/GithubHttpRequest.dart';
 import 'package:gitbbs/ui/editcomment/edit_comment_page.dart';
 import 'package:gitbbs/ui/issuedetail/commentlist/action.dart';
 import 'package:gitbbs/ui/issuedetail/commentlist/state.dart';
+import 'package:gitbbs/ui/widget/loading.dart';
+import 'package:gitbbs/util/event_bus_helper.dart';
 import 'package:gitbbs/util/issue_cache_manager.dart';
 
 Effect<CommentListState> buildEffect() {
@@ -73,9 +76,9 @@ void _queryDeleteComment(Action action, Context<CommentListState> ctx) {
                 child: Text('取消')),
             FlatButton(
                 onPressed: () {
+                  Navigator.of(context).pop();
                   ctx.dispatch(CommentListActionCreator.deleteCommentAction(
                       action.payload));
-                  Navigator.of(context).pop();
                 },
                 child: Text('确定')),
           ],
@@ -84,10 +87,14 @@ void _queryDeleteComment(Action action, Context<CommentListState> ctx) {
 }
 
 void _deleteComment(Action action, Context<CommentListState> ctx) async {
+  var dialog = LoadingDialog.show(ctx.context);
   GitHttpRequest request = GithubHttpRequest.getInstance();
   var success = await request.deleteComment(action.payload.getId());
+  dialog.dismiss();
   if (success) {
-    ctx.dispatch(
-        CommentListActionCreator.onCommentDeletedAction(action.payload));
+    var act = CommentListActionCreator.onCommentDeletedAction(action.payload);
+    EventBusHelper.fire(
+        CommentCountChangedEvent(false, ctx.state.issue.getNumber()));
+    ctx.dispatch(act);
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter_easyrefresh/material_footer.dart';
 import 'package:flutter_easyrefresh/material_header.dart';
 import 'package:gitbbs/ui/issuedetail/commentlist/action.dart';
 import 'package:gitbbs/ui/issuedetail/commentlist/state.dart';
+import 'package:gitbbs/ui/widget/loading.dart';
 
 Widget buildView(
     CommentListState state, Dispatch dispatch, ViewService viewService) {
@@ -14,10 +15,15 @@ Widget buildView(
   }
   return EasyRefresh(
       key: state.easyRefreshKey,
-      child: ListView.builder(
-        itemBuilder: adapter.itemBuilder,
-        itemCount: adapter.itemCount,
-      ),
+      child: state.init
+          ? Padding(
+              padding: EdgeInsets.fromLTRB(0, 150, 0, 0),
+              child: getLoadingView(),
+            )
+          : ListView.builder(
+              itemBuilder: adapter.itemBuilder,
+              itemCount: adapter.itemCount,
+            ),
       autoLoad: state.hasNext,
       refreshHeader: MaterialHeader(
         key: state.headerKey,
@@ -30,7 +36,8 @@ Widget buildView(
       loadMore: () {
         if (!state.hasNext) {
           state.footerKey.currentState.onNoMore();
-          state.scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('页面到底了！')));
+          state.scaffoldKey.currentState
+              .showSnackBar(SnackBar(content: Text('页面到底了！')));
           return;
         }
         dispatch(CommentListActionCreator.loadMoreAction());

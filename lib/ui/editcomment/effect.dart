@@ -3,6 +3,7 @@ import 'package:gitbbs/network/GitHttpRequest.dart';
 import 'package:gitbbs/network/github/GithubHttpRequest.dart';
 import 'package:gitbbs/ui/editcomment/action.dart';
 import 'package:gitbbs/ui/editcomment/state.dart';
+import 'package:gitbbs/ui/widget/loading.dart';
 import 'package:markdown_editor/markdown_editor.dart';
 import 'package:flutter/material.dart';
 import 'package:gitbbs/model/entry/comment_edit_data.dart';
@@ -33,6 +34,7 @@ void _submitComment(Action action, Context<EditCommentState> ctx) async {
   String body = ctx.state.getBody();
   GitHttpRequest request = GithubHttpRequest.getInstance();
   var success = false;
+  var dialog = LoadingDialog.show(ctx.context);
   if (ctx.state.type == Type.modify) {
     String commentId = ctx.state.comment.getId();
     success = await request.modifyComment(commentId, body);
@@ -40,6 +42,7 @@ void _submitComment(Action action, Context<EditCommentState> ctx) async {
     String issueId = ctx.state.issue.getId();
     success = await request.addComment(issueId, body);
   }
+  dialog.dismiss();
   if (success == true) {
     ctx.state.scaffoldKey.currentState
         .showSnackBar(SnackBar(content: Text('提交成功')));
@@ -71,8 +74,8 @@ void _checkSubmitComment(Action action, Context<EditCommentState> ctx) {
                 child: Text('取消')),
             FlatButton(
                 onPressed: () {
-                  ctx.dispatch(EditCommentActionCreator.submitCommentAction());
                   Navigator.of(context).pop();
+                  ctx.dispatch(EditCommentActionCreator.submitCommentAction());
                 },
                 child: Text('确定')),
           ],

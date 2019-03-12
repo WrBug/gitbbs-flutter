@@ -13,8 +13,8 @@ class CommentListState implements Cloneable<CommentListState> {
   GlobalKey<RefreshHeaderState> headerKey;
   GlobalKey<RefreshFooterState> footerKey;
   GlobalKey<ScaffoldState> scaffoldKey;
-
   bool hasNext;
+  bool init = false;
 
   @override
   CommentListState clone() {
@@ -38,5 +38,6 @@ CommentListState initState(CommentListData data) {
   state.easyRefreshKey = new GlobalKey<EasyRefreshState>();
   state.headerKey = new GlobalKey<RefreshHeaderState>();
   state.footerKey = new GlobalKey<RefreshFooterState>();
+  state.init = true;
   return state;
 }

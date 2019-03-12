@@ -6,6 +6,7 @@ import 'package:gitbbs/model/GitUser.dart';
 import 'package:gitbbs/model/UserCacheManager.dart';
 import 'package:gitbbs/ui/main/home/home_page.dart';
 import 'package:gitbbs/ui/main/user_tab.dart';
+import 'package:gitbbs/ui/widget/loading.dart';
 
 void main() {
   UserCacheManager.init();
@@ -114,7 +115,6 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _pageChange(int index) {
-    print('_pageChange $index');
     setState(() {
       if (_currentPageIndex != index) {
         _currentPageIndex = index;

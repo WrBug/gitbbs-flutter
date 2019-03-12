@@ -23,7 +23,7 @@ class IssueDetailState implements Cloneable<IssueDetailState> {
       return body;
     }
     body = IssueCacheManager.getIssueCache(getIssue().getNumber());
-    return body;
+    return body ?? '';
   }
 
   @override
@@ -31,7 +31,7 @@ class IssueDetailState implements Cloneable<IssueDetailState> {
     return IssueDetailState()
       ..originIssue = originIssue
       ..controller = controller
-      ..scaffoldKey=scaffoldKey
+      ..scaffoldKey = scaffoldKey
       ..issue = issue;
   }
 }
@@ -39,6 +39,6 @@ class IssueDetailState implements Cloneable<IssueDetailState> {
 IssueDetailState initState(GitIssue issue) {
   final IssueDetailState state = IssueDetailState();
   state.originIssue = issue;
-  state.scaffoldKey=GlobalKey<ScaffoldState>();
+  state.scaffoldKey = GlobalKey<ScaffoldState>();
   return state;
 }
