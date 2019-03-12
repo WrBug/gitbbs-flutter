@@ -1,10 +1,12 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
+import 'package:gitbbs/network/image_helper.dart';
 import 'package:gitbbs/ui/editcomment/action.dart';
 import 'package:gitbbs/ui/editcomment/state.dart';
 import 'package:gitbbs/model/entry/comment_edit_data.dart';
 import 'package:markdown_editor/editor.dart';
 import 'package:markdown_editor/markdown_editor.dart';
+import 'package:image_picker/image_picker.dart';
 
 Widget buildView(
     EditCommentState state, Dispatch dispatch, ViewService viewService) {
@@ -64,6 +66,11 @@ Widget buildView(
         key: state.mdKey,
         tabChange: (type) {
           dispatch(EditCommentActionCreator.pageTypeChangedAction());
+        },
+        imageSelect: () async {
+          var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+          var url = await ImageHelper.upload(image);
+          return url;
         },
         initText:
             state.type == Type.modify ? state.comment.getBody() ?? "" : "",

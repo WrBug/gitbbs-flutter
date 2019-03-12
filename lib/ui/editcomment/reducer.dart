@@ -4,7 +4,7 @@ import 'package:gitbbs/ui/editcomment/state.dart';
 
 Reducer<EditCommentState> buildReducer() {
   return asReducer<EditCommentState>(<Object, Reducer<EditCommentState>>{
-    EditCommentAction.pageTypeChanged: _pageTypeChanged
+    EditCommentAction.pageTypeChanged: _pageTypeChanged,
   });
 }
 

@@ -1,4 +1,5 @@
 import 'package:fish_redux/fish_redux.dart';
+import 'package:gitbbs/model/git_comment.dart';
 import 'package:markdown_editor/markdown_editor.dart';
 
 enum EditCommentAction {
@@ -24,4 +25,6 @@ class EditCommentActionCreator {
   static Action checkSubmitCommentAction() {
     return const Action(EditCommentAction.checkSubmitComment);
   }
+
+
 }

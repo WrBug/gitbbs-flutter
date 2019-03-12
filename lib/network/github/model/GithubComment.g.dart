@@ -24,7 +24,8 @@ GithubComment _$GithubCommentFromJson(Map<String, dynamic> json) {
     ..floor = json['floor'] as int
     ..viewerCanUpdate = json['viewerCanUpdate'] as bool
     ..viewerCanDelete = json['viewerCanDelete'] as bool
-    ..viewerDidAuthor = json['viewerDidAuthor'] as bool;
+    ..viewerDidAuthor = json['viewerDidAuthor'] as bool
+    ..isAuthor = json['isAuthor'] as bool;
 }
 
 Map<String, dynamic> _$GithubCommentToJson(GithubComment instance) =>
@@ -43,5 +44,6 @@ Map<String, dynamic> _$GithubCommentToJson(GithubComment instance) =>
       'floor': instance.floor,
       'viewerCanUpdate': instance.viewerCanUpdate,
       'viewerCanDelete': instance.viewerCanDelete,
-      'viewerDidAuthor': instance.viewerDidAuthor
+      'viewerDidAuthor': instance.viewerDidAuthor,
+      'isAuthor': instance.isAuthor
     };

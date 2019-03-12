@@ -77,7 +77,7 @@ _iconButtonBuild(GitComment comment, Dispatch dispatch) {
       dispatch(CommentListActionCreator.replyCommentAction(comment));
     },
   ));
-  if (comment.viewerCanUpdate) {
+  if (comment.viewerCanUpdate && comment.isAuthor) {
     list.add(IconButton(
       icon: Icon(Icons.edit),
       iconSize: 18,
@@ -92,7 +92,9 @@ _iconButtonBuild(GitComment comment, Dispatch dispatch) {
       icon: Icon(Icons.delete),
       iconSize: 18,
       color: icon_summary_color,
-      onPressed: () {},
+      onPressed: () {
+        dispatch(CommentListActionCreator.queryDeleteCommentAction(comment));
+      },
     ));
   }
   return Row(

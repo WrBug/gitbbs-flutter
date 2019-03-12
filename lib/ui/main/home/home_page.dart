@@ -9,7 +9,7 @@ import 'package:gitbbs/ui/main/home/item/adapter.dart';
 import 'package:gitbbs/ui/main/home/page_state.dart';
 import 'package:gitbbs/ui/main/home/reducer.dart';
 
-class HomePage extends Page<PageState, Map<String, dynamic>> {
+class HomePage extends Page<PageState,GlobalKey<ScaffoldState>> {
   HomePage()
       : super(
           initState: initState,
@@ -48,6 +48,8 @@ Widget _buildView(PageState state, Dispatch dispatch, ViewService viewService) {
       },
       loadMore: () {
         if (!state.hasNext) {
+          state.footerKey.currentState.onNoMore();
+          state.scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('页面到底了！')));
           return;
         }
         dispatch(PageActionCreator.onLoadMoreDataAction());

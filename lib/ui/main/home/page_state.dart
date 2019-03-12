@@ -10,12 +10,14 @@ class PageState extends Cloneable<PageState> {
   GlobalKey<EasyRefreshState> easyRefreshKey;
   GlobalKey<RefreshHeaderState> headerKey;
   GlobalKey<RefreshFooterState> footerKey;
+  GlobalKey<ScaffoldState> scaffoldKey;
 
   @override
   PageState clone() {
     return PageState()
       ..list = List.of(list)
       ..progressingList = List.of(progressingList)
+      ..scaffoldKey = scaffoldKey
       ..easyRefreshKey = easyRefreshKey
       ..headerKey = headerKey
       ..footerKey = footerKey
@@ -23,10 +25,11 @@ class PageState extends Cloneable<PageState> {
   }
 }
 
-PageState initState(Map<String, dynamic> args) {
+PageState initState(GlobalKey<ScaffoldState> scaffoldKey) {
   var state = PageState();
   state.easyRefreshKey = new GlobalKey<EasyRefreshState>();
   state.headerKey = new GlobalKey<RefreshHeaderState>();
   state.footerKey = new GlobalKey<RefreshFooterState>();
+  state.scaffoldKey = scaffoldKey;
   return state;
 }

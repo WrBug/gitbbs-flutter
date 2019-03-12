@@ -16,6 +16,8 @@ allprojects {
         google()
         jcenter()
     }
+
+
 }
 
 rootProject.buildDir = '../build'

@@ -1,6 +1,7 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:gitbbs/model/entry/comment_edit_data.dart';
+import 'package:gitbbs/model/entry/comment_list_data.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
 import 'package:gitbbs/network/github/GithubHttpRequest.dart';
 import 'package:gitbbs/ui/editcomment/edit_comment_page.dart';
@@ -28,7 +29,8 @@ void _toggleCommentVisible(Action action, Context<IssueDetailState> ctx) async {
     ctx.state.controller = showBottomSheet(
         context: context,
         builder: (context) {
-          return CommentListPage().buildPage(ctx.state.getIssue());
+          return CommentListPage().buildPage(
+              CommentListData(ctx.state.getIssue(), ctx.state.scaffoldKey));
         });
     ctx.state.controller.closed.whenComplete(() {
       ctx.state.controller = null;

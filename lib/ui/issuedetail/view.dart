@@ -12,6 +12,7 @@ import 'package:gitbbs/ui/widget/avatar_img.dart';
 Widget buildView(
     IssueDetailState state, Dispatch dispatch, ViewService viewService) {
   return Scaffold(
+    key: state.scaffoldKey,
     appBar: AppBar(
       title: Text(state.getIssue().getTitle()),
     ),

@@ -23,4 +23,6 @@ abstract class GitComment {
   bool viewerCanUpdate;
 
   bool viewerDidAuthor;
+
+  bool isAuthor;
 }

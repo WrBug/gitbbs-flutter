@@ -16,13 +16,12 @@ abstract class GitIssue implements Cloneable<GitIssue> {
 
   GitUser getAuthor();
 
-  int getCommentsCount();
-
+  int comments;
   String getShowComments() {
-    if (getCommentsCount() == null || getCommentsCount() == 0) {
+    if (comments == null || comments == 0) {
       return '暂无评论';
     }
-    return '${getCommentsCount().toString()} 条评论';
+    return '${comments.toString()} 条评论';
   }
 
   String getCreateTime();

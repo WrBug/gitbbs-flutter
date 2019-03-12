@@ -22,6 +22,7 @@ class GithubV4Issue extends GitIssue {
   String closedAt;
   bool locked;
   GithubUser author;
+  @override
   int comments;
   List<GithubLabel> labels;
   bool hasMore;
@@ -40,11 +41,6 @@ class GithubV4Issue extends GitIssue {
   @override
   String getClosedAt() {
     return closedAt;
-  }
-
-  @override
-  int getCommentsCount() {
-    return comments;
   }
 
   @override

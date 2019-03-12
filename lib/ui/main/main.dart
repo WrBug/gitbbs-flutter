@@ -31,6 +31,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  GlobalKey<ScaffoldState> key = GlobalKey<ScaffoldState>();
   var _currentPageIndex = 0;
   final items = [
     BottomNavigationBarItem(icon: Icon(Icons.home), title: Text("主页")),
@@ -39,12 +40,8 @@ class _MainPageState extends State<MainPage> {
     BottomNavigationBarItem(icon: Icon(Icons.favorite), title: Text("收藏")),
     BottomNavigationBarItem(icon: Icon(Icons.face), title: Text("我的"))
   ];
-  final bodies = [
-    HomePage().buildPage(<String, dynamic>{}, wantKeepAlive: true),
-    Text("2"),
-    Text("3"),
-    UserTab()
-  ];
+  var bodies;
+
   final title = ['主页', '问答', '收藏', '我的'];
   GitUser _user;
   StreamSubscription subscription;
@@ -53,6 +50,12 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
+    bodies = [
+      HomePage().buildPage(key, wantKeepAlive: true),
+      Text("2"),
+      Text("3"),
+      UserTab()
+    ];
     _user = UserCacheManager.getUser();
     subscription = UserCacheManager.addUserChangedListener().listen((event) {
       if (!event.authFailed) {
@@ -72,6 +75,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: key,
       appBar: AppBar(
         title: _currentPageIndex != 3
             ? Text(title[_currentPageIndex])

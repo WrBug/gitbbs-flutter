@@ -28,6 +28,8 @@ dependencies:
   common_utils: ^1.0.9
   flutter_easyrefresh: ^1.2.7
   flutter_markdown: ^0.2.0
+  modal_progress_hud: ^0.1.2
+  image_picker: ^0.5.0+6
   fish_redux:
     path: fish-redux
   markdown_editor:

@@ -111,6 +111,7 @@ String getCommentsQuery(int number, String before, int size) {
             body
             viewerCanUpdate
             viewerCanDelete
+            viewerDidAuthor
           }
         }
       }
@@ -140,6 +141,18 @@ String getModifyCommentQuery(String commentId, String body) {
   return '''
   mutation {
   updateIssueComment(input:{id:"$commentId",body:"$body"}){
+      clientMutationId
+    }
+  }
+  '''
+      .replaceAll("\t", " ")
+      .replaceAll(RegExp(r' +'), ' ');
+}
+
+String getDeleteCommentQuery(String commentId) {
+  return '''
+  mutation {
+  deleteIssueComment(input:{id:"$commentId"}){
       clientMutationId
     }
   }

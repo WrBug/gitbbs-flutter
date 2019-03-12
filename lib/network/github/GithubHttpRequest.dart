@@ -6,7 +6,7 @@ import 'package:gitbbs/model/PagingData.dart';
 import 'package:gitbbs/model/UserCacheManager.dart';
 import 'package:gitbbs/model/db/gitissue_data_base.dart';
 import 'package:gitbbs/model/git_comment.dart';
-import 'package:gitbbs/model/issue_cache_manager.dart';
+import 'package:gitbbs/util/issue_cache_manager.dart';
 import 'package:gitbbs/network/GitHttpClient.dart';
 import 'package:gitbbs/network/GitNetworkRequestAdapter.dart';
 import 'package:gitbbs/network/IssueState.dart';
@@ -67,7 +67,11 @@ class GithubHttpRequest implements GitHttpRequest {
       comment.cursor = map['cursor'];
       return comment;
     }).toList();
-    return PagingData(comments.length == size, comments);
+    var data = PagingData(comments.length == size, comments);
+    if (before == null || before == '') {
+      IssueCacheManager.saveIssueComments(number, data);
+    }
+    return data;
   }
 
   @override
@@ -75,7 +79,7 @@ class GithubHttpRequest implements GitHttpRequest {
     var response = await _client.execute(_adapter.getIssue(number));
     Map map = response.data['data']['repository']['issue'];
     var issue = V4Convert.toIssue(map);
-    IssueCacheManager.saveCache(issue.getNumber(), issue.getBody());
+    IssueCacheManager.saveIssueCache(issue.getNumber(), issue.getBody());
     GitIssueDataBase.createInstance().save(gitIssue: issue);
     return issue;
   }
@@ -94,6 +98,16 @@ class GithubHttpRequest implements GitHttpRequest {
   Future<bool> modifyComment(String commentId, String body) async {
     var response =
         await _client.execute(_adapter.modifyComment(commentId, body));
+    Map data = response.data;
+    if (data.containsKey('errors')) {
+      return false;
+    }
+    return true;
+  }
+
+  @override
+  Future<bool> deleteComment(String commentId) async {
+    var response = await _client.execute(_adapter.deleteComment(commentId));
     Map data = response.data;
     if (data.containsKey('errors')) {
       return false;

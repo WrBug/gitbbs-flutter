@@ -79,4 +79,7 @@ class GithubComment implements GitComment {
 
   @override
   String getId() => id;
+
+  @override
+  bool isAuthor;
 }

@@ -51,7 +51,7 @@ _bottomInfoBuild(GitIssue gitIssue) {
           ),
           Padding(padding: EdgeInsets.fromLTRB(5, 0, 0, 0)),
           Text(
-            '${gitIssue.getCommentsCount()} 评论',
+            '${gitIssue.comments} 评论',
             style: TextStyle(fontSize: 12),
           ),
           Padding(padding: EdgeInsets.fromLTRB(5, 0, 0, 0)),

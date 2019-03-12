@@ -2,7 +2,12 @@ import 'package:fish_redux/fish_redux.dart';
 import 'package:gitbbs/model/GitIssue.dart';
 import 'package:flutter/material.dart';
 
-enum IssueDetailAction { update,addComment, toggleCommentsVisible, commentsVisibleChanged }
+enum IssueDetailAction {
+  update,
+  addComment,
+  toggleCommentsVisible,
+  commentsVisibleChanged
+}
 
 class IssueDetailActionCreator {
   static Action update(GitIssue issue) {

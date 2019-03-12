@@ -1,12 +1,13 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:gitbbs/model/GitIssue.dart';
-import 'package:gitbbs/model/issue_cache_manager.dart';
+import 'package:gitbbs/util/issue_cache_manager.dart';
 
 class IssueDetailState implements Cloneable<IssueDetailState> {
   GitIssue originIssue;
   GitIssue issue;
   PersistentBottomSheetController controller;
+  GlobalKey<ScaffoldState> scaffoldKey;
 
   GitIssue getIssue() {
     return issue == null ? originIssue : issue;
@@ -21,7 +22,7 @@ class IssueDetailState implements Cloneable<IssueDetailState> {
     if (body != null) {
       return body;
     }
-    body = IssueCacheManager.getCache(getIssue().getNumber());
+    body = IssueCacheManager.getIssueCache(getIssue().getNumber());
     return body;
   }
 
@@ -30,6 +31,7 @@ class IssueDetailState implements Cloneable<IssueDetailState> {
     return IssueDetailState()
       ..originIssue = originIssue
       ..controller = controller
+      ..scaffoldKey=scaffoldKey
       ..issue = issue;
   }
 }
@@ -37,5 +39,6 @@ class IssueDetailState implements Cloneable<IssueDetailState> {
 IssueDetailState initState(GitIssue issue) {
   final IssueDetailState state = IssueDetailState();
   state.originIssue = issue;
+  state.scaffoldKey=GlobalKey<ScaffoldState>();
   return state;
 }

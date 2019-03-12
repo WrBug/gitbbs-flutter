@@ -53,6 +53,7 @@ class V4Convert {
       ..viewerCanDelete = node['viewerCanDelete']
       ..viewerCanUpdate = node['viewerCanUpdate']
       ..viewerDidAuthor = node['viewerDidAuthor']
+      ..isAuthor = node['viewerDidAuthor']
       ..body = node['body'];
     return comment;
   }

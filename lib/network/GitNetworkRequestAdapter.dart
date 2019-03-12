@@ -24,4 +24,5 @@ abstract class GitNetworkRequestAdapter {
 
   Request addComment(String issueId, String body);
   Request modifyComment(String commentId, String body);
+  Request deleteComment(String commentId);
 }

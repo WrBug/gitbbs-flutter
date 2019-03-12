@@ -63,4 +63,11 @@ class GithubV4NetWorkAdapter extends GitNetworkRequestAdapter {
     var map = {'query': query};
     return V4PreViewRequest(map);
   }
+
+  @override
+  Request deleteComment(String commentId) {
+    String query = getDeleteCommentQuery(commentId);
+    var map = {'query': query};
+    return V4PreViewRequest(map);
+  }
 }

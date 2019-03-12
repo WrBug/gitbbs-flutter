@@ -23,5 +23,8 @@ abstract class GitHttpRequest {
   Future<bool> signIn(String username, String password);
 
   Future<bool> addComment(String issueId, String body);
+
   Future<bool> modifyComment(String commentId, String body);
+
+  Future<bool> deleteComment(String commentId);
 }
