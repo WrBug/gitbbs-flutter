@@ -1,7 +1,11 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:gitbbs/model/entry/midddle_issues_data.dart';
 
-enum PageAction { loadData, loadMiddleData, loadMoreData }
+enum PageAction {
+  loadData,
+  loadMiddleData,
+  loadMoreData
+}
 
 class PageActionCreator {
   static Action onRefreshDataAction() {
@@ -15,4 +19,6 @@ class PageActionCreator {
   static Action onLoadMoreDataAction() {
     return const Action(PageAction.loadMoreData);
   }
+
+
 }

@@ -24,7 +24,8 @@ Effect<CommentListState> buildEffect() {
 }
 
 void _init(Action action, Context<CommentListState> ctx) async {
-  var cache = IssueCacheManager.getIssueComments(ctx.state.issue.getNumber());
+  var cache =
+      await IssueCacheManager.getIssueComments(ctx.state.issue.getNumber());
   if (cache != null) {
     ctx.dispatch(CommentListActionCreator.refreshedAction(cache));
   }

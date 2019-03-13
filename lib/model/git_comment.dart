@@ -2,6 +2,7 @@ import 'package:gitbbs/model/GitUser.dart';
 
 abstract class GitComment {
   String getId();
+
   GitUser getAuthor();
 
   String getAuthorAssociation();
@@ -25,4 +26,7 @@ abstract class GitComment {
   bool viewerDidAuthor;
 
   bool isAuthor;
+
+
+  Map<String, dynamic> toJson();
 }

@@ -1,57 +1,59 @@
 import 'dart:collection';
-
+import 'dart:convert';
 import 'package:gitbbs/model/PagingData.dart';
 import 'package:gitbbs/model/git_comment.dart';
+import 'package:gitbbs/network/github/model/GithubComment.dart';
+import 'package:gitbbs/util/disk_lru_cache.dart';
+import 'package:gitbbs/util/lru_cache.dart';
 
 class IssueCacheManager {
   static const _prefix_issue = 'issue_';
   static const _prefix_comment = 'comments_';
-  static const int _max_count = 30;
-  static Map<String, dynamic> _cache = LinkedHashMap();
+  static DiskLruCache lruCache = DiskLruCache(30, 'IssueCacheManager');
 
   static saveIssueCache(int number, String body) {
     _setData(_prefix_issue + number.toString(), body);
   }
 
-  static String getIssueCache(int number) {
-    return _getData(_prefix_issue + number.toString()) ?? '';
+  static Future<String> getIssueCache(int number) async {
+    return await _getData(_prefix_issue + number.toString()) ?? '';
   }
 
-  static PagingData<GitComment> getIssueComments(int number) {
-    return _getData(_prefix_comment + number.toString());
+  static Future<PagingData<GitComment>> getIssueComments(int number) async {
+    var json = await _getData(_prefix_comment + number.toString());
+    if (json == '') {
+      return null;
+    }
+    var map = jsonDecode(json);
+    List list = List.of(map['data']);
+    List<GitComment> comments = list.map<GitComment>((map) {
+      return GithubComment.fromJson(map);
+    }).toList();
+    return PagingData(map['hasNext'], comments);
   }
 
   static saveIssueComments(int number, PagingData<GitComment> data) {
-    _setData(_prefix_comment + number.toString(), data);
+    var list = data.data.map((comment) {
+      return comment.toJson();
+    }).toList();
+    _setData(_prefix_comment + number.toString(), data.toJson(list));
   }
 
-  static removeCommentItem(int number, GitComment comment) {
-    var data = getIssueComments(number);
+  static removeCommentItem(int number, GitComment comment) async {
+    var data = await getIssueComments(number);
     if (data != null) {
       data.data.remove(comment);
     }
   }
 
-  static _setData(String key, dynamic value) {
-    if (_cache.containsKey(key)) {
-      _cache.remove(key);
+  static _setData(String key, String value) {
+    if (!(value is String)) {
+      return;
     }
-    _cache[key] = value;
-    _checkCount();
+    lruCache.put(key, value);
   }
 
-  static _getData(String key) {
-    if (_cache.containsKey(key)) {
-      var cache = _cache.remove(key);
-      _cache[key] = cache;
-      return cache;
-    }
-    return null;
-  }
-
-  static void _checkCount() {
-    while (_cache.length > _max_count) {
-      _cache.remove(_cache.keys.first);
-    }
+  static Future<String> _getData(String key) async {
+    return await lruCache.get(key);
   }
 }

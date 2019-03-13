@@ -118,7 +118,7 @@ Widget _mainBodyBuild(IssueDetailState state) {
 }
 
 Widget _bodyBuild(IssueDetailState state) {
-  String body = state.getBody();
+  String body = state.body;
   return body == ''
       ? Padding(
           padding: EdgeInsets.fromLTRB(0, 150, 0, 0),

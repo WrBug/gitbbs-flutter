@@ -6,6 +6,7 @@ import 'package:gitbbs/util/issue_cache_manager.dart';
 class IssueDetailState implements Cloneable<IssueDetailState> {
   GitIssue originIssue;
   GitIssue issue;
+  String body;
   PersistentBottomSheetController controller;
   GlobalKey<ScaffoldState> scaffoldKey;
 
@@ -17,21 +18,13 @@ class IssueDetailState implements Cloneable<IssueDetailState> {
     return controller != null;
   }
 
-  String getBody() {
-    var body = getIssue().getBody();
-    if (body != null) {
-      return body;
-    }
-    body = IssueCacheManager.getIssueCache(getIssue().getNumber());
-    return body ?? '';
-  }
-
   @override
   IssueDetailState clone() {
     return IssueDetailState()
       ..originIssue = originIssue
       ..controller = controller
       ..scaffoldKey = scaffoldKey
+      ..body = body
       ..issue = issue;
   }
 }
@@ -39,6 +32,7 @@ class IssueDetailState implements Cloneable<IssueDetailState> {
 IssueDetailState initState(GitIssue issue) {
   final IssueDetailState state = IssueDetailState();
   state.originIssue = issue;
+  state.body = issue.getBody() ?? '';
   state.scaffoldKey = GlobalKey<ScaffoldState>();
   return state;
 }

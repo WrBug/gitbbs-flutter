@@ -2,13 +2,15 @@ import 'package:fish_redux/fish_redux.dart';
 import 'package:gitbbs/model/GitIssue.dart';
 import 'package:gitbbs/model/PagingData.dart';
 import 'package:gitbbs/model/entry/midddle_issues_data.dart';
+import 'package:gitbbs/model/event/comments_count_changed_event.dart';
 
 enum PageInnerAction {
   loadInitData,
   refreshData,
   refreshMiddleData,
   loadMoreData,
-  showMiddleProgress
+  showMiddleProgress,
+  onCommentsCountChanged
 }
 
 class PageInnerActionCreator {
@@ -32,5 +34,9 @@ class PageInnerActionCreator {
 
   static Action showMiddleProgress(MiddleIssuesData issuesData) {
     return Action(PageInnerAction.showMiddleProgress, payload: issuesData);
+  }
+
+  static Action onCommentsCountChangedAction(CommentCountChangedEvent event) {
+    return Action(PageInnerAction.onCommentsCountChanged, payload: event);
   }
 }

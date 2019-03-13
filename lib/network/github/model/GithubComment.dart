@@ -37,6 +37,7 @@ class GithubComment implements GitComment {
   factory GithubComment.fromJson(Map<String, dynamic> json) =>
       _$GithubCommentFromJson(json);
 
+
   Map<String, dynamic> toJson() => _$GithubCommentToJson(this);
 
   @override

@@ -3,6 +3,7 @@ import 'package:gitbbs/model/GitIssue.dart';
 import 'package:gitbbs/model/PagingData.dart';
 import 'package:gitbbs/model/db/gitissue_data_base.dart';
 import 'package:gitbbs/model/entry/midddle_issues_data.dart';
+import 'package:gitbbs/model/event/comments_count_changed_event.dart';
 import 'package:gitbbs/ui/main/home/inner_action.dart';
 import 'package:gitbbs/ui/main/home/page_state.dart';
 
@@ -12,7 +13,8 @@ Reducer<PageState> buildReducer() {
     PageInnerAction.refreshData: _refreshData,
     PageInnerAction.refreshMiddleData: _refreshMiddleData,
     PageInnerAction.loadMoreData: _loadMoreData,
-    PageInnerAction.showMiddleProgress: _showMiddleProgress
+    PageInnerAction.showMiddleProgress: _showMiddleProgress,
+    PageInnerAction.onCommentsCountChanged: _onCommentsCountChanged
   });
 }
 
@@ -66,4 +68,22 @@ PageState _showMiddleProgress(PageState state, Action action) {
   final PageState newState = state.clone();
   newState.progressingList.add(data.afterIssue);
   return newState;
+}
+
+PageState _onCommentsCountChanged(PageState state, Action action) {
+  CommentCountChangedEvent event = action.payload;
+  final PageState newState = state.clone();
+  bool find = false;
+  for (var item in newState.list) {
+    if (item.getNumber() == event.number) {
+      find = true;
+      if (event.isAdd) {
+        item.comments++;
+      } else {
+        item.comments--;
+      }
+      break;
+    }
+  }
+  return find ? newState : state;
 }

@@ -10,6 +10,7 @@ import 'package:gitbbs/ui/issuedetail/action.dart';
 import 'package:gitbbs/ui/issuedetail/commentlist/comment_list_page.dart';
 import 'package:gitbbs/ui/issuedetail/state.dart';
 import 'package:gitbbs/util/event_bus_helper.dart';
+import 'package:gitbbs/util/issue_cache_manager.dart';
 
 Effect<IssueDetailState> buildEffect() {
   return combineEffects(<Object, Effect<IssueDetailState>>{
@@ -21,9 +22,10 @@ Effect<IssueDetailState> buildEffect() {
 
 void _init(Action action, Context<IssueDetailState> ctx) async {
   EventBusHelper.on<CommentCountChangedEvent>().listen((event) {
-    ctx.dispatch(
-        IssueDetailActionCreator.onCommentsCountChangedAction(event));
+    ctx.dispatch(IssueDetailActionCreator.onCommentsCountChangedAction(event));
   });
+  var body = await IssueCacheManager.getIssueCache(ctx.state.originIssue.getNumber());
+  ctx.dispatch(IssueDetailActionCreator.updateBodyAction(body));
   GitHttpRequest request = GithubHttpRequest.getInstance();
   var issue = await request.getIssue(ctx.state.originIssue.getNumber());
   ctx.dispatch(IssueDetailActionCreator.update(issue));

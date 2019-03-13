@@ -9,6 +9,7 @@ import 'package:gitbbs/ui/issuedetail/state.dart';
 Reducer<IssueDetailState> buildReducer() {
   return asReducer<IssueDetailState>(<Object, Reducer<IssueDetailState>>{
     IssueDetailAction.update: _update,
+    IssueDetailAction.updateBody: _updateBody,
     IssueDetailAction.commentsVisibleChanged: _commentsVisibleChanged,
     IssueDetailAction.onCommentsCountChanged: _onCommentsCountChanged
   });
@@ -21,9 +22,20 @@ IssueDetailState _commentsVisibleChanged(
 }
 
 IssueDetailState _update(IssueDetailState state, Action action) {
-  var issue = action.payload ?? GitIssue;
+  GitIssue issue = action.payload ?? GitIssue;
   final IssueDetailState newState = state.clone();
   newState.issue = issue;
+  newState.body = issue.getBody();
+  return newState;
+}
+
+IssueDetailState _updateBody(IssueDetailState state, Action action) {
+  String body = action.payload ?? String;
+  if (state.body != '') {
+    return state;
+  }
+  final IssueDetailState newState = state.clone();
+  newState.body = body;
   return newState;
 }
 

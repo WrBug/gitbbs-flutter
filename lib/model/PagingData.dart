@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class PagingData<T> {
 
   bool hasNext;
@@ -5,4 +7,13 @@ class PagingData<T> {
   int nextPage;
 
   PagingData(this.hasNext, this.data);
+
+  String toJson(List<Map> data) {
+    var map={
+    'hasNext':hasNext,
+    'data':data,
+    'nextPage':nextPage
+  };
+    return jsonEncode(map);
+  }
 }

@@ -3,12 +3,14 @@ import 'package:gitbbs/model/GitIssue.dart';
 import 'package:gitbbs/model/PagingData.dart';
 import 'package:gitbbs/model/db/gitissue_data_base.dart';
 import 'package:gitbbs/model/entry/midddle_issues_data.dart';
+import 'package:gitbbs/model/event/comments_count_changed_event.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
 import 'package:gitbbs/network/IssueState.dart';
 import 'package:gitbbs/network/github/GithubHttpRequest.dart';
 import 'package:gitbbs/ui/main/home/action.dart';
 import 'package:gitbbs/ui/main/home/inner_action.dart';
 import 'package:gitbbs/ui/main/home/page_state.dart';
+import 'package:gitbbs/util/event_bus_helper.dart';
 
 Effect<PageState> buildEffect() {
   return combineEffects(<Object, Effect<PageState>>{
@@ -20,6 +22,9 @@ Effect<PageState> buildEffect() {
 }
 
 void _init(Action action, Context<PageState> ctx) {
+  EventBusHelper.on<CommentCountChangedEvent>().listen((event) {
+    ctx.dispatch(PageInnerActionCreator.onCommentsCountChangedAction(event));
+  });
   var db = GitIssueDataBase.createInstance();
   db.getList(size: 10).then((initToDos) {
     ctx.dispatch(PageInnerActionCreator.loadInitData(initToDos.data));

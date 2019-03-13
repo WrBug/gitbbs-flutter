@@ -14,9 +14,7 @@ Effect<GitIssue> buildEffect() {
 }
 
 void _init(Action action, Context<GitIssue> ctx) {
-  EventBusHelper.on<CommentCountChangedEvent>().listen((event) {
-    ctx.dispatch(IssueItemActionCreator.onCommentsCountChangedAction(event));
-  });
+
 }
 
 void _onGetDetail(Action action, Context<GitIssue> ctx) {

@@ -5,6 +5,7 @@ import 'package:gitbbs/model/event/comments_count_changed_event.dart';
 
 enum IssueDetailAction {
   update,
+  updateBody,
   addComment,
   toggleCommentsVisible,
   commentsVisibleChanged,
@@ -15,7 +16,9 @@ class IssueDetailActionCreator {
   static Action update(GitIssue issue) {
     return Action(IssueDetailAction.update, payload: issue);
   }
-
+  static Action updateBodyAction(String body) {
+    return Action(IssueDetailAction.updateBody, payload: body);
+  }
   static Action commentsVisibleChangedAction() {
     return const Action(IssueDetailAction.commentsVisibleChanged);
   }
