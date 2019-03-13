@@ -29,20 +29,20 @@ void _init(Action action, Context<CommentListState> ctx) async {
   if (cache != null) {
     ctx.dispatch(CommentListActionCreator.refreshedAction(cache));
   }
-  GitHttpRequest request = GithubHttpRequest.getInstance();
+  GitHttpRequest request = GitHttpRequest.getInstance();
   var pagingData = await request.getComments(ctx.state.issue.getNumber(), null);
   ctx.dispatch(CommentListActionCreator.refreshedAction(pagingData));
 }
 
 void _refresh(Action action, Context<CommentListState> ctx) async {
-  GitHttpRequest request = GithubHttpRequest.getInstance();
+  GitHttpRequest request = GitHttpRequest.getInstance();
   var pagingData = await request.getComments(ctx.state.issue.getNumber(), null);
   ctx.dispatch(CommentListActionCreator.refreshedAction(pagingData));
 }
 
 void _loadMore(Action action, Context<CommentListState> ctx) async {
   String cursor = ctx.state.list.last?.getCursor();
-  GitHttpRequest request = GithubHttpRequest.getInstance();
+  GitHttpRequest request = GitHttpRequest.getInstance();
   var pagingData =
       await request.getComments(ctx.state.issue.getNumber(), cursor);
   ctx.dispatch(CommentListActionCreator.onMoreLoadedAction(pagingData));
@@ -101,7 +101,7 @@ void _queryDeleteComment(Action action, Context<CommentListState> ctx) {
 
 void _deleteComment(Action action, Context<CommentListState> ctx) async {
   var dialog = LoadingDialog.show(ctx.context);
-  GitHttpRequest request = GithubHttpRequest.getInstance();
+  GitHttpRequest request = GitHttpRequest.getInstance();
   var success = await request.deleteComment(action.payload.getId());
   dialog.dismiss();
   if (success) {

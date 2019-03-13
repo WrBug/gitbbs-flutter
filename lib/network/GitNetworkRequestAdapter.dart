@@ -9,8 +9,6 @@ abstract class GitNetworkRequestAdapter {
 
   String getApiUrl();
 
-
-
   Request getMoreIssues(List<String> label, String creator,
       IssueState issueState, String before, String after, int size);
 
@@ -18,11 +16,15 @@ abstract class GitNetworkRequestAdapter {
 
   Request getIssue(int number);
 
-  Request getComments(int number,String before,int size);
+  Request getComments(int number, String before, int size);
 
-  Request doAuthenticated(String token);
+  Request doAuthenticated(String token, String username);
 
   Request addComment(String issueId, String body);
+
   Request modifyComment(String commentId, String body);
+
   Request deleteComment(String commentId);
+
+  Request getGists(String login);
 }

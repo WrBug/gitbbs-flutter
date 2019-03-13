@@ -15,7 +15,7 @@ class GithubComment implements GitComment {
   String id;
   @JsonKey(name: 'node_id')
   String nodeId;
-  GithubUser user;
+  GithubV4User user;
   @JsonKey(name: 'created_at')
   String createdAt;
   @JsonKey(name: 'updated_at')

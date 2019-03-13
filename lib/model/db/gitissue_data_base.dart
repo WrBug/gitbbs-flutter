@@ -216,7 +216,7 @@ class GitIssueDataBase {
     issue.closed = map[column_closed] == 1;
     issue.closedAt = map[column_closedAt];
     issue.locked = map[column_locked] == 1;
-    issue.author = GithubUser.fromJson(jsonDecode(map[column_author]));
+    issue.author = GithubV4User.fromJson(jsonDecode(map[column_author]));
     List<GithubLabel> list = List();
     if (map[column_labels] != null) {
       List<Map> labelMap = jsonDecode(map[column_labels]);

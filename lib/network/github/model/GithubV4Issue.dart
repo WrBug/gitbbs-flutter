@@ -21,7 +21,7 @@ class GithubV4Issue extends GitIssue {
   bool closed;
   String closedAt;
   bool locked;
-  GithubUser author;
+  GithubV4User author;
   @override
   int comments;
   List<GithubLabel> labels;

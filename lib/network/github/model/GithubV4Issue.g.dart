@@ -19,7 +19,7 @@ GithubV4Issue _$GithubV4IssueFromJson(Map<String, dynamic> json) {
     ..locked = json['locked'] as bool
     ..author = json['author'] == null
         ? null
-        : GithubUser.fromJson(json['author'] as Map<String, dynamic>)
+        : GithubV4User.fromJson(json['author'] as Map<String, dynamic>)
     ..comments = json['comments'] as int
     ..labels = (json['labels'] as List)
         ?.map((e) =>

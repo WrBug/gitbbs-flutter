@@ -52,9 +52,10 @@ class GithubV4NetWorkAdapter extends GitNetworkRequestAdapter {
   }
 
   @override
-  Request doAuthenticated(String token) {
-    return Request('/user', null, Method.GET,
-        header: {"Authorization": 'token $token'});
+  Request doAuthenticated(String token, String username) {
+    String query = getUserQuery(username);
+    var map = {'query': query};
+    return V4Request(map, header: {"Authorization": 'token $token'});
   }
 
   @override
@@ -69,5 +70,12 @@ class GithubV4NetWorkAdapter extends GitNetworkRequestAdapter {
     String query = getDeleteCommentQuery(commentId);
     var map = {'query': query};
     return V4PreViewRequest(map);
+  }
+
+  @override
+  Request getGists(String login) {
+    String query = getGistsQuery(login);
+    var map = {'query': query};
+    return V4Request(map);
   }
 }

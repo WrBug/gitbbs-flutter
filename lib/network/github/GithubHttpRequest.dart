@@ -1,11 +1,13 @@
 import 'dart:convert';
 
+import 'package:gitbbs/constant/GitConstant.dart';
 import 'package:gitbbs/model/GitIssue.dart';
 import 'package:gitbbs/model/GitUser.dart';
 import 'package:gitbbs/model/PagingData.dart';
 import 'package:gitbbs/model/UserCacheManager.dart';
 import 'package:gitbbs/model/db/gitissue_data_base.dart';
 import 'package:gitbbs/model/git_comment.dart';
+import 'package:gitbbs/network/github/model/github_gist.dart';
 import 'package:gitbbs/util/issue_cache_manager.dart';
 import 'package:gitbbs/network/GitHttpClient.dart';
 import 'package:gitbbs/network/GitNetworkRequestAdapter.dart';
@@ -118,6 +120,21 @@ class GithubHttpRequest implements GitHttpRequest {
     return true;
   }
 
+  Future<GithubGist> getFavoriteGist() async {
+    var response = await _client
+        .execute(_adapter.getGists(UserCacheManager.getUser().getName()));
+    Map data = response.data;
+    if (data.containsKey('errors')) {
+      return null;
+    }
+    List list = data['data']['user']['gists']['nodes'];
+    GithubGist gist = _getFavoriteGist(list);
+    if (gist != null) {
+      UserCacheManager.saveFavoriteGist(gist);
+    }
+    return gist;
+  }
+
   @override
   Future createIssue(String title, String body, String label) async {
     var response =
@@ -126,9 +143,16 @@ class GithubHttpRequest implements GitHttpRequest {
   }
 
   @override
-  Future<GitUser> doAuthenticated(String token) async {
-    var response = await _client.execute(_adapter.doAuthenticated(token));
-    return GithubUser.fromJson(response.data);
+  Future<GitUser> doAuthenticated(String token, String username) async {
+    var response =
+        await _client.execute(_adapter.doAuthenticated(token, username));
+    Map data = response.data['data']['user'];
+
+    GithubGist gist = _getFavoriteGist(data['gists']['nodes']);
+    if (gist != null) {
+      UserCacheManager.saveFavoriteGist(gist);
+    }
+    return GithubV4User.fromJson(data);
   }
 
   @override
@@ -138,7 +162,30 @@ class GithubHttpRequest implements GitHttpRequest {
     if (str == '') {
       return false;
     }
-    UserCacheManager.saveToken(str);
+    UserCacheManager.saveToken(str, username);
     return true;
+  }
+
+  GithubGist _getFavoriteGist(List list) {
+    GithubGist gist;
+    list.forEach((map) {
+      if (map['isPublic'] == true) {
+        List files = map['files'];
+        for (var fileMap in files) {
+          if (fileMap['name'] == FAVORITE_GITS_FILE_NAME) {
+            gist = GithubGist()
+              ..name = map['name']
+              ..id = map['id']
+              ..isPublic = true
+              ..isFork = map['isFork'];
+            Map<String, String> files = Map();
+            files[FAVORITE_GITS_FILE_NAME] = fileMap['text'];
+            gist.files = files;
+            return;
+          }
+        }
+      }
+    });
+    return gist;
   }
 }

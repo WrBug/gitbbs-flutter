@@ -32,7 +32,7 @@ void _init(Action action, Context<PageState> ctx) {
 }
 
 void _onLoadMiddleData(Action action, Context<PageState> ctx) async {
-  GitHttpRequest request = GithubHttpRequest.getInstance();
+  GitHttpRequest request = GitHttpRequest.getInstance();
   MiddleIssuesData issuesData = action.payload;
   issuesData.refreshing = true;
   ctx.dispatch(PageInnerActionCreator.showMiddleProgress(issuesData));
@@ -45,7 +45,7 @@ void _onLoadMiddleData(Action action, Context<PageState> ctx) async {
 }
 
 void _onLoadData(Action action, Context<PageState> ctx) async {
-  GitHttpRequest request = GithubHttpRequest.getInstance();
+  GitHttpRequest request = GitHttpRequest.getInstance();
   String cursor = '';
   if (ctx.state.list?.isNotEmpty == true) {
     cursor = ctx.state.list.first.getCursor();
@@ -68,7 +68,7 @@ void _onLoadMoreData(Action action, Context<PageState> ctx) async {
         PagingData(true, dbData.data)));
     return;
   }
-  GitHttpRequest request = GithubHttpRequest.getInstance();
+  GitHttpRequest request = GitHttpRequest.getInstance();
   var data = await request.getMoreIssues(state: IssueState.ALL, after: cursor);
   ctx.dispatch(PageInnerActionCreator.onLoadMoreDataAction(data));
 }

@@ -18,7 +18,7 @@ class V4Convert {
     issue.bodyHtml = node['bodyHTML'];
     issue.closedAt = node['closedAt'];
     issue.locked = node['locked'];
-    GithubUser user = GithubUser();
+    GithubV4User user = GithubV4User();
     user.login = node['author']['login'];
     user.avatarUrl = node['author']['avatarUrl'];
     issue.author = user;
@@ -40,7 +40,7 @@ class V4Convert {
   }
 
   static GithubComment toComment(Map node) {
-    GithubUser user = GithubUser();
+    GithubV4User user = GithubV4User();
     user.login = node['author']['login'];
     user.avatarUrl = node['author']['avatarUrl'];
     GithubComment comment = GithubComment()

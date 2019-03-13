@@ -5,7 +5,7 @@ import 'package:gitbbs/network/GitHttpRequest.dart';
 import 'package:gitbbs/network/github/GithubHttpRequest.dart';
 
 class LoginPage extends StatefulWidget {
-  final GitHttpRequest request = GithubHttpRequest.getInstance();
+  final GitHttpRequest request = GitHttpRequest.getInstance();
 
   @override
   State<StatefulWidget> createState() => _LoginPage();

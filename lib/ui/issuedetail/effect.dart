@@ -27,7 +27,7 @@ void _init(Action action, Context<IssueDetailState> ctx) async {
   var body =
       await IssueCacheManager.getIssueCache(ctx.state.originIssue.getNumber());
   ctx.dispatch(IssueDetailActionCreator.updateBodyAction(body));
-  GitHttpRequest request = GithubHttpRequest.getInstance();
+  GitHttpRequest request = GitHttpRequest.getInstance();
   var issue = await request.getIssue(ctx.state.originIssue.getNumber());
   ctx.dispatch(IssueDetailActionCreator.update(issue));
 }

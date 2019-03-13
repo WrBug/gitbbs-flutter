@@ -35,7 +35,7 @@ void _togglePageType(Action action, Context<EditCommentState> ctx) async {
 
 void _submitComment(Action action, Context<EditCommentState> ctx) async {
   String body = ctx.state.getBody();
-  GitHttpRequest request = GithubHttpRequest.getInstance();
+  GitHttpRequest request = GitHttpRequest.getInstance();
   GitComment comment;
   var dialog = LoadingDialog.show(ctx.context);
   if (ctx.state.type == Type.modify) {

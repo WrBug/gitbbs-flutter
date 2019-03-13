@@ -169,5 +169,58 @@ String getDeleteCommentQuery(String commentId) {
   '''
       .replaceAll("\t", " ")
       .replaceAll(RegExp(r' +'), ' ');
-  ;
+}
+
+String getUserQuery(String username) {
+  return '''
+  {
+  user(login:"$username"){
+    id
+    url
+    avatarUrl
+    url
+    isSiteAdmin
+    name
+    company
+    websiteUrl
+    location
+    email
+    bio
+    gists(first:100,){
+  nodes{
+    isPublic
+    name
+    isFork
+    files{
+      name
+      text
+    }
+  }
+}
+  }
+}
+
+  '''  .replaceAll("\t", " ")
+      .replaceAll(RegExp(r' +'), ' ');
+}
+
+String getGistsQuery(String login) {
+  return '''
+    {
+    user(login:"$login"){
+      gists(first:100,){
+        nodes{
+          isPublic
+          name
+          isFork
+          files{
+            name
+            text
+          }
+        }
+      }
+    }
+  }
+  '''  .replaceAll("\t", " ")
+      .replaceAll(RegExp(r' +'), ' ');
 }

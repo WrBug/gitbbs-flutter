@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gitbbs/constant/ColorConstant.dart';
 import 'package:gitbbs/model/GitUser.dart';
 import 'package:gitbbs/model/UserCacheManager.dart';
+import 'package:gitbbs/network/GitHttpRequest.dart';
 import 'package:gitbbs/ui/main/home/home_page.dart';
 import 'package:gitbbs/ui/main/user_tab.dart';
 import 'package:gitbbs/ui/widget/loading.dart';

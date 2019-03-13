@@ -15,7 +15,7 @@ GithubComment _$GithubCommentFromJson(Map<String, dynamic> json) {
     ..nodeId = json['node_id'] as String
     ..user = json['user'] == null
         ? null
-        : GithubUser.fromJson(json['user'] as Map<String, dynamic>)
+        : GithubV4User.fromJson(json['user'] as Map<String, dynamic>)
     ..createdAt = json['created_at'] as String
     ..updatedAt = json['updated_at'] as String
     ..authorAssociation = json['author_association'] as String

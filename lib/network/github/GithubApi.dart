@@ -75,7 +75,7 @@ class GithubApi {
       'authenticity_token': authenticityToken,
       'oauth_access': {
         'description': '$APP_NAME 自动创建[' + DateTime.now().toString() + "]",
-        'scopes': ['repo', 'user']
+        'scopes': ['repo', 'gist', 'user']
       }
     };
     try {
@@ -119,6 +119,3 @@ class GithubApi {
     });
   }
 }
-
-
-

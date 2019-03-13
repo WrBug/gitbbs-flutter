@@ -7,6 +7,7 @@ import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
 
 class DiskLruCache {
+  static DiskLruCache _default = DiskLruCache(30, 'lru');
   final int maxSize;
   final String cacheDir;
   SizeOf<String> sizeOf = (data) => 1;
@@ -16,6 +17,8 @@ class DiskLruCache {
   DiskLruCache(this.maxSize, this.cacheDir) {
     _cache = LruCache(20);
   }
+
+  factory DiskLruCache.getDefault() => _default;
 
   Future<String> get _localPath async {
     if (_path != null) {

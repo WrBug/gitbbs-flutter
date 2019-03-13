@@ -37,7 +37,7 @@ class MmkvChannel {
       if (json == null || json == '') {
         return Future.value(null);
       }
-      return GithubUser.fromJson(jsonDecode(json));
+      return GithubV4User.fromJson(jsonDecode(json));
     } on PlatformException catch (e) {
       return Future.value(null);
     }
