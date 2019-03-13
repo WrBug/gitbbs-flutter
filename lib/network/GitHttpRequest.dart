@@ -3,6 +3,7 @@ import 'package:gitbbs/model/GitUser.dart';
 import 'package:gitbbs/model/PagingData.dart';
 import 'package:gitbbs/model/git_comment.dart';
 import 'package:gitbbs/network/IssueState.dart';
+import 'package:gitbbs/network/github/GithubHttpRequest.dart';
 
 abstract class GitHttpRequest {
   Future<PagingData<GitIssue>> getMoreIssues(
@@ -22,9 +23,11 @@ abstract class GitHttpRequest {
 
   Future<bool> signIn(String username, String password);
 
-  Future<bool> addComment(String issueId, String body);
+  Future<GitComment> addComment(String issueId, String body);
 
   Future<bool> modifyComment(String commentId, String body);
 
   Future<bool> deleteComment(String commentId);
+
+  factory GitHttpRequest.getInstance() => GithubHttpRequest.getInstance();
 }

@@ -12,7 +12,8 @@ enum CommentListAction {
   replyComment,
   queryDeleteComment,
   deleteComment,
-  onCommentDeleted
+  onCommentDeleted,
+  onCommentEdited
 }
 
 class CommentListActionCreator {
@@ -50,5 +51,9 @@ class CommentListActionCreator {
 
   static Action onCommentDeletedAction(GitComment comment) {
     return Action(CommentListAction.onCommentDeleted, payload: comment);
+  }
+
+  static Action onCommentEditedAction(GitComment comment) {
+    return Action(CommentListAction.onCommentEdited, payload: comment);
   }
 }

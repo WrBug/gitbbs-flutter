@@ -1,9 +1,12 @@
 import 'package:fish_redux/fish_redux.dart';
+import 'package:gitbbs/model/event/comments_count_changed_event.dart';
+import 'package:gitbbs/model/git_comment.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
 import 'package:gitbbs/network/github/GithubHttpRequest.dart';
 import 'package:gitbbs/ui/editcomment/action.dart';
 import 'package:gitbbs/ui/editcomment/state.dart';
 import 'package:gitbbs/ui/widget/loading.dart';
+import 'package:gitbbs/util/event_bus_helper.dart';
 import 'package:markdown_editor/markdown_editor.dart';
 import 'package:flutter/material.dart';
 import 'package:gitbbs/model/entry/comment_edit_data.dart';
@@ -33,20 +36,28 @@ void _togglePageType(Action action, Context<EditCommentState> ctx) async {
 void _submitComment(Action action, Context<EditCommentState> ctx) async {
   String body = ctx.state.getBody();
   GitHttpRequest request = GithubHttpRequest.getInstance();
-  var success = false;
+  GitComment comment;
   var dialog = LoadingDialog.show(ctx.context);
   if (ctx.state.type == Type.modify) {
     String commentId = ctx.state.comment.getId();
-    success = await request.modifyComment(commentId, body);
+    bool success = await request.modifyComment(commentId, body);
+    if (success) {
+      comment = ctx.state.comment;
+      comment.setBody(body);
+    }
   } else {
     String issueId = ctx.state.issue.getId();
-    success = await request.addComment(issueId, body);
+    comment = await request.addComment(issueId, body);
+    if (comment != null) {
+      EventBusHelper.fire(
+          CommentCountChangedEvent(true, ctx.state.issue.getNumber()));
+    }
   }
   dialog.dismiss();
-  if (success == true) {
+  if (comment != null) {
     ctx.state.scaffoldKey.currentState
         .showSnackBar(SnackBar(content: Text('提交成功')));
-    Navigator.of(ctx.context).pop();
+    Navigator.of(ctx.context).pop(comment);
     return;
   }
   ctx.state.scaffoldKey.currentState

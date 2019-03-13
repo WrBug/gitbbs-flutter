@@ -11,13 +11,11 @@ abstract class GitComment {
 
   String getUpdatedAt();
 
+  void setBody(String body);
+
   String getBody();
 
   String getCursor();
-
-  void setFloor(int floor);
-
-  int getFloor();
 
   bool viewerCanDelete;
 
@@ -26,7 +24,6 @@ abstract class GitComment {
   bool viewerDidAuthor;
 
   bool isAuthor;
-
 
   Map<String, dynamic> toJson();
 }

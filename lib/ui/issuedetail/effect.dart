@@ -24,7 +24,8 @@ void _init(Action action, Context<IssueDetailState> ctx) async {
   EventBusHelper.on<CommentCountChangedEvent>().listen((event) {
     ctx.dispatch(IssueDetailActionCreator.onCommentsCountChangedAction(event));
   });
-  var body = await IssueCacheManager.getIssueCache(ctx.state.originIssue.getNumber());
+  var body =
+      await IssueCacheManager.getIssueCache(ctx.state.originIssue.getNumber());
   ctx.dispatch(IssueDetailActionCreator.updateBodyAction(body));
   GitHttpRequest request = GithubHttpRequest.getInstance();
   var issue = await request.getIssue(ctx.state.originIssue.getNumber());
@@ -54,5 +55,10 @@ void _addComment(Action action, Context<IssueDetailState> ctx) async {
   Navigator.of(ctx.context).push(MaterialPageRoute(builder: (context) {
     return EditCommentPage()
         .buildPage(CommentEditData(action.payload, Type.add));
-  }));
+  })).then((comment) {
+    if (comment != null) {
+      ctx.dispatch(IssueDetailActionCreator.onCommentsCountChangedAction(
+          CommentCountChangedEvent(true, action.payload.getNumber())));
+    }
+  });
 }

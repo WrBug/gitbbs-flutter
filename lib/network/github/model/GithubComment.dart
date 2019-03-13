@@ -37,7 +37,6 @@ class GithubComment implements GitComment {
   factory GithubComment.fromJson(Map<String, dynamic> json) =>
       _$GithubCommentFromJson(json);
 
-
   Map<String, dynamic> toJson() => _$GithubCommentToJson(this);
 
   @override
@@ -68,19 +67,15 @@ class GithubComment implements GitComment {
   @override
   String getCursor() => cursor;
 
-  @override
-  int getFloor() {
-    return floor;
-  }
-
-  @override
-  void setFloor(int floor) {
-    this.floor = floor;
-  }
 
   @override
   String getId() => id;
 
   @override
   bool isAuthor;
+
+  @override
+  void setBody(String body) {
+    this.body = body;
+  }
 }

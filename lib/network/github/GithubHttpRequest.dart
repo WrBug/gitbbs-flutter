@@ -41,7 +41,7 @@ class GithubHttpRequest implements GitHttpRequest {
       IssueState state,
       String before,
       String after}) async {
-    final size = 4;
+    final size = 15;
     var response = await _client.execute(
         _adapter.getMoreIssues(label, creator, state, before, after, size));
     var issues = List<GitIssue>();
@@ -85,13 +85,16 @@ class GithubHttpRequest implements GitHttpRequest {
   }
 
   @override
-  Future<bool> addComment(String issueId, String body) async {
+  Future<GitComment> addComment(String issueId, String body) async {
     var response = await _client.execute(_adapter.addComment(issueId, body));
     Map data = response.data;
     if (data.containsKey('errors')) {
-      return false;
+      return null;
     }
-    return true;
+    Map map = response.data['data']['addComment']['commentEdge'];
+    var comment = V4Convert.toComment(map['node']);
+    comment.cursor = map['cursor'];
+    return comment;
   }
 
   @override

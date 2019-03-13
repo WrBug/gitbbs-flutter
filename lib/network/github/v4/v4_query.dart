@@ -97,7 +97,22 @@ String getCommentsQuery(int number, String before, int size) {
     issue(number:$number){
       comments(last:$size,before:$cursor){
         edges{
-          cursor
+          ${getCommentEdge()}
+        }
+      }
+    }
+  }
+}
+
+'''
+      .replaceAll("\t", " ")
+      .replaceAll('\n', ' ')
+      .replaceAll(RegExp(r' +'), ' ');
+}
+
+String getCommentEdge() {
+  return '''
+            cursor
           node{
             author{
               avatarUrl
@@ -113,23 +128,16 @@ String getCommentsQuery(int number, String before, int size) {
             viewerCanDelete
             viewerDidAuthor
           }
-        }
-      }
-    }
-  }
-}
-
-'''
-      .replaceAll("\t", " ")
-      .replaceAll('\n', ' ')
-      .replaceAll(RegExp(r' +'), ' ');
+  ''';
 }
 
 String getAddCommentQuery(String issueId, String body) {
   return '''
   mutation {
   addComment(input:{subjectId:"$issueId",body:"$body"}){
-      clientMutationId
+      commentEdge{
+           ${getCommentEdge()}
+      }
     }
   }
   '''
@@ -153,7 +161,9 @@ String getDeleteCommentQuery(String commentId) {
   return '''
   mutation {
   deleteIssueComment(input:{id:"$commentId"}){
-      clientMutationId
+      commentEdge{
+           clientMutationId
+      }
     }
   }
   '''

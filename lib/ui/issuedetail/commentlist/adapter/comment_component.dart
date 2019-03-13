@@ -58,12 +58,7 @@ Widget _headerBuild(GitComment comment, Dispatch dispatch) {
       ),
     ),
     Padding(padding: EdgeInsets.fromLTRB(8, 0, 0, 0)),
-    _iconButtonBuild(comment, dispatch),
-    Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
-    Text(
-      'F${comment.getFloor()}',
-      style: TextStyle(color: text_title_color, fontSize: 14),
-    )
+    _iconButtonBuild(comment, dispatch)
   ]);
 }
 
