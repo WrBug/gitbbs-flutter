@@ -15,6 +15,7 @@ class V4Convert {
     issue.number = node['number'];
     issue.closed = node['closed'];
     issue.body = node['body'];
+    issue.bodyText = node['bodyText'];
     issue.closedAt = node['closedAt'];
     issue.locked = node['locked'];
     GithubV4User user = GithubV4User();

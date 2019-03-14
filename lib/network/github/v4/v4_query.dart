@@ -43,7 +43,7 @@ String getIssueQuery(int number) {
     {
   repository(owner: "$REPO_OWNER", name: "$REPO_NAME") {
     issue(number:$number){
-        ${_getIssueContent(fields: ['body'])}
+        ${_getIssueContent(fields: ['body', 'bodyText'])}
     }
   }
 }
@@ -201,7 +201,8 @@ String getUserQuery(String username) {
   }
 }
 
-  '''  .replaceAll("\t", " ")
+  '''
+      .replaceAll("\t", " ")
       .replaceAll(RegExp(r' +'), ' ');
 }
 
@@ -223,6 +224,7 @@ String getGistsQuery(String login) {
       }
     }
   }
-  '''  .replaceAll("\t", " ")
+  '''
+      .replaceAll("\t", " ")
       .replaceAll(RegExp(r' +'), ' ');
 }

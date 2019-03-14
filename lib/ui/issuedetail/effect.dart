@@ -29,7 +29,7 @@ void _init(Action action, Context<IssueDetailState> ctx) async {
   });
   var body =
       await IssueCacheManager.getIssueCache(ctx.state.originIssue.getNumber());
-  var map = await UserCacheManager.getFavoriteList();
+  var map = await UserCacheManager.getFavoriteMap();
   ctx.dispatch(IssueDetailActionCreator.updateCacheAction(
       IssueCache(body, map.containsKey(ctx.state.originIssue.getId()))));
   GitHttpRequest request = GitHttpRequest.getInstance();

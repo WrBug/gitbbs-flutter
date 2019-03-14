@@ -5,6 +5,7 @@ import 'package:gitbbs/constant/ColorConstant.dart';
 import 'package:gitbbs/model/GitUser.dart';
 import 'package:gitbbs/model/UserCacheManager.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
+import 'package:gitbbs/ui/favoritelist/favorite_list_page.dart';
 import 'package:gitbbs/ui/main/home/home_page.dart';
 import 'package:gitbbs/ui/main/user_tab.dart';
 import 'package:gitbbs/ui/widget/loading.dart';
@@ -55,7 +56,7 @@ class _MainPageState extends State<MainPage> {
     bodies = [
       HomePage().buildPage(key, wantKeepAlive: true),
       Text("2"),
-      Text("3"),
+      FavoriteListPage().buildPage(key, wantKeepAlive: true),
       UserTab()
     ];
     _user = UserCacheManager.getUser();

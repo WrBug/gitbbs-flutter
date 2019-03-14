@@ -24,6 +24,8 @@ class GithubV4Issue extends GitIssue {
   GithubV4User author;
   @override
   int comments;
+  @override
+  String bodyText;
   List<GithubLabel> labels;
   bool hasMore;
   String body;
@@ -97,12 +99,7 @@ class GithubV4Issue extends GitIssue {
   }
 
   @override
-  String getBody() {
-    return body;
+  setBodyText(String body) {
+    this.bodyText = body;
   }
-@override
-   setBody(String body) {
-    this.body=body;
-  }
-
 }

@@ -17,6 +17,8 @@ abstract class GitIssue implements Cloneable<GitIssue> {
   GitUser getAuthor();
 
   int comments;
+  String bodyText;
+  String body;
 
   String getShowComments() {
     if (comments == null || comments == 0) {
@@ -35,7 +37,6 @@ abstract class GitIssue implements Cloneable<GitIssue> {
 
   bool getMore() => false;
 
-  String getBody();
 
-  setBody(String body);
+  setBodyText(String body);
 }

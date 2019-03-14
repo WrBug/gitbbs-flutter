@@ -84,7 +84,7 @@ class GithubHttpRequest implements GitHttpRequest {
     var response = await _client.execute(_adapter.getIssue(number));
     Map map = response.data['data']['repository']['issue'];
     var issue = V4Convert.toIssue(map);
-    IssueCacheManager.saveIssueCache(issue.getNumber(), issue.getBody());
+    IssueCacheManager.saveIssueCache(issue.getNumber(), issue.body);
     GitIssueDataBase.createInstance().save(gitIssue: issue);
     return issue;
   }

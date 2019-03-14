@@ -21,6 +21,7 @@ GithubV4Issue _$GithubV4IssueFromJson(Map<String, dynamic> json) {
         ? null
         : GithubV4User.fromJson(json['author'] as Map<String, dynamic>)
     ..comments = json['comments'] as int
+    ..bodyText = json['bodyText'] as String
     ..labels = (json['labels'] as List)
         ?.map((e) =>
             e == null ? null : GithubLabel.fromJson(e as Map<String, dynamic>))
@@ -42,6 +43,7 @@ Map<String, dynamic> _$GithubV4IssueToJson(GithubV4Issue instance) =>
       'locked': instance.locked,
       'author': instance.author,
       'comments': instance.comments,
+      'bodyText': instance.bodyText,
       'labels': instance.labels,
       'hasMore': instance.hasMore,
       'body': instance.body

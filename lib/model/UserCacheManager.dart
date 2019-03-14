@@ -39,37 +39,27 @@ class UserCacheManager {
     _checkToken(username);
   }
 
-  static Future<Map<String, GitIssue>> getFavoriteList() async {
+  static Future<List<GitIssue>> getFavoriteList() async {
+    if (_favoriteIssueList != null) {
+      return _favoriteIssueList;
+    }
+    await _initFavoriteList();
+    return _favoriteIssueList;
+  }
+
+  static Future<Map<String, GitIssue>> getFavoriteMap() async {
     if (_issueMap != null) {
       return _issueMap;
     }
-    if (_favoriteGist == null) {
-      String json =
-          await DiskLruCache.getDefault().get(FAVORITE_GITS_FILE_NAME);
-      if (json == '') {
-        return null;
-      }
-      var map = jsonDecode(json);
-      _favoriteGist = GithubGist.fromJson(map);
-    }
-    if (_favoriteGist == null) {
-      return null;
-    }
-    String json = _favoriteGist.files[FAVORITE_GITS_FILE_NAME];
-    List list = jsonDecode(json);
-    _issueMap = Map();
-    _favoriteIssueList = List();
-    list.forEach((map) {
-      var githubV4Issue = GithubV4Issue.fromJson(map);
-      _favoriteIssueList.add(githubV4Issue);
-      _issueMap[githubV4Issue.getId()] = githubV4Issue;
-    });
+    await _initFavoriteList();
     return _issueMap;
   }
 
   static void addFavorite(GitIssue issue) {
     GitIssue newIssue = issue.clone();
-    newIssue.setBody('');
+    String text = newIssue.bodyText ?? '';
+    newIssue.setBodyText(text.length > 100 ? text.substring(0, 100) : text);
+    newIssue.body = '';
     if (_issueMap.containsKey(newIssue.getId())) {
       return;
     }
@@ -93,9 +83,10 @@ class UserCacheManager {
 
   static saveFavoriteGist(GithubGist gist) {
     _favoriteGist = gist;
+    _issueMap = null;
+    _favoriteIssueList = null;
     DiskLruCache.getDefault()
         .put(FAVORITE_GITS_FILE_NAME, jsonEncode(gist.toJson()));
-    getFavoriteList();
   }
 
   static GitUser getUser() {
@@ -145,5 +136,30 @@ class UserCacheManager {
     file.content = jsonEncode(_favoriteIssueList);
     file.filename = FAVORITE_GITS_FILE_NAME;
     _request.saveConfigGist({file.filename: file});
+  }
+
+  static Future _initFavoriteList() async {
+    if (_favoriteGist == null) {
+      String json =
+          await DiskLruCache.getDefault().get(FAVORITE_GITS_FILE_NAME);
+      if (json == '') {
+        return null;
+      }
+      var map = jsonDecode(json);
+      _favoriteGist = GithubGist.fromJson(map);
+    }
+    _issueMap = Map();
+    _favoriteIssueList = List();
+    if (_favoriteGist == null) {
+      return null;
+    }
+    String json = _favoriteGist.files[FAVORITE_GITS_FILE_NAME];
+    List list = jsonDecode(json);
+
+    list.forEach((map) {
+      var githubV4Issue = GithubV4Issue.fromJson(map);
+      _favoriteIssueList.add(githubV4Issue);
+      _issueMap[githubV4Issue.getId()] = githubV4Issue;
+    });
   }
 }
