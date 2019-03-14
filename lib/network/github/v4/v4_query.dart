@@ -43,7 +43,7 @@ String getIssueQuery(int number) {
     {
   repository(owner: "$REPO_OWNER", name: "$REPO_NAME") {
     issue(number:$number){
-        ${_getIssueContent(fields: ['body', 'bodyHTML'])}
+        ${_getIssueContent(fields: ['body'])}
     }
   }
 }
@@ -190,6 +190,7 @@ String getUserQuery(String username) {
   nodes{
     isPublic
     name
+    description
     isFork
     files{
       name
@@ -212,6 +213,7 @@ String getGistsQuery(String login) {
         nodes{
           isPublic
           name
+          description
           isFork
           files{
             name

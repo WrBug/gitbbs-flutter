@@ -7,6 +7,7 @@ class IssueDetailState implements Cloneable<IssueDetailState> {
   GitIssue originIssue;
   GitIssue issue;
   String body;
+  bool favorite;
   PersistentBottomSheetController controller;
   GlobalKey<ScaffoldState> scaffoldKey;
 
@@ -25,6 +26,7 @@ class IssueDetailState implements Cloneable<IssueDetailState> {
       ..controller = controller
       ..scaffoldKey = scaffoldKey
       ..body = body
+      ..favorite = favorite
       ..issue = issue;
   }
 }
@@ -32,6 +34,7 @@ class IssueDetailState implements Cloneable<IssueDetailState> {
 IssueDetailState initState(GitIssue issue) {
   final IssueDetailState state = IssueDetailState();
   state.originIssue = issue;
+  state.favorite = false;
   state.body = issue.getBody() ?? '';
   state.scaffoldKey = GlobalKey<ScaffoldState>();
   return state;

@@ -4,6 +4,7 @@ import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:gitbbs/constant/ColorConstant.dart';
 import 'package:gitbbs/model/GitIssue.dart';
+import 'package:gitbbs/model/UserCacheManager.dart';
 import 'package:gitbbs/ui/issuedetail/action.dart';
 import 'package:gitbbs/ui/issuedetail/state.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -16,6 +17,14 @@ Widget buildView(
     key: state.scaffoldKey,
     appBar: AppBar(
       title: Text(state.getIssue().getTitle()),
+      actions: <Widget>[
+        IconButton(
+            icon: Icon(state.favorite ? Icons.favorite : Icons.favorite_border),
+            color: state.favorite ? Colors.red : Colors.white,
+            onPressed: () {
+              dispatch(IssueDetailActionCreator.toggleFavoriteAction());
+            })
+      ],
     ),
     floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     floatingActionButton: _floatButtonBuild(state, dispatch, viewService),

@@ -7,7 +7,9 @@ import 'package:gitbbs/model/PagingData.dart';
 import 'package:gitbbs/model/UserCacheManager.dart';
 import 'package:gitbbs/model/db/gitissue_data_base.dart';
 import 'package:gitbbs/model/git_comment.dart';
+import 'package:gitbbs/model/git_gist_cache_manager.dart';
 import 'package:gitbbs/network/github/model/github_gist.dart';
+import 'package:gitbbs/network/github/model/github_gist_file.dart';
 import 'package:gitbbs/util/issue_cache_manager.dart';
 import 'package:gitbbs/network/GitHttpClient.dart';
 import 'package:gitbbs/network/GitNetworkRequestAdapter.dart';
@@ -26,6 +28,7 @@ class GithubHttpRequest implements GitHttpRequest {
   GitHttpClient _client;
   GitNetworkRequestAdapter _adapter;
   static GithubHttpRequest _instance = GithubHttpRequest();
+  static String configGistId = '';
 
   GithubHttpRequest() {
     _adapter = GithubV4NetWorkAdapter();
@@ -143,6 +146,18 @@ class GithubHttpRequest implements GitHttpRequest {
   }
 
   @override
+  Future<GithubGist> forkConfigGist() async {
+    await _client.execute(_adapter.forkConfigGist());
+    return await getFavoriteGist();
+  }
+
+  @override
+  Future<bool> saveConfigGist(Map<String, GithubGistFile> map) async {
+    await _client.execute(_adapter.saveConfigGist(map));
+    return true;
+  }
+
+  @override
   Future<GitUser> doAuthenticated(String token, String username) async {
     var response =
         await _client.execute(_adapter.doAuthenticated(token, username));
@@ -151,6 +166,9 @@ class GithubHttpRequest implements GitHttpRequest {
     GithubGist gist = _getFavoriteGist(data['gists']['nodes']);
     if (gist != null) {
       UserCacheManager.saveFavoriteGist(gist);
+    } else {
+      var githubGist = await forkConfigGist();
+      UserCacheManager.saveFavoriteGist(githubGist);
     }
     return GithubV4User.fromJson(data);
   }
@@ -169,18 +187,19 @@ class GithubHttpRequest implements GitHttpRequest {
   GithubGist _getFavoriteGist(List list) {
     GithubGist gist;
     list.forEach((map) {
-      if (map['isPublic'] == true) {
+      if ((map['isPublic'] == true) && (map['isFork'] == true)) {
         List files = map['files'];
         for (var fileMap in files) {
           if (fileMap['name'] == FAVORITE_GITS_FILE_NAME) {
             gist = GithubGist()
               ..name = map['name']
-              ..id = map['id']
               ..isPublic = true
-              ..isFork = map['isFork'];
+              ..isFork = true;
             Map<String, String> files = Map();
             files[FAVORITE_GITS_FILE_NAME] = fileMap['text'];
             gist.files = files;
+            GitGistCacheManager.configId = gist.name;
+            GitGistCacheManager.configDescription = map['description'];
             return;
           }
         }

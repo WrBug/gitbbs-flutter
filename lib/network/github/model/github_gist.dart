@@ -4,7 +4,6 @@ part 'github_gist.g.dart';
 
 @JsonSerializable()
 class GithubGist {
-  String id;
   bool isPublic;
   String name;
   bool isFork;

@@ -5,6 +5,7 @@ import 'package:gitbbs/model/git_comment.dart';
 import 'package:gitbbs/network/IssueState.dart';
 import 'package:gitbbs/network/github/GithubHttpRequest.dart';
 import 'package:gitbbs/network/github/model/github_gist.dart';
+import 'package:gitbbs/network/github/model/github_gist_file.dart';
 
 abstract class GitHttpRequest {
   Future<PagingData<GitIssue>> getMoreIssues(
@@ -31,6 +32,10 @@ abstract class GitHttpRequest {
   Future<bool> deleteComment(String commentId);
 
   Future<GithubGist> getFavoriteGist();
+
+  Future<GithubGist> forkConfigGist();
+
+  Future<bool> saveConfigGist(Map<String, GithubGistFile> map);
 
   factory GitHttpRequest.getInstance() => GithubHttpRequest.getInstance();
 }

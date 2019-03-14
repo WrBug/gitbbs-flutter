@@ -1,5 +1,6 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
+import 'package:gitbbs/model/UserCacheManager.dart';
 import 'package:gitbbs/model/entry/comment_edit_data.dart';
 import 'package:gitbbs/model/entry/comment_list_data.dart';
 import 'package:gitbbs/model/event/comments_count_changed_event.dart';
@@ -7,6 +8,7 @@ import 'package:gitbbs/network/GitHttpRequest.dart';
 import 'package:gitbbs/network/github/GithubHttpRequest.dart';
 import 'package:gitbbs/ui/editcomment/edit_comment_page.dart';
 import 'package:gitbbs/ui/issuedetail/action.dart';
+import 'package:gitbbs/ui/issuedetail/bean/issue_cache.dart';
 import 'package:gitbbs/ui/issuedetail/commentlist/comment_list_page.dart';
 import 'package:gitbbs/ui/issuedetail/state.dart';
 import 'package:gitbbs/util/event_bus_helper.dart';
@@ -16,7 +18,8 @@ Effect<IssueDetailState> buildEffect() {
   return combineEffects(<Object, Effect<IssueDetailState>>{
     Lifecycle.initState: _init,
     IssueDetailAction.toggleCommentsVisible: _toggleCommentVisible,
-    IssueDetailAction.addComment: _addComment
+    IssueDetailAction.addComment: _addComment,
+    IssueDetailAction.toggleFavorite: _toggleFavorite
   });
 }
 
@@ -26,10 +29,22 @@ void _init(Action action, Context<IssueDetailState> ctx) async {
   });
   var body =
       await IssueCacheManager.getIssueCache(ctx.state.originIssue.getNumber());
-  ctx.dispatch(IssueDetailActionCreator.updateBodyAction(body));
+  var map = await UserCacheManager.getFavoriteList();
+  ctx.dispatch(IssueDetailActionCreator.updateCacheAction(
+      IssueCache(body, map.containsKey(ctx.state.originIssue.getId()))));
   GitHttpRequest request = GitHttpRequest.getInstance();
   var issue = await request.getIssue(ctx.state.originIssue.getNumber());
   ctx.dispatch(IssueDetailActionCreator.update(issue));
+}
+
+void _toggleFavorite(Action action, Context<IssueDetailState> ctx) async {
+  if (ctx.state.favorite) {
+    UserCacheManager.removeFavorite(ctx.state.getIssue().getId());
+  } else {
+    UserCacheManager.addFavorite(ctx.state.getIssue());
+  }
+  ctx.dispatch(IssueDetailActionCreator.onFavoriteStatusChangedAction(
+      !ctx.state.favorite));
 }
 
 void _toggleCommentVisible(Action action, Context<IssueDetailState> ctx) async {

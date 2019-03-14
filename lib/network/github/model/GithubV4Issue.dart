@@ -27,8 +27,6 @@ class GithubV4Issue extends GitIssue {
   List<GithubLabel> labels;
   bool hasMore;
   String body;
-  @JsonKey(name: 'bodyHTML')
-  String bodyHtml;
 
   @override
   String getId() => id;
@@ -102,9 +100,9 @@ class GithubV4Issue extends GitIssue {
   String getBody() {
     return body;
   }
-
-  @override
-  String getShowBody() {
-    return bodyHtml;
+@override
+   setBody(String body) {
+    this.body=body;
   }
+
 }

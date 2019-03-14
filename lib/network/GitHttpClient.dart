@@ -34,11 +34,16 @@ class GitHttpClient {
       var response = await _dio.get(request.path,
           queryParameters: request.params, options: Options(headers: header));
       return response;
-    } else {
+    } else if (request.method == Method.POST) {
       var response = await _dio.post(request.path,
           data: request.params, options: Options(headers: header));
       return response;
+    } else if (request.method == Method.PATCH) {
+      var response = await _dio.patch(request.path,
+          data: request.params, options: Options(headers: header));
+      return response;
     }
+    return null;
   }
 }
 

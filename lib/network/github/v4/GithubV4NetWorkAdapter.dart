@@ -1,7 +1,10 @@
 import 'dart:collection';
 
+import 'package:gitbbs/constant/GitConstant.dart';
+import 'package:gitbbs/model/git_gist_cache_manager.dart';
 import 'package:gitbbs/network/IssueState.dart';
 import 'package:gitbbs/network/Request.dart';
+import 'package:gitbbs/network/github/model/github_gist_file.dart';
 import 'package:gitbbs/network/github/v4/V4Request.dart';
 import 'package:gitbbs/network/github/v4/v4_pre_view_request.dart';
 import 'package:gitbbs/network/github/v4/v4_query.dart';
@@ -77,5 +80,20 @@ class GithubV4NetWorkAdapter extends GitNetworkRequestAdapter {
     String query = getGistsQuery(login);
     var map = {'query': query};
     return V4Request(map);
+  }
+
+  @override
+  Request forkConfigGist() {
+    return Request('/gists/$GITS_CONFIG_ID/forks', {}, Method.POST);
+  }
+
+  Request saveConfigGist(Map<String, GithubGistFile> map) {
+    return Request(
+        '/gists/${GitGistCacheManager.configId}',
+        {
+          'description': GitGistCacheManager.configDescription ?? 'gitbbs auto generate',
+          'files': map
+        },
+        Method.PATCH);
   }
 }

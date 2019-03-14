@@ -4,9 +4,9 @@ import 'package:gitbbs/model/GitUser.dart';
 import 'package:gitbbs/model/event/UserUpdatedEvent.dart';
 import 'package:gitbbs/nativebirdge/MmkvChannel.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
-import 'package:gitbbs/network/github/GithubHttpRequest.dart';
 import 'package:gitbbs/network/github/model/GithubV4Issue.dart';
 import 'package:gitbbs/network/github/model/github_gist.dart';
+import 'package:gitbbs/network/github/model/github_gist_file.dart';
 import 'package:gitbbs/util/disk_lru_cache.dart';
 import 'package:gitbbs/util/event_bus_helper.dart';
 import 'dart:convert';
@@ -18,6 +18,8 @@ class UserCacheManager {
   static GitHttpRequest _request = GitHttpRequest.getInstance();
   static GithubGist _favoriteGist;
   static bool _authFailed = false;
+  static Map<String, GitIssue> _issueMap;
+  static List<GitIssue> _favoriteIssueList;
 
   static init() {
     _mmkvChannel.getToken().then((token) {
@@ -37,7 +39,10 @@ class UserCacheManager {
     _checkToken(username);
   }
 
-  static Future<List<GitIssue>> getFavoriteList() async {
+  static Future<Map<String, GitIssue>> getFavoriteList() async {
+    if (_issueMap != null) {
+      return _issueMap;
+    }
     if (_favoriteGist == null) {
       String json =
           await DiskLruCache.getDefault().get(FAVORITE_GITS_FILE_NAME);
@@ -52,9 +57,34 @@ class UserCacheManager {
     }
     String json = _favoriteGist.files[FAVORITE_GITS_FILE_NAME];
     List list = jsonDecode(json);
-    return list.map<GitIssue>((map) {
-      return GithubV4Issue.fromJson(map);
-    }).toList();
+    _issueMap = Map();
+    _favoriteIssueList = List();
+    list.forEach((map) {
+      var githubV4Issue = GithubV4Issue.fromJson(map);
+      _favoriteIssueList.add(githubV4Issue);
+      _issueMap[githubV4Issue.getId()] = githubV4Issue;
+    });
+    return _issueMap;
+  }
+
+  static void addFavorite(GitIssue issue) {
+    GitIssue newIssue = issue.clone();
+    newIssue.setBody('');
+    if (_issueMap.containsKey(newIssue.getId())) {
+      return;
+    }
+    _favoriteIssueList.add(newIssue);
+    _issueMap[newIssue.getId()] = newIssue;
+    _saveFavorite();
+  }
+
+  static void removeFavorite(String id) {
+    if (!_issueMap.containsKey(id)) {
+      return;
+    }
+    var issue = _issueMap.remove(id);
+    _favoriteIssueList.remove(issue);
+    _saveFavorite();
   }
 
   static Stream<UserUpdatedEvent> addUserChangedListener() {
@@ -65,6 +95,7 @@ class UserCacheManager {
     _favoriteGist = gist;
     DiskLruCache.getDefault()
         .put(FAVORITE_GITS_FILE_NAME, jsonEncode(gist.toJson()));
+    getFavoriteList();
   }
 
   static GitUser getUser() {
@@ -94,5 +125,25 @@ class UserCacheManager {
       _authFailed = true;
       EventBusHelper.fire(UserUpdatedEvent(null, true));
     });
+  }
+
+  static void _saveFavorite() {
+    _saveFavoriteLocal();
+    _saveFavoriteNetwork();
+  }
+
+  static void _saveFavoriteLocal() {
+    _favoriteGist.files = {
+      FAVORITE_GITS_FILE_NAME: jsonEncode(_favoriteIssueList)
+    };
+    DiskLruCache.getDefault()
+        .put(FAVORITE_GITS_FILE_NAME, jsonEncode(_favoriteGist.toJson()));
+  }
+
+  static void _saveFavoriteNetwork() {
+    GithubGistFile file = GithubGistFile();
+    file.content = jsonEncode(_favoriteIssueList);
+    file.filename = FAVORITE_GITS_FILE_NAME;
+    _request.saveConfigGist({file.filename: file});
   }
 }

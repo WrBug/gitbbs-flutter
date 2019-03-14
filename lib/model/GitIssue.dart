@@ -2,8 +2,8 @@ import 'package:gitbbs/model/GitUser.dart';
 import 'package:fish_redux/fish_redux.dart';
 
 abstract class GitIssue implements Cloneable<GitIssue> {
-
   String getId();
+
   String getTitle();
 
   int getNumber();
@@ -17,6 +17,7 @@ abstract class GitIssue implements Cloneable<GitIssue> {
   GitUser getAuthor();
 
   int comments;
+
   String getShowComments() {
     if (comments == null || comments == 0) {
       return '暂无评论';
@@ -36,5 +37,5 @@ abstract class GitIssue implements Cloneable<GitIssue> {
 
   String getBody();
 
-  String getShowBody();
+  setBody(String body);
 }

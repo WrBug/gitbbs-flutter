@@ -8,7 +8,6 @@ part of 'github_gist.dart';
 
 GithubGist _$GithubGistFromJson(Map<String, dynamic> json) {
   return GithubGist()
-    ..id = json['id'] as String
     ..isPublic = json['isPublic'] as bool
     ..name = json['name'] as String
     ..isFork = json['isFork'] as bool
@@ -18,7 +17,6 @@ GithubGist _$GithubGistFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$GithubGistToJson(GithubGist instance) =>
     <String, dynamic>{
-      'id': instance.id,
       'isPublic': instance.isPublic,
       'name': instance.name,
       'isFork': instance.isFork,

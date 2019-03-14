@@ -1,5 +1,6 @@
 import 'package:gitbbs/constant/GitConstant.dart';
 import 'package:gitbbs/network/IssueState.dart';
+import 'package:gitbbs/network/github/model/github_gist_file.dart';
 
 import 'Request.dart';
 
@@ -27,4 +28,8 @@ abstract class GitNetworkRequestAdapter {
   Request deleteComment(String commentId);
 
   Request getGists(String login);
+
+  Request forkConfigGist();
+
+  Request saveConfigGist(Map<String, GithubGistFile> map);
 }
