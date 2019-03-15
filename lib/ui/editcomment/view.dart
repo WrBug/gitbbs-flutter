@@ -1,9 +1,11 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
+import 'package:gitbbs/model/cachemanager/edit_text_cache_manager.dart';
 import 'package:gitbbs/network/image_helper.dart';
 import 'package:gitbbs/ui/editcomment/action.dart';
 import 'package:gitbbs/ui/editcomment/state.dart';
 import 'package:gitbbs/model/entry/comment_edit_data.dart';
+import 'package:gitbbs/ui/widget/loading.dart';
 import 'package:markdown_editor/editor.dart';
 import 'package:markdown_editor/markdown_editor.dart';
 import 'package:image_picker/image_picker.dart';
@@ -68,12 +70,16 @@ Widget buildView(
           dispatch(EditCommentActionCreator.pageTypeChangedAction());
         },
         imageSelect: () async {
-          var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-          var url = await ImageHelper.upload(image);
+          var url = await ImageHelper.pickAndUpload(viewService.context);
           return url;
         },
-        initText:
-            state.type == Type.modify ? state.comment.getBody() ?? "" : "",
+        textChange: () {
+          EditTextCacheManager.save(state.getCacheKey(),
+              state.mdKey.currentState.getMarkDownText().text);
+        },
+        initText: state?.initText?.isNotEmpty == true
+            ? state.initText
+            : state.type == Type.modify ? state.comment.getBody() ?? "" : "",
         padding: const EdgeInsets.all(10),
       ),
     ),

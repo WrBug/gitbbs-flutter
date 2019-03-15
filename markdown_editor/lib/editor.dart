@@ -3,17 +3,18 @@ import 'package:markdown_editor/action.dart';
 import 'package:markdown_editor/edit_perform.dart';
 
 class MdEditor extends StatefulWidget {
-  MdEditor({
-    Key key,
-    this.titleStyle,
-    this.padding = const EdgeInsets.all(0.0),
-    this.initTitle,
-    this.initText,
-    this.hintTitle,
-    this.hintText,
-    this.imageSelect,
-    this.textChange,
-  }) : super(key: key);
+  MdEditor(
+      {Key key,
+      this.titleStyle,
+      this.padding = const EdgeInsets.all(0.0),
+      this.initTitle,
+      this.initText,
+      this.hintTitle,
+      this.hintText,
+      this.imageSelect,
+      this.textChange,
+      this.header})
+      : super(key: key);
 
   final TextStyle titleStyle;
   final EdgeInsetsGeometry padding;
@@ -21,6 +22,7 @@ class MdEditor extends StatefulWidget {
   final String initText;
   final String hintTitle;
   final String hintText;
+  final List<Widget> header;
 
   /// see [ImageSelectCallback]
   final ImageSelectCallback imageSelect;
@@ -43,6 +45,10 @@ class MdEditorState extends State<MdEditor> {
 
   String getText() {
     return _textEditingController.value.text;
+  }
+
+  void setText(String newText) {
+    _textEditingController.text = newText;
   }
 
   @override
@@ -86,29 +92,9 @@ class MdEditorState extends State<MdEditor> {
             child: Padding(
               padding: widget.padding,
               child: Column(
-                children: <Widget>[
-                  TextField(
-                    maxLines: _maxLines,
-                    controller: _textEditingController,
-                    autofocus: true,
-                    onChanged: (text) {
-                      _editPerform.change(text);
-                      if (_maxLines != null &&
-                          text != null &&
-                          text.length > _maxLines) {
-                        setState(() {
-                          _maxLines = null;
-                        });
-                      }
-
-                      if (widget.textChange != null) widget.textChange();
-                    },
-                    decoration: InputDecoration(
-                      hintText: widget.hintText ?? '请输入内容',
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ],
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: _buildContent(),
               ),
             ),
           ),
@@ -192,5 +178,32 @@ class MdEditorState extends State<MdEditor> {
         ),
       ],
     );
+  }
+
+  List<Widget> _buildContent() {
+    List<Widget> content = [];
+    if (widget.header != null) {
+      content.addAll(widget.header);
+    }
+    content.add(TextField(
+      maxLines: _maxLines,
+      controller: _textEditingController,
+      autofocus: true,
+      onChanged: (text) {
+        _editPerform.change(text);
+        if (_maxLines != null && text != null && text.length > _maxLines) {
+          setState(() {
+            _maxLines = null;
+          });
+        }
+
+        if (widget.textChange != null) widget.textChange();
+      },
+      decoration: InputDecoration(
+        hintText: widget.hintText ?? '请输入内容，支持markdown，左滑可以预览',
+        border: InputBorder.none,
+      ),
+    ));
+    return content;
   }
 }

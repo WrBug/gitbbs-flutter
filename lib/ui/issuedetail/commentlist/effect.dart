@@ -9,7 +9,7 @@ import 'package:gitbbs/ui/issuedetail/commentlist/action.dart';
 import 'package:gitbbs/ui/issuedetail/commentlist/state.dart';
 import 'package:gitbbs/ui/widget/loading.dart';
 import 'package:gitbbs/util/event_bus_helper.dart';
-import 'package:gitbbs/util/issue_cache_manager.dart';
+import 'package:gitbbs/model/cachemanager/issue_cache_manager.dart';
 
 Effect<CommentListState> buildEffect() {
   return combineEffects(<Object, Effect<CommentListState>>{

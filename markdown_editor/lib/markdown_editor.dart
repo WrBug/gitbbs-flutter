@@ -15,24 +15,26 @@ class MarkdownText {
 enum PageType { editor, preview }
 
 class MarkdownEditor extends StatefulWidget {
-  MarkdownEditor({
-    Key key,
-    this.padding = const EdgeInsets.all(0.0),
-    this.initTitle,
-    this.initText,
-    this.hintTitle,
-    this.hintText,
-    this.onTapLink,
-    this.imageSelect,
-    this.tabChange,
-    this.textChange,
-  }) : super(key: key);
+  MarkdownEditor(
+      {Key key,
+      this.padding = const EdgeInsets.all(0.0),
+      this.initTitle,
+      this.initText,
+      this.hintTitle,
+      this.hintText,
+      this.onTapLink,
+      this.imageSelect,
+      this.tabChange,
+      this.textChange,
+      this.header})
+      : super(key: key);
 
   final EdgeInsetsGeometry padding;
   final String initTitle;
   final String initText;
   final String hintTitle;
   final String hintText;
+  final List<Widget> header;
 
   /// see [MdPreview.onTapLink]
   final TapLinkCallback onTapLink;
@@ -60,6 +62,10 @@ class MarkdownEditorWidgetState extends State<MarkdownEditor>
   MarkdownText getMarkDownText() {
     return MarkdownText(
         _editorKey.currentState.getTitle(), _editorKey.currentState.getText());
+  }
+
+  void setText(String text) {
+    _editorKey.currentState.setText(text);
   }
 
   /// Change current [PageType]
@@ -113,6 +119,7 @@ class MarkdownEditorWidgetState extends State<MarkdownEditor>
             hintTitle: widget.hintTitle,
             imageSelect: widget.imageSelect,
             textChange: widget.textChange,
+            header: widget.header,
           ),
         ),
         SafeArea(

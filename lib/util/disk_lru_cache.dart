@@ -13,6 +13,7 @@ class DiskLruCache {
   SizeOf<String> sizeOf = (data) => 1;
   LruCache<List<int>> _cache;
   String _path;
+  List<String> files = [];
 
   DiskLruCache(this.maxSize, this.cacheDir) {
     _cache = LruCache(20);

@@ -2,7 +2,7 @@ import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:gitbbs/model/GitIssue.dart';
-import 'package:gitbbs/model/UserCacheManager.dart';
+import 'package:gitbbs/model/cachemanager/user_cache_manager.dart';
 
 class FavoriteListState implements Cloneable<FavoriteListState> {
   List<GitIssue> list;

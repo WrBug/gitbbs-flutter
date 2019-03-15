@@ -4,13 +4,13 @@ import 'package:gitbbs/constant/GitConstant.dart';
 import 'package:gitbbs/model/GitIssue.dart';
 import 'package:gitbbs/model/GitUser.dart';
 import 'package:gitbbs/model/PagingData.dart';
-import 'package:gitbbs/model/UserCacheManager.dart';
+import 'package:gitbbs/model/cachemanager/user_cache_manager.dart';
 import 'package:gitbbs/model/db/gitissue_data_base.dart';
 import 'package:gitbbs/model/git_comment.dart';
-import 'package:gitbbs/model/git_gist_cache_manager.dart';
+import 'package:gitbbs/model/cachemanager/git_gist_cache_manager.dart';
 import 'package:gitbbs/network/github/model/github_gist.dart';
 import 'package:gitbbs/network/github/model/github_gist_file.dart';
-import 'package:gitbbs/util/issue_cache_manager.dart';
+import 'package:gitbbs/model/cachemanager/issue_cache_manager.dart';
 import 'package:gitbbs/network/GitHttpClient.dart';
 import 'package:gitbbs/network/GitNetworkRequestAdapter.dart';
 import 'package:gitbbs/network/IssueState.dart';
@@ -19,6 +19,7 @@ import 'package:gitbbs/network/github/model/GithubComment.dart';
 import 'package:gitbbs/network/github/model/GithubLabel.dart';
 import 'package:gitbbs/network/github/model/GithubUser.dart';
 import 'package:gitbbs/network/github/model/GithubV4Issue.dart';
+import 'package:gitbbs/network/github/model/label_info.dart';
 import 'package:gitbbs/network/github/v4/GithubV4NetWorkAdapter.dart';
 import 'package:gitbbs/network/github/v4/v4_convert.dart';
 import '../GitHttpRequest.dart';
@@ -206,5 +207,14 @@ class GithubHttpRequest implements GitHttpRequest {
       }
     });
     return gist;
+  }
+
+  @override
+  Future<LabelInfo> getLabelsConfig() async {
+    var response = await _client.execute(_adapter.getLabelsConfig());
+    String content = response.data['content'];
+    content = Utf8Decoder().convert(base64Decode(content.replaceAll("\n", '')));
+    var labelInfo = LabelInfo.fromJson(jsonDecode(content));
+    return labelInfo;
   }
 }

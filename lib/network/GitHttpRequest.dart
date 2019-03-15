@@ -6,6 +6,7 @@ import 'package:gitbbs/network/IssueState.dart';
 import 'package:gitbbs/network/github/GithubHttpRequest.dart';
 import 'package:gitbbs/network/github/model/github_gist.dart';
 import 'package:gitbbs/network/github/model/github_gist_file.dart';
+import 'package:gitbbs/network/github/model/label_info.dart';
 
 abstract class GitHttpRequest {
   Future<PagingData<GitIssue>> getMoreIssues(
@@ -36,6 +37,8 @@ abstract class GitHttpRequest {
   Future<GithubGist> forkConfigGist();
 
   Future<bool> saveConfigGist(Map<String, GithubGistFile> map);
+
+  Future<LabelInfo> getLabelsConfig();
 
   factory GitHttpRequest.getInstance() => GithubHttpRequest.getInstance();
 }

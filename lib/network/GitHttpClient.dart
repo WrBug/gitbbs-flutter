@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:gitbbs/constant/NetworkConstant.dart';
-import 'package:gitbbs/model/UserCacheManager.dart';
+import 'package:gitbbs/model/cachemanager/user_cache_manager.dart';
 import 'package:gitbbs/network/Request.dart';
 
 class GitHttpClient {

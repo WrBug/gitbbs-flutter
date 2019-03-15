@@ -3,7 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gitbbs/constant/ColorConstant.dart';
 import 'package:gitbbs/model/GitUser.dart';
-import 'package:gitbbs/model/UserCacheManager.dart';
+import 'package:gitbbs/model/cachemanager/user_cache_manager.dart';
 import 'package:gitbbs/ui/login/login_page.dart';
 import 'package:gitbbs/ui/widget/avatar_img.dart';
 

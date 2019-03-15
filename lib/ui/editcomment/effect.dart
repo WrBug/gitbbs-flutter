@@ -1,4 +1,5 @@
 import 'package:fish_redux/fish_redux.dart';
+import 'package:gitbbs/model/cachemanager/edit_text_cache_manager.dart';
 import 'package:gitbbs/model/event/comments_count_changed_event.dart';
 import 'package:gitbbs/model/git_comment.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
@@ -20,7 +21,12 @@ Effect<EditCommentState> buildEffect() {
   });
 }
 
-void _init(Action action, Context<EditCommentState> ctx) async {}
+void _init(Action action, Context<EditCommentState> ctx) async {
+  var text = await EditTextCacheManager.get(ctx.state.getCacheKey());
+  if (text?.isNotEmpty == true) {
+    ctx.dispatch(EditCommentActionCreator.onUpdateInitTextAction(text));
+  }
+}
 
 void _togglePageType(Action action, Context<EditCommentState> ctx) async {
   var pageType = ctx.state.getCurrentPage();
@@ -57,6 +63,7 @@ void _submitComment(Action action, Context<EditCommentState> ctx) async {
   if (comment != null) {
     ctx.state.scaffoldKey.currentState
         .showSnackBar(SnackBar(content: Text('提交成功')));
+    EditTextCacheManager.delete(ctx.state.getCacheKey());
     Navigator.of(ctx.context).pop(comment);
     return;
   }

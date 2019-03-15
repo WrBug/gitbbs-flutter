@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gitbbs/ui/main/main.dart';
 
 // ignore: must_be_immutable
 class LoadingDialog extends Dialog {

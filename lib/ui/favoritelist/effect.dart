@@ -1,5 +1,5 @@
 import 'package:fish_redux/fish_redux.dart';
-import 'package:gitbbs/model/UserCacheManager.dart';
+import 'package:gitbbs/model/cachemanager/user_cache_manager.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
 import 'package:gitbbs/ui/favoritelist/action.dart';
 import 'package:gitbbs/ui/favoritelist/state.dart';

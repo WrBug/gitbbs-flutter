@@ -32,4 +32,6 @@ abstract class GitNetworkRequestAdapter {
   Request forkConfigGist();
 
   Request saveConfigGist(Map<String, GithubGistFile> map);
+
+  Request getLabelsConfig();
 }

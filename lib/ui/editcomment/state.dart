@@ -12,9 +12,14 @@ class EditCommentState implements Cloneable<EditCommentState> {
   Type type;
   GlobalKey<MarkdownEditorWidgetState> mdKey;
   GlobalKey<ScaffoldState> scaffoldKey;
+  String initText;
+
+  String getCacheKey() {
+    return (comment?.getId() ?? '') + (issue?.getId() ?? '') + type.toString();
+  }
 
   PageType getCurrentPage() {
-    return mdKey.currentState?.getCurrentPage() ?? PageType.editor;
+    return mdKey?.currentState?.getCurrentPage() ?? PageType.editor;
   }
 
   String getBody() {
@@ -25,7 +30,11 @@ class EditCommentState implements Cloneable<EditCommentState> {
       return mdKey.currentState?.getMarkDownText()?.text ?? "";
     }
     if (type == Type.reply) {
-      String content = '> ' + comment.getBody().replaceAll('\n', '\n> ').replaceAll('\r\n', '\r\n> ');
+      String content = '> ' +
+          comment
+              .getBody()
+              .replaceAll('\n', '\n> ')
+              .replaceAll('\r\n', '\r\n> ');
       String reply = mdKey.currentState?.getMarkDownText()?.text ?? "";
       return '''$content
       
@@ -46,6 +55,7 @@ class EditCommentState implements Cloneable<EditCommentState> {
       ..issue = issue
       ..scaffoldKey = scaffoldKey
       ..mdKey = mdKey
+      ..initText = initText
       ..type = type;
   }
 }
@@ -56,5 +66,6 @@ EditCommentState initState(CommentEditData data) {
     ..issue = data.issue
     ..scaffoldKey = GlobalKey<ScaffoldState>()
     ..mdKey = GlobalKey<MarkdownEditorWidgetState>()
+    ..initText = ''
     ..type = data.type;
 }

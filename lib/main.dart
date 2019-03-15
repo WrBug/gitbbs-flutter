@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:gitbbs/constant/ColorConstant.dart';
 import 'package:gitbbs/model/GitUser.dart';
-import 'package:gitbbs/model/UserCacheManager.dart';
-import 'package:gitbbs/network/GitHttpRequest.dart';
+import 'package:gitbbs/model/cachemanager/user_cache_manager.dart';
+import 'package:gitbbs/ui/editissue/bean/edit_issue_info.dart';
+import 'package:gitbbs/ui/editissue/edit_issue_page.dart';
 import 'package:gitbbs/ui/favoritelist/favorite_list_page.dart';
 import 'package:gitbbs/ui/main/home/home_page.dart';
 import 'package:gitbbs/ui/main/user_tab.dart';
-import 'package:gitbbs/ui/widget/loading.dart';
 
 void main() {
   UserCacheManager.init();
@@ -44,7 +44,7 @@ class _MainPageState extends State<MainPage> {
     BottomNavigationBarItem(icon: Icon(Icons.face), title: Text("我的"))
   ];
   var bodies;
-
+  var menus;
   final title = ['主页', '问答', '收藏', '我的'];
   GitUser _user;
   StreamSubscription subscription;
@@ -58,6 +58,26 @@ class _MainPageState extends State<MainPage> {
       Text("2"),
       FavoriteListPage().buildPage(key, wantKeepAlive: true),
       UserTab()
+    ];
+    menus = [
+      [
+        IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => EditIssuePage().buildPage(EditIssueInfo(
+                    IssueType.article, IssueEditType.add, null))));
+          },
+        )
+      ],
+      [
+        IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () {},
+        )
+      ],
+      null,
+      null
     ];
     _user = UserCacheManager.getUser();
     subscription = UserCacheManager.addUserChangedListener().listen((event) {
@@ -97,6 +117,7 @@ class _MainPageState extends State<MainPage> {
                   )
                 ],
               ),
+        actions: menus[_currentPageIndex],
         elevation: 0,
       ),
       bottomNavigationBar: BottomNavigationBar(

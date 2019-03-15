@@ -1,7 +1,7 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:gitbbs/model/GitIssue.dart';
-import 'package:gitbbs/util/issue_cache_manager.dart';
+import 'package:gitbbs/model/cachemanager/issue_cache_manager.dart';
 
 class IssueDetailState implements Cloneable<IssueDetailState> {
   GitIssue originIssue;

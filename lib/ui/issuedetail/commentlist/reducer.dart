@@ -5,7 +5,7 @@ import 'package:gitbbs/model/git_comment.dart';
 import 'package:gitbbs/network/github/model/GithubComment.dart';
 import 'package:gitbbs/ui/issuedetail/commentlist/action.dart';
 import 'package:gitbbs/ui/issuedetail/commentlist/state.dart';
-import 'package:gitbbs/util/issue_cache_manager.dart';
+import 'package:gitbbs/model/cachemanager/issue_cache_manager.dart';
 
 Reducer<CommentListState> buildReducer() {
   return asReducer<CommentListState>(<Object, Reducer<CommentListState>>{

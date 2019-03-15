@@ -1,7 +1,7 @@
 import 'dart:collection';
 
 import 'package:gitbbs/constant/GitConstant.dart';
-import 'package:gitbbs/model/git_gist_cache_manager.dart';
+import 'package:gitbbs/model/cachemanager/git_gist_cache_manager.dart';
 import 'package:gitbbs/network/IssueState.dart';
 import 'package:gitbbs/network/Request.dart';
 import 'package:gitbbs/network/github/model/github_gist_file.dart';
@@ -91,9 +91,16 @@ class GithubV4NetWorkAdapter extends GitNetworkRequestAdapter {
     return Request(
         '/gists/${GitGistCacheManager.configId}',
         {
-          'description': GitGistCacheManager.configDescription ?? 'gitbbs auto generate',
+          'description':
+              GitGistCacheManager.configDescription ?? 'gitbbs auto generate',
           'files': map
         },
         Method.PATCH);
+  }
+
+  @override
+  Request getLabelsConfig() {
+    return Request('/repos/$owner/$repoName/contents/label.json',
+        {'ref': 'master'}, Method.GET);
   }
 }

@@ -4,7 +4,7 @@ import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:gitbbs/constant/ColorConstant.dart';
 import 'package:gitbbs/model/GitIssue.dart';
-import 'package:gitbbs/model/UserCacheManager.dart';
+import 'package:gitbbs/model/cachemanager/user_cache_manager.dart';
 import 'package:gitbbs/ui/issuedetail/action.dart';
 import 'package:gitbbs/ui/issuedetail/state.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -69,7 +69,7 @@ Row tabs(BuildContext context, GitIssue issue, Dispatch dispatch,
           dispatch(IssueDetailActionCreator.toggleCommentsVisible(context));
         },
         child: Padding(
-          padding: EdgeInsets.all(8),
+          padding: EdgeInsets.all(10),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -89,7 +89,7 @@ Row tabs(BuildContext context, GitIssue issue, Dispatch dispatch,
       InkWell(
         onTap: () {},
         child: Padding(
-            padding: EdgeInsets.all(8),
+            padding: EdgeInsets.all(10),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[

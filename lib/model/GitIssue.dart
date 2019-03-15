@@ -1,5 +1,6 @@
 import 'package:gitbbs/model/GitUser.dart';
 import 'package:fish_redux/fish_redux.dart';
+import 'package:gitbbs/network/github/model/GithubLabel.dart';
 
 abstract class GitIssue implements Cloneable<GitIssue> {
   String getId();
@@ -15,6 +16,8 @@ abstract class GitIssue implements Cloneable<GitIssue> {
   bool isLocked();
 
   GitUser getAuthor();
+
+  List<GithubLabel> labels;
 
   int comments;
   String bodyText;
@@ -36,7 +39,6 @@ abstract class GitIssue implements Cloneable<GitIssue> {
   void setMore(bool more) {}
 
   bool getMore() => false;
-
 
   setBodyText(String body);
 }

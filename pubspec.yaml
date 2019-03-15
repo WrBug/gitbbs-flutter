@@ -29,6 +29,7 @@ dependencies:
   flutter_easyrefresh: ^1.2.7
   flutter_markdown: ^0.2.0
   image_picker: ^0.5.0+6
+  flutter_tags: ^0.2.2
   fish_redux:
     path: fish-redux
   markdown_editor:

@@ -1,6 +1,6 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
-import 'package:gitbbs/model/UserCacheManager.dart';
+import 'package:gitbbs/model/cachemanager/user_cache_manager.dart';
 import 'package:gitbbs/model/entry/comment_edit_data.dart';
 import 'package:gitbbs/model/entry/comment_list_data.dart';
 import 'package:gitbbs/model/event/comments_count_changed_event.dart';
@@ -12,7 +12,7 @@ import 'package:gitbbs/ui/issuedetail/bean/issue_cache.dart';
 import 'package:gitbbs/ui/issuedetail/commentlist/comment_list_page.dart';
 import 'package:gitbbs/ui/issuedetail/state.dart';
 import 'package:gitbbs/util/event_bus_helper.dart';
-import 'package:gitbbs/util/issue_cache_manager.dart';
+import 'package:gitbbs/model/cachemanager/issue_cache_manager.dart';
 
 Effect<IssueDetailState> buildEffect() {
   return combineEffects(<Object, Effect<IssueDetailState>>{
