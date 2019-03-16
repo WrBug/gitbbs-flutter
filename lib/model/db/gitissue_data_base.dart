@@ -33,6 +33,7 @@ class GitIssueDataBase {
   static const String column_comments = "comments";
   static const String column_labels = "labels";
   static const String column_hasMore = "hasMore";
+  static const String column_is_author = 'isAuthor';
   static const List<String> columns = [
     column_id,
     column_number,
@@ -46,7 +47,8 @@ class GitIssueDataBase {
     column_locked,
     column_author,
     column_comments,
-    column_hasMore
+    column_hasMore,
+    column_is_author,
   ];
 
   static GitIssueDataBase createInstance() {
@@ -65,10 +67,25 @@ class GitIssueDataBase {
   initDb() async {
     Directory directory = await getApplicationDocumentsDirectory();
     String path = join(directory.path, db_name);
-    var dataBase = await openDatabase(path, version: 1, onCreate: _onCreate);
-    print('数据库创建成功，version:1');
+    var dataBase = await openDatabase(path,
+        version: 2, onCreate: _onCreate, onUpgrade: _onUpgrade);
+    print('数据库创建成功，version:2');
     print('path: $path');
     return dataBase;
+  }
+
+  FutureOr _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    print('_onUpgrade');
+    for (var version = oldVersion; version < newVersion; version++) {
+      switch (version) {
+        case 1:
+          {
+            db.execute('''
+      alter table $tableName add column $column_is_author integer
+    ''');
+          }
+      }
+    }
   }
 
   //新建数据库表
@@ -87,7 +104,9 @@ class GitIssueDataBase {
     $column_author text,
     $column_comments integer,
     $column_labels text,
-    $column_hasMore integer)''');
+    $column_hasMore integer,
+    $column_is_author integer,
+    )''');
     print('$tableName is created');
     await db.execute('''
     CREATE UNIQUE INDEX cursor on $tableName ($column_cursor);
@@ -200,6 +219,7 @@ class GitIssueDataBase {
       map[column_labels] = jsonEncode(issue.labels);
       map[column_comments] = issue.comments;
       map[column_hasMore] = issue?.hasMore == true ? 1 : 0;
+      map[column_is_author] = issue?.isAuthor == true ? 1 : 0;
       return map;
     }
     return null;
@@ -216,6 +236,7 @@ class GitIssueDataBase {
     issue.closed = map[column_closed] == 1;
     issue.closedAt = map[column_closedAt];
     issue.locked = map[column_locked] == 1;
+    issue.isAuthor = map[column_is_author] == 1;
     issue.author = GithubV4User.fromJson(jsonDecode(map[column_author]));
     List<GithubLabel> list = List();
     if (map[column_labels] != null) {
