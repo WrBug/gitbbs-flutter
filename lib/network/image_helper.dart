@@ -12,6 +12,9 @@ class ImageHelper {
 
   static Future<String> pickAndUpload(BuildContext context) async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    if (image == null) {
+      return '';
+    }
     var dialog = LoadingDialog.show(context, text: '正在上传图片');
     var url = await ImageHelper.upload(image);
     dialog.dismiss();

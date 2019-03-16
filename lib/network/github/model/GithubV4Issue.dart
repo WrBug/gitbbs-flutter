@@ -29,6 +29,7 @@ class GithubV4Issue extends GitIssue {
   List<GithubLabel> labels;
   bool hasMore;
   String body;
+  bool isAuthor;
 
   @override
   String getId() => id;

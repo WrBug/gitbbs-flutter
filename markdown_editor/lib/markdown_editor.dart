@@ -26,6 +26,7 @@ class MarkdownEditor extends StatefulWidget {
       this.imageSelect,
       this.tabChange,
       this.textChange,
+      this.pageType,
       this.header})
       : super(key: key);
 
@@ -35,6 +36,7 @@ class MarkdownEditor extends StatefulWidget {
   final String hintTitle;
   final String hintText;
   final List<Widget> header;
+  final PageType pageType;
 
   /// see [MdPreview.onTapLink]
   final TapLinkCallback onTapLink;
@@ -84,6 +86,9 @@ class MarkdownEditorWidgetState extends State<MarkdownEditor>
   void initState() {
     super.initState();
     _controller = TabController(vsync: this, length: PageType.values.length);
+    if (widget.pageType != null) {
+      setCurrentPage(widget.pageType);
+    }
     _controller.addListener(() {
       if (_controller.index == PageType.preview.index) {
         setState(() {

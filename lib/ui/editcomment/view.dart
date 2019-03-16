@@ -5,6 +5,7 @@ import 'package:gitbbs/network/image_helper.dart';
 import 'package:gitbbs/ui/editcomment/action.dart';
 import 'package:gitbbs/ui/editcomment/state.dart';
 import 'package:gitbbs/model/entry/comment_edit_data.dart';
+import 'package:gitbbs/ui/markdownhelp/markdown_help_page.dart';
 import 'package:gitbbs/ui/widget/loading.dart';
 import 'package:markdown_editor/editor.dart';
 import 'package:markdown_editor/markdown_editor.dart';
@@ -57,7 +58,8 @@ Widget buildView(
               child: Text('帮助', style: TextStyle(fontSize: 16)),
             ),
             onTap: () {
-              print(state.mdKey.currentState.getMarkDownText().text);
+              Navigator.of(viewService.context).push(
+                  MaterialPageRoute(builder: (context) => MarkdownHelpPage()));
             },
           ),
         ),

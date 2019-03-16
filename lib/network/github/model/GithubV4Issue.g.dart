@@ -27,7 +27,8 @@ GithubV4Issue _$GithubV4IssueFromJson(Map<String, dynamic> json) {
             e == null ? null : GithubLabel.fromJson(e as Map<String, dynamic>))
         ?.toList()
     ..hasMore = json['hasMore'] as bool
-    ..body = json['body'] as String;
+    ..body = json['body'] as String
+    ..isAuthor = json['isAuthor'] as bool;
 }
 
 Map<String, dynamic> _$GithubV4IssueToJson(GithubV4Issue instance) =>
@@ -46,5 +47,6 @@ Map<String, dynamic> _$GithubV4IssueToJson(GithubV4Issue instance) =>
       'bodyText': instance.bodyText,
       'labels': instance.labels,
       'hasMore': instance.hasMore,
-      'body': instance.body
+      'body': instance.body,
+      'isAuthor': instance.isAuthor
     };

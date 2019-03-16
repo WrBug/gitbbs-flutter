@@ -22,6 +22,7 @@ class V4Convert {
     user.login = node['author']['login'];
     user.avatarUrl = node['author']['avatarUrl'];
     issue.author = user;
+    issue.isAuthor = node['viewerDidAuthor'];
     issue.comments = node['comments']['totalCount'];
     List<GithubLabel> labels = new List();
     for (Map value in node['labels']['edges']) {

@@ -6,6 +6,7 @@ import 'package:gitbbs/ui/issuedetail/bean/issue_cache.dart';
 
 enum IssueDetailAction {
   update,
+  showAuthorPopMenu,
   updateCache,
   addComment,
   toggleFavorite,
@@ -16,6 +17,10 @@ enum IssueDetailAction {
 }
 
 class IssueDetailActionCreator {
+  static Action showAuthorPopMenuAction() {
+    return const Action(IssueDetailAction.showAuthorPopMenu);
+  }
+
   static Action update(GitIssue issue) {
     return Action(IssueDetailAction.update, payload: issue);
   }

@@ -17,14 +17,7 @@ Widget buildView(
     key: state.scaffoldKey,
     appBar: AppBar(
       title: Text(state.getIssue().getTitle()),
-      actions: <Widget>[
-        IconButton(
-            icon: Icon(state.favorite ? Icons.favorite : Icons.favorite_border),
-            color: state.favorite ? Colors.red : Colors.white,
-            onPressed: () {
-              dispatch(IssueDetailActionCreator.toggleFavoriteAction());
-            })
-      ],
+      actions: _actionBuild(state, dispatch, viewService),
     ),
     floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     floatingActionButton: _floatButtonBuild(state, dispatch, viewService),
@@ -33,6 +26,30 @@ Widget buildView(
             _commentsBuild(context, state, dispatch, viewService)),
     body: _mainBodyBuild(state),
   );
+}
+
+_actionBuild(
+    IssueDetailState state, Dispatch dispatch, ViewService viewService) {
+  var actions = <Widget>[];
+  actions.add(IconButton(
+      icon: Icon(state.favorite ? Icons.favorite : Icons.favorite_border),
+      color: state.favorite ? Colors.red : Colors.white,
+      onPressed: () {
+        dispatch(IssueDetailActionCreator.toggleFavoriteAction());
+      }));
+  if (state.getIssue().isAuthor == true) {
+    actions.add(_popMenuBuild(state, dispatch, viewService));
+  }
+  return actions;
+}
+
+Widget _popMenuBuild(
+    IssueDetailState state, Dispatch dispatch, ViewService viewService) {
+  return IconButton(
+      icon: Icon(Icons.more_vert),
+      onPressed: () {
+        dispatch(IssueDetailActionCreator.showAuthorPopMenuAction());
+      });
 }
 
 FloatingActionButton _floatButtonBuild(

@@ -65,6 +65,7 @@ String _getIssueContent({List<String> fields}) {
     ${fields == null ? "" : fields.join('\n')}
     closedAt
     locked
+    viewerDidAuthor
     author{
       login
       avatarUrl
