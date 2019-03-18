@@ -13,7 +13,8 @@ abstract class GitNetworkRequestAdapter {
   Request getMoreIssues(List<String> label, String creator,
       IssueState issueState, String before, String after, int size);
 
-  Request createIssue(String title, String body, String label);
+  Request createIssue(String title, String body, List<String> label);
+  Request deleteIssue(String issueId);
 
   Request getIssue(int number);
 

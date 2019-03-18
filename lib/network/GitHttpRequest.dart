@@ -20,7 +20,9 @@ abstract class GitHttpRequest {
 
   Future<GitIssue> getIssue(int number);
 
-  Future createIssue(String title, String body, String label);
+  Future createIssue(String title, String body, List<String> label);
+
+  Future deleteIssue(String issueId);
 
   Future<GitUser> doAuthenticated(String token, String username);
 

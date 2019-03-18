@@ -117,6 +117,20 @@ class GitIssueDataBase {
     print('$tableName INDEX created');
   }
 
+  Future<bool> deleteByNumber(int number) async {
+    Database database = await db;
+    int result = await database
+        .delete(tableName, where: '$column_number=?', whereArgs: [number]);
+    return true;
+  }
+
+  Future<bool> deleteByIssueId(String id) async {
+    Database database = await db;
+    int result = await database
+        .delete(tableName, where: '$column_issue_id=?', whereArgs: [id]);
+    return true;
+  }
+
   Future<bool> save({GitIssue gitIssue, List<GitIssue> list}) async {
     List<GitIssue> issues = List();
     if (list?.isNotEmpty == true) {

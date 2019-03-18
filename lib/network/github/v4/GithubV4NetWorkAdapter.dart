@@ -6,6 +6,7 @@ import 'package:gitbbs/network/IssueState.dart';
 import 'package:gitbbs/network/Request.dart';
 import 'package:gitbbs/network/github/model/github_gist_file.dart';
 import 'package:gitbbs/network/github/v4/V4Request.dart';
+import 'package:gitbbs/network/github/v4/v4_mutation.dart';
 import 'package:gitbbs/network/github/v4/v4_pre_view_request.dart';
 import 'package:gitbbs/network/github/v4/v4_query.dart';
 import '../../GitNetworkRequestAdapter.dart';
@@ -24,13 +25,20 @@ class GithubV4NetWorkAdapter extends GitNetworkRequestAdapter {
   }
 
   @override
-  Request createIssue(String title, String body, String label) {
+  Request createIssue(String title, String body, List<String> label) {
     var path = "/repos/$owner/$repoName/issues";
     var map = Map<String, dynamic>();
     map['title'] = title;
     map['body'] = body;
-    map['labels'] = [label];
+    map['labels'] = label;
     return Request(path, map, Method.POST);
+  }
+
+  @override
+  Request deleteIssue(String issueId) {
+    String query = deleteIssueMutation(issueId);
+    var map = {'query': query};
+    return V4PreViewRequest(map);
   }
 
   @override
@@ -49,7 +57,7 @@ class GithubV4NetWorkAdapter extends GitNetworkRequestAdapter {
 
   @override
   Request addComment(String issueId, String body) {
-    String query = getAddCommentQuery(issueId, body);
+    String query = getAddCommentMutation(issueId, body);
     var map = {'query': query};
     return V4Request(map);
   }
@@ -63,14 +71,14 @@ class GithubV4NetWorkAdapter extends GitNetworkRequestAdapter {
 
   @override
   Request modifyComment(String commentId, String body) {
-    String query = getModifyCommentQuery(commentId, body);
+    String query = getModifyCommentMutation(commentId, body);
     var map = {'query': query};
     return V4PreViewRequest(map);
   }
 
   @override
   Request deleteComment(String commentId) {
-    String query = getDeleteCommentQuery(commentId);
+    String query = getDeleteCommentMutation(commentId);
     var map = {'query': query};
     return V4PreViewRequest(map);
   }

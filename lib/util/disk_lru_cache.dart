@@ -50,9 +50,14 @@ class DiskLruCache {
     _cache.put(file.path, list);
     return Utf8Decoder().convert(list);
   }
-
   void put(String fileName, String value) async {
     var file = await getFile(fileName);
+    if ((value == null) || (value == '')) {
+      if (file.existsSync()) {
+        file.deleteSync();
+        return;
+      }
+    }
     var list = Utf8Encoder().convert(value);
     file.writeAsBytes(list);
     _cache.put(file.path, list);

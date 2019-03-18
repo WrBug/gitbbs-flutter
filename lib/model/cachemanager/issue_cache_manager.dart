@@ -15,6 +15,10 @@ class IssueCacheManager {
     _setData(_prefix_issue + number.toString(), body);
   }
 
+  static deleteIssueCache(int number) {
+    _setData(_prefix_issue + number.toString(), '');
+  }
+
   static Future<String> getIssueCache(int number) async {
     return await _getData(_prefix_issue + number.toString()) ?? '';
   }
@@ -47,9 +51,6 @@ class IssueCacheManager {
   }
 
   static _setData(String key, String value) {
-    if (!(value is String)) {
-      return;
-    }
     lruCache.put(key, value);
   }
 

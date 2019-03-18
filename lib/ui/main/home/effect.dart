@@ -4,6 +4,7 @@ import 'package:gitbbs/model/PagingData.dart';
 import 'package:gitbbs/model/db/gitissue_data_base.dart';
 import 'package:gitbbs/model/entry/midddle_issues_data.dart';
 import 'package:gitbbs/model/event/comments_count_changed_event.dart';
+import 'package:gitbbs/model/event/refresh_list_event.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
 import 'package:gitbbs/network/IssueState.dart';
 import 'package:gitbbs/network/github/GithubHttpRequest.dart';
@@ -15,18 +16,34 @@ import 'package:gitbbs/util/event_bus_helper.dart';
 Effect<PageState> buildEffect() {
   return combineEffects(<Object, Effect<PageState>>{
     Lifecycle.initState: _init,
+    Lifecycle.dispose: _dispose,
     PageAction.loadData: _onLoadData,
     PageAction.loadMiddleData: _onLoadMiddleData,
     PageAction.loadMoreData: _onLoadMoreData,
   });
 }
 
+void _dispose(Action action, Context<PageState> ctx) {
+  print('_dispose');
+}
+
 void _init(Action action, Context<PageState> ctx) {
+  print('_init');
   EventBusHelper.on<CommentCountChangedEvent>().listen((event) {
     ctx.dispatch(PageInnerActionCreator.onCommentsCountChangedAction(event));
   });
+  EventBusHelper.on<RefreshIssueEvent>().listen((event) {
+    _onLoadData(action, ctx);
+  });
+  EventBusHelper.on<LoadLocalIssueEvent>().listen((event) {
+    _loadCache(ctx, ctx.state.list.length);
+  });
+  _loadCache(ctx, 20);
+}
+
+void _loadCache(Context<PageState> ctx, int size) {
   var db = GitIssueDataBase.createInstance();
-  db.getList(size: 10).then((initToDos) {
+  db.getList(size: size).then((initToDos) {
     ctx.dispatch(PageInnerActionCreator.loadInitData(initToDos.data));
   });
 }

@@ -2,6 +2,7 @@ import 'package:fish_redux/fish_redux.dart';
 import 'package:gitbbs/model/GitIssue.dart';
 import 'package:flutter/material.dart';
 import 'package:gitbbs/ui/editissue/bean/edit_issue_info.dart';
+import 'package:gitbbs/ui/widget/selectable_tags.dart';
 import 'package:markdown_editor/markdown_editor.dart';
 
 class EditIssueState implements Cloneable<EditIssueState> {
@@ -11,7 +12,7 @@ class EditIssueState implements Cloneable<EditIssueState> {
   TextEditingController titleController;
   IssueType issueType;
   IssueEditType editType;
-  List<String> tags;
+  List<Tag> tags;
   String initText;
 
   @override

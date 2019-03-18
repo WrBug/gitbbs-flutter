@@ -4,6 +4,7 @@ import 'package:gitbbs/model/cachemanager/user_cache_manager.dart';
 import 'package:gitbbs/model/entry/comment_edit_data.dart';
 import 'package:gitbbs/model/entry/comment_list_data.dart';
 import 'package:gitbbs/model/event/comments_count_changed_event.dart';
+import 'package:gitbbs/model/event/refresh_list_event.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
 import 'package:gitbbs/network/github/GithubHttpRequest.dart';
 import 'package:gitbbs/ui/editcomment/edit_comment_page.dart';
@@ -13,6 +14,7 @@ import 'package:gitbbs/ui/issuedetail/action.dart';
 import 'package:gitbbs/ui/issuedetail/bean/issue_cache.dart';
 import 'package:gitbbs/ui/issuedetail/commentlist/comment_list_page.dart';
 import 'package:gitbbs/ui/issuedetail/state.dart';
+import 'package:gitbbs/ui/widget/loading.dart';
 import 'package:gitbbs/util/event_bus_helper.dart';
 import 'package:gitbbs/model/cachemanager/issue_cache_manager.dart';
 
@@ -37,6 +39,12 @@ void _init(Action action, Context<IssueDetailState> ctx) async {
       IssueCache(body, map.containsKey(ctx.state.originIssue.getId()))));
   GitHttpRequest request = GitHttpRequest.getInstance();
   var issue = await request.getIssue(ctx.state.originIssue.getNumber());
+  if (issue == null) {
+    Navigator.of(ctx.context).pop();
+    EventBusHelper.fire(LoadLocalIssueEvent());
+    UserCacheManager.removeFavorite(ctx.state.originIssue.getId());
+    return;
+  }
   ctx.dispatch(IssueDetailActionCreator.update(issue));
 }
 
@@ -76,6 +84,44 @@ void _showAuthorPopMenuAction(
     Navigator.of(ctx.context).push(MaterialPageRoute(
         builder: (context) => EditIssuePage().buildPage(EditIssueInfo(
             IssueType.article, IssueEditType.modify, ctx.state.getIssue()))));
+  } else if (result == 'delete') {
+    _showDeleteIssueNotice(action, ctx);
+  }
+}
+
+void _showDeleteIssueNotice(Action action, Context<IssueDetailState> ctx) {
+  showDialog(
+      context: ctx.context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('提示'),
+          content: Text('是否删除文章？'),
+          actions: <Widget>[
+            FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('取消')),
+            FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _deleteIssue(action, ctx);
+                },
+                child: Text('确定')),
+          ],
+        );
+      });
+}
+
+void _deleteIssue(Action action, Context<IssueDetailState> ctx) async {
+  var dialog = LoadingDialog.show(ctx.context);
+  bool success = await GitHttpRequest.getInstance()
+      .deleteIssue(ctx.state.getIssue().getId());
+  dialog.dismiss();
+  if (success) {
+    Navigator.of(ctx.context).pop();
+    EventBusHelper.fire(LoadLocalIssueEvent());
   }
 }
 

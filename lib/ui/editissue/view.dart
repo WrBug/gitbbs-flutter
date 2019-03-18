@@ -49,7 +49,7 @@ _actionsBuild(
           ),
         ),
         onTap: () {
-//          dispatch(EditCommentActionCreator.checkSubmitCommentAction());
+          dispatch(EditIssueActionCreator.saveIssueAction());
         },
       ),
     ),
@@ -84,6 +84,7 @@ _contentBuild(
     header: <Widget>[
       TextField(
         controller: state.titleController,
+        maxLength: 32,
         decoration: InputDecoration(
             contentPadding: EdgeInsets.all(10), labelText: '标题'),
       ),
@@ -107,17 +108,6 @@ _contentBuild(
 
 Widget _labelBuild(
     EditIssueState state, Dispatch dispatch, ViewService viewService) {
-  var tags = <Tag>[];
-  if (state.issue?.labels != null) {
-    for (var label in state.issue.labels) {
-      tags.add(Tag(title: label.name, active: true));
-    }
-  }
-  for (var tag in state.tags) {
-    if (!tags.contains(tag)) {
-      tags.add(Tag(title: tag, active: false));
-    }
-  }
   return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.max,
@@ -129,7 +119,7 @@ Widget _labelBuild(
         ),
         Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
         SelectableTags(
-          tags: tags,
+          tags: state.tags,
           color: Color.fromARGB(0xff, 0xee, 0xee, 0xee),
           margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
           padding: EdgeInsets.fromLTRB(16, 0, 16, 0),

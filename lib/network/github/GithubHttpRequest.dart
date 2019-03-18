@@ -83,6 +83,11 @@ class GithubHttpRequest implements GitHttpRequest {
   @override
   getIssue(int number) async {
     var response = await _client.execute(_adapter.getIssue(number));
+    if (response.data.containsKey('errors')) {
+      await IssueCacheManager.deleteIssueCache(number);
+      await GitIssueDataBase.createInstance().deleteByNumber(number);
+      return null;
+    }
     Map map = response.data['data']['repository']['issue'];
     var issue = V4Convert.toIssue(map);
     IssueCacheManager.saveIssueCache(issue.getNumber(), issue.body);
@@ -140,9 +145,20 @@ class GithubHttpRequest implements GitHttpRequest {
   }
 
   @override
-  Future createIssue(String title, String body, String label) async {
+  Future createIssue(String title, String body, List<String> label) async {
     var response =
         await _client.execute(_adapter.createIssue(title, body, label));
+    return true;
+  }
+
+  Future deleteIssue(String issueId) async {
+    var response = await _client.execute(_adapter.deleteIssue(issueId));
+    Map data = response.data;
+    if (data.containsKey('errors')) {
+      return false;
+    }
+    await GitIssueDataBase.createInstance().deleteByIssueId(issueId);
+    UserCacheManager.removeFavorite(issueId);
     return true;
   }
 

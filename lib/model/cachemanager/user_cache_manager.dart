@@ -2,6 +2,7 @@ import 'package:gitbbs/constant/GitConstant.dart';
 import 'package:gitbbs/model/GitIssue.dart';
 import 'package:gitbbs/model/GitUser.dart';
 import 'package:gitbbs/model/event/UserUpdatedEvent.dart';
+import 'package:gitbbs/model/event/refresh_list_event.dart';
 import 'package:gitbbs/nativebirdge/MmkvChannel.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
 import 'package:gitbbs/network/github/model/GithubV4Issue.dart';
@@ -121,6 +122,7 @@ class UserCacheManager {
   static void _saveFavorite() {
     _saveFavoriteLocal();
     _saveFavoriteNetwork();
+    EventBusHelper.fire(LoadFavoriteListEvent());
   }
 
   static void _saveFavoriteLocal() {

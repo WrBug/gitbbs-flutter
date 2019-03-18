@@ -132,45 +132,6 @@ String getCommentEdge() {
   ''';
 }
 
-String getAddCommentQuery(String issueId, String body) {
-  return '''
-  mutation {
-  addComment(input:{subjectId:"$issueId",body:"$body"}){
-      commentEdge{
-           ${getCommentEdge()}
-      }
-    }
-  }
-  '''
-      .replaceAll("\t", " ")
-      .replaceAll(RegExp(r' +'), ' ');
-}
-
-String getModifyCommentQuery(String commentId, String body) {
-  return '''
-  mutation {
-  updateIssueComment(input:{id:"$commentId",body:"$body"}){
-      clientMutationId
-    }
-  }
-  '''
-      .replaceAll("\t", " ")
-      .replaceAll(RegExp(r' +'), ' ');
-}
-
-String getDeleteCommentQuery(String commentId) {
-  return '''
-  mutation {
-  deleteIssueComment(input:{id:"$commentId"}){
-      commentEdge{
-           clientMutationId
-      }
-    }
-  }
-  '''
-      .replaceAll("\t", " ")
-      .replaceAll(RegExp(r' +'), ' ');
-}
 
 String getUserQuery(String username) {
   return '''
@@ -229,3 +190,4 @@ String getGistsQuery(String login) {
       .replaceAll("\t", " ")
       .replaceAll(RegExp(r' +'), ' ');
 }
+
