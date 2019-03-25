@@ -38,14 +38,16 @@ class _MainPageState extends State<MainPage> {
   var _currentPageIndex = 0;
   final items = [
     BottomNavigationBarItem(icon: Icon(Icons.home), title: Text("主页")),
-    BottomNavigationBarItem(
-        icon: Icon(Icons.question_answer), title: Text("问答")),
+//    BottomNavigationBarItem(
+//        icon: Icon(Icons.question_answer), title: Text("问答")),
     BottomNavigationBarItem(icon: Icon(Icons.favorite), title: Text("收藏")),
     BottomNavigationBarItem(icon: Icon(Icons.face), title: Text("我的"))
   ];
   var bodies;
   var menus;
-  final title = ['主页', '问答', '收藏', '我的'];
+  final title = ['主页', '收藏', '我的'];
+
+//  final title = ['主页', '问答', '收藏', '我的'];
   GitUser _user;
   StreamSubscription subscription;
   PageController _controller = PageController();
@@ -55,7 +57,7 @@ class _MainPageState extends State<MainPage> {
     super.initState();
     bodies = [
       HomePage().buildPage(key, wantKeepAlive: true),
-      Text("2"),
+//      Text("2"),
       FavoriteListPage().buildPage(key, wantKeepAlive: true),
       UserTab()
     ];
@@ -68,12 +70,6 @@ class _MainPageState extends State<MainPage> {
                 builder: (context) => EditIssuePage().buildPage(EditIssueInfo(
                     IssueType.article, IssueEditType.add, null))));
           },
-        )
-      ],
-      [
-        IconButton(
-          icon: Icon(Icons.add),
-          onPressed: () {},
         )
       ],
       null,

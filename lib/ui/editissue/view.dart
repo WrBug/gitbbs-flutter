@@ -121,7 +121,7 @@ Widget _labelBuild(
         SelectableTags(
           tags: state.tags,
           color: Color.fromARGB(0xff, 0xee, 0xee, 0xee),
-          margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
+          margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
           padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
           alignment: MainAxisAlignment.start,
           borderRadius: BorderRadius.circular(3),

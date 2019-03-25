@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gitbbs/constant/ColorConstant.dart';
 import 'package:gitbbs/model/GitUser.dart';
 import 'package:gitbbs/model/cachemanager/user_cache_manager.dart';
-import 'package:gitbbs/ui/login/login_page.dart';
+import 'package:gitbbs/ui/login/login.dart';
 import 'package:gitbbs/ui/widget/avatar_img.dart';
 
 class UserTab extends StatefulWidget {
@@ -64,7 +64,9 @@ class _UserTab extends State<UserTab> {
         child: GestureDetector(
       onTap: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LoginPage()));
+            context,
+            MaterialPageRoute(
+                builder: (context) => LoginPage().buildPage(null)));
       },
       child: Text(
         '点击登录>>',
@@ -85,7 +87,7 @@ class _UserTab extends State<UserTab> {
         ),
         Center(
             child: Text(
-              _user.bio==null?"暂无签名":_user.bio,
+          _user.bio == null ? "暂无签名" : _user.bio,
           style: TextStyle(color: Colors.white, fontSize: 14),
         ))
       ],
