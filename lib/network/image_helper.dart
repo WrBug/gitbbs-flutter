@@ -10,6 +10,7 @@ const _base_url = 'https://sm.ms/api/upload';
 class ImageHelper {
   static Dio _dio = Dio(BaseOptions(baseUrl: _base_url));
 
+  // ignore: sdk_version_async_exported_from_core
   static Future<String> pickAndUpload(BuildContext context) async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
     if (image == null) {

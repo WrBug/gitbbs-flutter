@@ -188,7 +188,6 @@ class MdEditorState extends State<MdEditor> {
     content.add(TextField(
       maxLines: _maxLines,
       controller: _textEditingController,
-      autofocus: true,
       onChanged: (text) {
         _editPerform.change(text);
         if (_maxLines != null && text != null && text.length > _maxLines) {

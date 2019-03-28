@@ -8,13 +8,37 @@ class MarkdownHelpPage extends StatefulWidget {
 }
 
 class _MarkdownHelpPage extends State<MarkdownHelpPage> {
+  GlobalKey<MarkdownEditorWidgetState> mdKey;
+
+  @override
+  void initState() {
+    super.initState();
+    mdKey = GlobalKey();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Markdown使用帮助'),
+        actions: <Widget>[
+          InkWell(
+            child: Center(
+                child: Padding(
+              padding: EdgeInsets.all(10),
+              child: Text("切换"),
+            )),
+            onTap: () {
+              mdKey.currentState.setCurrentPage(
+                  mdKey.currentState.getCurrentPage() == PageType.preview
+                      ? PageType.editor
+                      : PageType.preview);
+            },
+          )
+        ],
       ),
       body: MarkdownEditor(
+        key: mdKey,
         padding: EdgeInsets.all(10),
         initText: help_text,
       ),

@@ -9,7 +9,9 @@ import 'package:gitbbs/ui/editissue/state.dart';
 import 'package:flutter/material.dart';
 import 'package:gitbbs/ui/widget/loading.dart';
 import 'package:gitbbs/ui/widget/selectable_tags.dart';
+import 'package:gitbbs/util/disk_lru_cache.dart';
 import 'package:gitbbs/util/event_bus_helper.dart';
+import 'dart:convert';
 
 Effect<EditIssueState> buildEffect() {
   return combineEffects(<Object, Effect<EditIssueState>>{
@@ -25,27 +27,48 @@ void _init(Action action, Context<EditIssueState> ctx) async {
   if (text?.isNotEmpty == true) {
     ctx.dispatch(EditIssueActionCreator.onUpdateInitTextAction(text));
   }
-  var labelInfo = await GitHttpRequest.getInstance().getLabelsConfig();
+  var json = await DiskLruCache.getDefault().get("labelInfo");
+  LabelInfo labelInfo;
+  if (json?.isNotEmpty == true) {
+    labelInfo = LabelInfo.fromJson(jsonDecode(json));
+    _showLabel(labelInfo, ctx);
+  }
+  labelInfo = await GitHttpRequest.getInstance().getLabelsConfig();
+  _showLabel(labelInfo, ctx);
+  DiskLruCache.getDefault().put("labelInfo", jsonEncode(labelInfo));
+}
+
+void _showLabel(LabelInfo labelInfo, Context<EditIssueState> ctx) {
   var tags = <Tag>[];
   var existTags = <String>[];
+  var map = Map<String, Tag>();
   if (ctx.state.issue?.labels != null) {
     for (var label in ctx.state.issue.labels) {
       existTags.add(label.name);
-      tags.add(Tag(title: label.name, active: true));
+      var tag = Tag(title: label.name, active: true);
+      tags.add(tag);
+      map[tag.title] = tag;
     }
   }
   for (Labels label in labelInfo.labels) {
     if (label?.id?.toLowerCase() == toIssueTypeName(ctx.state.issueType)) {
       for (var tag in labelInfo.tags) {
         if ((tag.level <= label.level) && (!existTags.contains(tag.name))) {
-          tags.add(Tag(title: tag.name, active: false));
+          var tag1 = Tag(title: tag.name, active: false);
+          tags.add(tag1);
+          map[tag1.title] = tag1;
         }
       }
       break;
     }
   }
-
-//  dialog.dismiss();
+  if (ctx.state.tags?.isNotEmpty == true) {
+    for (var tag in ctx.state.tags) {
+      if (map.containsKey(tag.title)) {
+        map[tag.title].active = tag.active;
+      }
+    }
+  }
   ctx.dispatch(EditIssueActionCreator.updateTagsAction(tags));
 }
 
