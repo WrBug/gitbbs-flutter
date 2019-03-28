@@ -35,4 +35,6 @@ abstract class GitNetworkRequestAdapter {
   Request saveConfigGist(Map<String, GithubGistFile> map);
 
   Request getLabelsConfig();
+
+  Request getUserIssuesCount(String login);
 }

@@ -8,6 +8,7 @@ abstract class GitUser implements Cloneable<GitUser> {
   String getName();
 
   String bio;
+  int issuesCount;
 
   bool isEqual(GitUser other) {
     if (other == null) {

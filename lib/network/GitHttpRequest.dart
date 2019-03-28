@@ -42,5 +42,7 @@ abstract class GitHttpRequest {
 
   Future<LabelInfo> getLabelsConfig();
 
+  Future<int> getUserIssuesCount(String login);
+
   factory GitHttpRequest.getInstance() => GithubHttpRequest.getInstance();
 }

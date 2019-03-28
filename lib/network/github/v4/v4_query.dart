@@ -132,7 +132,6 @@ String getCommentEdge() {
   ''';
 }
 
-
 String getUserQuery(String username) {
   return '''
   {
@@ -191,3 +190,15 @@ String getGistsQuery(String login) {
       .replaceAll(RegExp(r' +'), ' ');
 }
 
+String getIssuesCountQuery(String login) {
+  return '''
+      {
+  repository(owner:"$REPO_OWNER",name:"$REPO_NAME"){
+    issues(filterBy:{createdBy:"$login"}){
+      totalCount
+    },
+  }
+}
+
+  ''';
+}

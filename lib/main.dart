@@ -8,7 +8,7 @@ import 'package:gitbbs/ui/editissue/bean/edit_issue_info.dart';
 import 'package:gitbbs/ui/editissue/edit_issue_page.dart';
 import 'package:gitbbs/ui/favoritelist/favorite_list_page.dart';
 import 'package:gitbbs/ui/main/home/home_page.dart';
-import 'package:gitbbs/ui/main/user_tab.dart';
+import 'package:gitbbs/ui/userinfo/user_info_page.dart';
 
 void main() {
   UserCacheManager.init();
@@ -59,7 +59,7 @@ class _MainPageState extends State<MainPage> {
       HomePage().buildPage(key, wantKeepAlive: true),
 //      Text("2"),
       FavoriteListPage().buildPage(key, wantKeepAlive: true),
-      UserTab()
+      UserInfoPage().buildPage(key, wantKeepAlive: true)
     ];
     menus = [
       [

@@ -14,9 +14,7 @@ import 'package:gitbbs/model/cachemanager/issue_cache_manager.dart';
 import 'package:gitbbs/network/GitHttpClient.dart';
 import 'package:gitbbs/network/GitNetworkRequestAdapter.dart';
 import 'package:gitbbs/network/IssueState.dart';
-import 'package:gitbbs/network/github/GithubNetWorkAdapter.dart';
 import 'package:gitbbs/network/github/model/GithubComment.dart';
-import 'package:gitbbs/network/github/model/GithubLabel.dart';
 import 'package:gitbbs/network/github/model/GithubUser.dart';
 import 'package:gitbbs/network/github/model/GithubV4Issue.dart';
 import 'package:gitbbs/network/github/model/label_info.dart';
@@ -232,5 +230,16 @@ class GithubHttpRequest implements GitHttpRequest {
     content = Utf8Decoder().convert(base64Decode(content.replaceAll("\n", '')));
     var labelInfo = LabelInfo.fromJson(jsonDecode(content));
     return labelInfo;
+  }
+
+  @override
+  Future<int> getUserIssuesCount(String login) async {
+    var response = await _client.execute(_adapter.getUserIssuesCount(login));
+    if (response.data.containsKey('errors')) {
+      return 0;
+    }
+    int count = response.data['data']['repository']['issue']['totalCount'];
+    UserCacheManager.updateIssuesCount(count);
+    return count;
   }
 }

@@ -17,6 +17,7 @@ class UserCacheManager {
   static GitUser _user;
   static MmkvChannel _mmkvChannel = MmkvChannel.getInstance();
   static GitHttpRequest _request = GitHttpRequest.getInstance();
+  static DiskLruCache _lruCache = DiskLruCache(10, 'user');
   static GithubGist _favoriteGist;
   static bool _authFailed = false;
   static Map<String, GitIssue> _issueMap;
@@ -38,6 +39,11 @@ class UserCacheManager {
     _user = null;
     _mmkvChannel.saveToken(token);
     _checkToken(username);
+  }
+
+  static updateIssuesCount(int count) {
+    _user.issuesCount = count;
+    _mmkvChannel.saveUser(_user);
   }
 
   static Future<List<GitIssue>> getFavoriteList() async {
@@ -129,8 +135,7 @@ class UserCacheManager {
     _favoriteGist.files = {
       FAVORITE_GITS_FILE_NAME: jsonEncode(_favoriteIssueList)
     };
-    DiskLruCache.getDefault()
-        .put(FAVORITE_GITS_FILE_NAME, jsonEncode(_favoriteGist.toJson()));
+    _lruCache.put(FAVORITE_GITS_FILE_NAME, jsonEncode(_favoriteGist.toJson()));
   }
 
   static void _saveFavoriteNetwork() {
@@ -142,8 +147,7 @@ class UserCacheManager {
 
   static Future _initFavoriteList() async {
     if (_favoriteGist == null) {
-      String json =
-          await DiskLruCache.getDefault().get(FAVORITE_GITS_FILE_NAME);
+      String json = await _lruCache.get(FAVORITE_GITS_FILE_NAME);
       if (json == '') {
         return null;
       }

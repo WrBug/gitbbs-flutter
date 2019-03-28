@@ -111,4 +111,11 @@ class GithubV4NetWorkAdapter extends GitNetworkRequestAdapter {
     return Request('/repos/$owner/$repoName/contents/label.json',
         {'ref': 'master'}, Method.GET);
   }
+
+  @override
+  Request getUserIssuesCount(String login) {
+    String query = getIssuesCountQuery(login);
+    var map = {'query': query};
+    return V4PreViewRequest(map);
+  }
 }

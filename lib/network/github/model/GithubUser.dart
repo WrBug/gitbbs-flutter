@@ -16,6 +16,7 @@ class GithubV4User extends GitUser {
   String websiteUrl;
   String location;
   String email;
+  int issuesCount;
 
   GithubV4User();
 
@@ -33,6 +34,7 @@ class GithubV4User extends GitUser {
   String getName() {
     return name ?? login ?? '';
   }
+
 
   @override
   GitUser clone() {

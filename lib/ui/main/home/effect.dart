@@ -24,11 +24,9 @@ Effect<PageState> buildEffect() {
 }
 
 void _dispose(Action action, Context<PageState> ctx) {
-  print('_dispose');
 }
 
 void _init(Action action, Context<PageState> ctx) {
-  print('_init');
   EventBusHelper.on<CommentCountChangedEvent>().listen((event) {
     ctx.dispatch(PageInnerActionCreator.onCommentsCountChangedAction(event));
   });
