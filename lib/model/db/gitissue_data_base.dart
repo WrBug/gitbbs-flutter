@@ -105,8 +105,8 @@ class GitIssueDataBase {
     $column_comments integer,
     $column_labels text,
     $column_hasMore integer,
-    $column_is_author integer,
-    )''');
+    $column_is_author integer)
+    ''');
     print('$tableName is created');
     await db.execute('''
     CREATE UNIQUE INDEX cursor on $tableName ($column_cursor);

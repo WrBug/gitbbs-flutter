@@ -34,7 +34,7 @@ IssueDetailState initState(GitIssue issue) {
   final IssueDetailState state = IssueDetailState();
   state.originIssue = issue;
   state.favorite = false;
-  state.body = issue.body ?? '';
+  state.body = issue.body;
   state.scaffoldKey = GlobalKey<ScaffoldState>();
   return state;
 }

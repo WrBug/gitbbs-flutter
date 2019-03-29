@@ -34,7 +34,7 @@ IssueDetailState _update(IssueDetailState state, Action action) {
   GitIssue issue = action.payload ?? GitIssue;
   final IssueDetailState newState = state.clone();
   newState.issue = issue;
-  newState.body = issue.body;
+  newState.body = issue.body ?? '';
   return newState;
 }
 

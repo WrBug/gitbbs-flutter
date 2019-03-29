@@ -19,13 +19,6 @@ Widget buildView(
             Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
             _itemBuild('消息中心', Icons.notifications_active, dispatch,
                 UserInfoActionCreator.goMessageCenterAction()),
-            Divider(
-              height: 1,
-            ),
-            _itemBuild('我的文章', Icons.book, dispatch,
-                UserInfoActionCreator.goMyIssuesPageAction(),
-                summary:
-                    '${state.gitUser?.issuesCount == null ? '' : state.gitUser?.issuesCount}'),
             Divider(height: 1),
             _itemBuild('我的收藏', Icons.favorite, dispatch,
                 UserInfoActionCreator.goMyFavoriteAction(),
