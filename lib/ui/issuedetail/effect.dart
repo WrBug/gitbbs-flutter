@@ -13,6 +13,7 @@ import 'package:gitbbs/ui/issuedetail/action.dart';
 import 'package:gitbbs/ui/issuedetail/bean/issue_cache.dart';
 import 'package:gitbbs/ui/issuedetail/commentlist/comment_list_page.dart';
 import 'package:gitbbs/ui/issuedetail/state.dart';
+import 'package:gitbbs/ui/login/login.dart';
 import 'package:gitbbs/ui/widget/loading.dart';
 import 'package:gitbbs/util/event_bus_helper.dart';
 import 'package:gitbbs/model/cachemanager/issue_cache_manager.dart';
@@ -34,8 +35,8 @@ void _init(Action action, Context<IssueDetailState> ctx) async {
   var body =
       await IssueCacheManager.getIssueCache(ctx.state.originIssue.getNumber());
   var map = await UserCacheManager.getFavoriteMap();
-  ctx.dispatch(IssueDetailActionCreator.updateCacheAction(
-      IssueCache(body, map?.containsKey(ctx.state.originIssue.getId())==true)));
+  ctx.dispatch(IssueDetailActionCreator.updateCacheAction(IssueCache(
+      body, map?.containsKey(ctx.state.originIssue.getId()) == true)));
   GitHttpRequest request = GitHttpRequest.getInstance();
   var issue = await request.getIssue(ctx.state.originIssue.getNumber());
   if (issue == null) {
@@ -80,9 +81,10 @@ void _showAuthorPopMenuAction(
             ))
       ]);
   if (result == 'edit') {
-    Navigator.of(ctx.context).push(MaterialPageRoute(
-        builder: (context) => EditIssuePage().buildPage(EditIssueInfo(
-            IssueType.article, IssueEditType.modify, ctx.state.getIssue()))));
+    EditIssuePage.start(
+        ctx.context,
+        EditIssueInfo(
+            IssueType.article, IssueEditType.modify, ctx.state.getIssue()));
   } else if (result == 'delete') {
     _showDeleteIssueNotice(action, ctx);
   }
@@ -125,13 +127,19 @@ void _deleteIssue(Action action, Context<IssueDetailState> ctx) async {
 }
 
 void _toggleFavorite(Action action, Context<IssueDetailState> ctx) async {
-  if (ctx.state.favorite) {
-    UserCacheManager.removeFavorite(ctx.state.getIssue().getId());
+  var success = await LoginPage.checkLoginAndStart(ctx.context);
+  if (success == true) {
+    if (ctx.state.favorite) {
+      UserCacheManager.removeFavorite(ctx.state.getIssue().getId());
+    } else {
+      UserCacheManager.addFavorite(ctx.state.getIssue());
+    }
+    ctx.dispatch(IssueDetailActionCreator.onFavoriteStatusChangedAction(
+        !ctx.state.favorite));
   } else {
-    UserCacheManager.addFavorite(ctx.state.getIssue());
+    ctx.state.scaffoldKey.currentState
+        .showSnackBar(SnackBar(content: Text('请登陆后再试!')));
   }
-  ctx.dispatch(IssueDetailActionCreator.onFavoriteStatusChangedAction(
-      !ctx.state.favorite));
 }
 
 void _toggleCommentVisible(Action action, Context<IssueDetailState> ctx) async {
@@ -154,10 +162,8 @@ void _toggleCommentVisible(Action action, Context<IssueDetailState> ctx) async {
 }
 
 void _addComment(Action action, Context<IssueDetailState> ctx) async {
-  Navigator.of(ctx.context).push(MaterialPageRoute(builder: (context) {
-    return EditCommentPage()
-        .buildPage(CommentEditData(action.payload, Type.add));
-  })).then((comment) {
+  EditCommentPage.start(ctx.context, CommentEditData(action.payload, Type.add))
+      .then((comment) {
     if (comment != null) {
       ctx.dispatch(IssueDetailActionCreator.onCommentsCountChangedAction(
           CommentCountChangedEvent(true, action.payload.getNumber())));

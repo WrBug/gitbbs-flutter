@@ -31,12 +31,8 @@ void _login(Action action, Context<LoginPageState> ctx) async {
       .showSnackBar(SnackBar(content: Text('正在验证密码，请稍后')));
   ctx.dispatch(LoginActionCreator.onLoadingChangedAction(true));
   GitHttpRequest request = GitHttpRequest.getInstance();
-  bool success = await request
-      .signIn(
-          ctx.state.usernameController.text, ctx.state.passwordController.text)
-      .catchError((err) {
-    return false;
-  });
+  bool success = await request.signIn(
+      ctx.state.usernameController.text, ctx.state.passwordController.text);
   if (success) {
     ctx.state.scaffoldKey.currentState
         .showSnackBar(SnackBar(content: Text('登录成功')));

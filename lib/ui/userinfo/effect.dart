@@ -48,8 +48,7 @@ void _refresh(Action action, Context<UserInfoState> ctx) async {
 }
 
 void _goLogin(Action action, Context<UserInfoState> ctx) {
-  Navigator.push(ctx.context,
-      MaterialPageRoute(builder: (context) => LoginPage().buildPage(null)));
+  LoginPage.checkLoginAndStart(ctx.context);
 }
 
 void _logout(Action action, Context<UserInfoState> ctx) {

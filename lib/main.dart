@@ -66,9 +66,8 @@ class _MainPageState extends State<MainPage> {
         IconButton(
           icon: Icon(Icons.add),
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => EditIssuePage().buildPage(EditIssueInfo(
-                    IssueType.article, IssueEditType.add, null))));
+            EditIssuePage.start(context,
+                EditIssueInfo(IssueType.article, IssueEditType.add, null));
           },
         )
       ],

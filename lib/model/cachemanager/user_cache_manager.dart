@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:gitbbs/constant/GitConstant.dart';
 import 'package:gitbbs/model/GitIssue.dart';
 import 'package:gitbbs/model/GitUser.dart';
@@ -19,7 +20,7 @@ class UserCacheManager {
   static GitHttpRequest _request = GitHttpRequest.getInstance();
   static DiskLruCache _lruCache = DiskLruCache(10, 'user');
   static GithubGist _favoriteGist;
-  static bool _authFailed = false;
+  static bool _authFailed = true;
   static Map<String, GitIssue> _issueMap;
   static List<GitIssue> _favoriteIssueList;
 
@@ -41,9 +42,9 @@ class UserCacheManager {
     _mmkvChannel.saveToken('');
     _favoriteGist = null;
     _authFailed = true;
-    _favoriteIssueList = null;
+    _favoriteIssueList.clear();
     _token = '';
-    _issueMap = null;
+    _issueMap.clear();
     init();
   }
 
@@ -80,7 +81,7 @@ class UserCacheManager {
     String text = newIssue.bodyText ?? '';
     newIssue.setBodyText(text.length > 100 ? text.substring(0, 100) : text);
     newIssue.body = '';
-    if (_issueMap.containsKey(newIssue.getId())) {
+    if (_issueMap?.containsKey(newIssue.getId()) == true) {
       return;
     }
     _favoriteIssueList.add(newIssue);
@@ -89,7 +90,7 @@ class UserCacheManager {
   }
 
   static void removeFavorite(String id) {
-    if (!_issueMap.containsKey(id)) {
+    if (_issueMap?.containsKey(id) != true) {
       return;
     }
     var issue = _issueMap.remove(id);
@@ -133,8 +134,13 @@ class UserCacheManager {
         EventBusHelper.fire(UserUpdatedEvent(user, _authFailed));
       }
     }).catchError((e) {
-      _authFailed = true;
-      EventBusHelper.fire(UserUpdatedEvent(null, true));
+      if ((e is DioError) && (e.response.statusCode == 401)) {
+        _authFailed = true;
+        EventBusHelper.fire(UserUpdatedEvent(null, true));
+      } else {
+        _authFailed = false;
+        EventBusHelper.fire(UserUpdatedEvent(_user, _authFailed));
+      }
     });
   }
 

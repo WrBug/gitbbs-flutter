@@ -48,11 +48,10 @@ void _loadMore(Action action, Context<CommentListState> ctx) async {
 }
 
 void _editComment(Action action, Context<CommentListState> ctx) {
-  Navigator.of(ctx.context)
-      .push(MaterialPageRoute(
-          builder: (context) => EditCommentPage().buildPage(CommentEditData(
-              ctx.state.issue, Type.modify,
-              comment: action.payload))))
+  EditCommentPage.start(
+          ctx.context,
+          CommentEditData(ctx.state.issue, Type.modify,
+              comment: action.payload))
       .then((comment) {
     if (comment != null) {
       ctx.dispatch(CommentListActionCreator.onCommentEditedAction(comment));
@@ -61,11 +60,8 @@ void _editComment(Action action, Context<CommentListState> ctx) {
 }
 
 void _reply(Action action, Context<CommentListState> ctx) {
-  Navigator.of(ctx.context)
-      .push(MaterialPageRoute(
-          builder: (context) => EditCommentPage().buildPage(CommentEditData(
-              ctx.state.issue, Type.reply,
-              comment: action.payload))))
+  EditCommentPage.start(ctx.context,
+          CommentEditData(ctx.state.issue, Type.reply, comment: action.payload))
       .then((comment) {
     if (comment != null) {
       ctx.dispatch(CommentListActionCreator.onCommentEditedAction(comment));

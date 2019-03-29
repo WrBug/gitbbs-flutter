@@ -64,12 +64,18 @@ class TokenInterceptor extends Interceptor {
         }
       }
     }
+    if (options.headers.containsKey(DEFAULT_TOKEN_KEY)) {
+      options.headers.remove(DEFAULT_TOKEN_KEY);
+    }
     return super.onRequest(options);
   }
 
   @override
   onError(DioError err) {
-    if (err.response.statusCode == 401) {}
+    if (err.response.statusCode == 401) {
+      UserCacheManager.removeCache();
+      err.request.headers.clear();
+    }
     return super.onError(err);
   }
 }

@@ -7,6 +7,7 @@ import 'package:gitbbs/ui/editissue/action.dart';
 import 'package:gitbbs/ui/editissue/bean/edit_issue_info.dart';
 import 'package:gitbbs/ui/editissue/state.dart';
 import 'package:flutter/material.dart';
+import 'package:gitbbs/ui/login/login.dart';
 import 'package:gitbbs/ui/widget/loading.dart';
 import 'package:gitbbs/ui/widget/selectable_tags.dart';
 import 'package:gitbbs/util/disk_lru_cache.dart';
@@ -23,6 +24,7 @@ Effect<EditIssueState> buildEffect() {
 
 void _init(Action action, Context<EditIssueState> ctx) async {
 //  var dialog = LoadingDialog.show(ctx.context);
+
   var text = await EditTextCacheManager.get(ctx.state.getCacheKey());
   if (text?.isNotEmpty == true) {
     ctx.dispatch(EditIssueActionCreator.onUpdateInitTextAction(text));
