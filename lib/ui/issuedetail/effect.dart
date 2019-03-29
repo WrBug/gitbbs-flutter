@@ -6,7 +6,6 @@ import 'package:gitbbs/model/entry/comment_list_data.dart';
 import 'package:gitbbs/model/event/comments_count_changed_event.dart';
 import 'package:gitbbs/model/event/refresh_list_event.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
-import 'package:gitbbs/network/github/GithubHttpRequest.dart';
 import 'package:gitbbs/ui/editcomment/edit_comment_page.dart';
 import 'package:gitbbs/ui/editissue/bean/edit_issue_info.dart';
 import 'package:gitbbs/ui/editissue/edit_issue_page.dart';
@@ -36,7 +35,7 @@ void _init(Action action, Context<IssueDetailState> ctx) async {
       await IssueCacheManager.getIssueCache(ctx.state.originIssue.getNumber());
   var map = await UserCacheManager.getFavoriteMap();
   ctx.dispatch(IssueDetailActionCreator.updateCacheAction(
-      IssueCache(body, map.containsKey(ctx.state.originIssue.getId()))));
+      IssueCache(body, map?.containsKey(ctx.state.originIssue.getId())==true)));
   GitHttpRequest request = GitHttpRequest.getInstance();
   var issue = await request.getIssue(ctx.state.originIssue.getNumber());
   if (issue == null) {

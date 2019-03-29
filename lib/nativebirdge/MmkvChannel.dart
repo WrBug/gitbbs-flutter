@@ -16,7 +16,7 @@ class MmkvChannel {
     try {
       String result = await platform.invokeMethod('getToken');
       return result;
-    } on PlatformException catch (e) {
+    } on PlatformException {
       return Future.value("");
     }
   }
@@ -26,7 +26,7 @@ class MmkvChannel {
       String result =
           await platform.invokeMethod('saveToken', {'token': token});
       return result;
-    } on PlatformException catch (e) {
+    } on PlatformException {
       return Future.value();
     }
   }
@@ -46,9 +46,9 @@ class MmkvChannel {
   Future saveUser(GitUser user) async {
     try {
       String result = await platform
-          .invokeMethod('saveUser', {'user': user.toJsonString()});
+          .invokeMethod('saveUser', {'user': user?.toJsonString()});
       return result;
-    } on PlatformException catch (e) {
+    } on PlatformException {
       return Future.value();
     }
   }

@@ -1,4 +1,3 @@
-import 'dart:collection';
 
 import 'package:gitbbs/constant/GitConstant.dart';
 import 'package:gitbbs/model/cachemanager/git_gist_cache_manager.dart';
@@ -6,6 +5,7 @@ import 'package:gitbbs/network/IssueState.dart';
 import 'package:gitbbs/network/Request.dart';
 import 'package:gitbbs/network/github/model/github_gist_file.dart';
 import 'package:gitbbs/network/github/v4/V4Request.dart';
+import 'package:gitbbs/network/github/v4/default_token_v4_request.dart';
 import 'package:gitbbs/network/github/v4/v4_mutation.dart';
 import 'package:gitbbs/network/github/v4/v4_pre_view_request.dart';
 import 'package:gitbbs/network/github/v4/v4_query.dart';
@@ -21,7 +21,7 @@ class GithubV4NetWorkAdapter extends GitNetworkRequestAdapter {
     String query = getIssuesQuery(issueState, size,
         label: label, creator: creator, before: before, after: after);
     var map = {'query': query};
-    return V4Request(map);
+    return DefaultTokenV4Request(map);
   }
 
   @override
@@ -45,14 +45,16 @@ class GithubV4NetWorkAdapter extends GitNetworkRequestAdapter {
   Request getIssue(int number) {
     String query = getIssueQuery(number);
     var map = {'query': query};
-    return V4Request(map);
+    return DefaultTokenV4Request(map);
   }
 
   @override
   Request getComments(int number, String before, int size) {
     String query = getCommentsQuery(number, before, size);
     var map = {'query': query};
-    return V4Request(map);
+    return DefaultTokenV4Request(
+      map,
+    );
   }
 
   @override

@@ -14,7 +14,8 @@ Effect<UserInfoState> buildEffect() {
     Lifecycle.initState: _init,
     Lifecycle.dispose: _dispose,
     UserInfoAction.goLogin: _goLogin,
-    UserInfoAction.refresh: _refresh
+    UserInfoAction.refresh: _refresh,
+    UserInfoAction.logout: _logout
   });
 }
 
@@ -36,6 +37,9 @@ void _init(Action action, Context<UserInfoState> ctx) async {
 }
 
 void _refresh(Action action, Context<UserInfoState> ctx) async {
+  if (ctx.state.gitUser == null) {
+    return;
+  }
   GitHttpRequest request = GitHttpRequest.getInstance();
   var count = await request.getUserIssuesCount(ctx.state.gitUser.getName());
   var favoriteCount = (await UserCacheManager.getFavoriteList()).length;
@@ -46,4 +50,29 @@ void _refresh(Action action, Context<UserInfoState> ctx) async {
 void _goLogin(Action action, Context<UserInfoState> ctx) {
   Navigator.push(ctx.context,
       MaterialPageRoute(builder: (context) => LoginPage().buildPage(null)));
+}
+
+void _logout(Action action, Context<UserInfoState> ctx) {
+  showDialog(
+      context: ctx.context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('提示'),
+          content: Text('是否退出当前账号？'),
+          actions: <Widget>[
+            FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('取消')),
+            FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  UserCacheManager.removeCache();
+                },
+                child: Text('确定')),
+          ],
+        );
+      });
 }

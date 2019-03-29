@@ -1,13 +1,11 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:gitbbs/model/GitIssue.dart';
-import 'package:gitbbs/model/db/gitissue_data_base.dart';
 import 'package:gitbbs/model/entry/midddle_issues_data.dart';
 import 'package:gitbbs/ui/main/home/item/middle_component/click_to_load_middle_component.dart';
 import 'package:gitbbs/ui/main/home/item/component.dart';
 import 'package:gitbbs/ui/main/home/item/divide_component.dart';
 import 'package:gitbbs/ui/main/home/item/header_component.dart';
 import 'package:gitbbs/ui/main/home/page_state.dart';
-import 'package:gitbbs/ui/main/home/reducer.dart';
 
 const TYPE_HEADER = 'header';
 const TYPE_ISSUE = 'issue';

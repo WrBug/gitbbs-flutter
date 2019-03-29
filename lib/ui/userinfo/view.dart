@@ -1,7 +1,5 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyrefresh/bezier_bounce_footer.dart';
-import 'package:flutter_easyrefresh/bezier_circle_header.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_easyrefresh/material_header.dart';
 import 'package:gitbbs/constant/ColorConstant.dart';
@@ -27,7 +25,7 @@ Widget buildView(
             _itemBuild('我的文章', Icons.book, dispatch,
                 UserInfoActionCreator.goMyIssuesPageAction(),
                 summary:
-                    '${state.gitUser.issuesCount == null ? '' : state.gitUser.issuesCount}'),
+                    '${state.gitUser?.issuesCount == null ? '' : state.gitUser?.issuesCount}'),
             Divider(height: 1),
             _itemBuild('我的收藏', Icons.favorite, dispatch,
                 UserInfoActionCreator.goMyFavoriteAction(),

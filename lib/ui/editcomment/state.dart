@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:gitbbs/model/GitIssue.dart';
 import 'package:gitbbs/model/entry/comment_edit_data.dart';
 import 'package:gitbbs/model/git_comment.dart';
-import 'package:markdown_editor/editor.dart';
 import 'package:markdown_editor/markdown_editor.dart';
 
 class EditCommentState implements Cloneable<EditCommentState> {

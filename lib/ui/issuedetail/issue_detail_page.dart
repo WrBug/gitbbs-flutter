@@ -1,5 +1,4 @@
 import 'package:fish_redux/fish_redux.dart';
-import 'package:flutter/material.dart';
 import 'package:gitbbs/model/GitIssue.dart';
 import 'package:gitbbs/ui/issuedetail/effect.dart';
 import 'package:gitbbs/ui/issuedetail/reducer.dart';

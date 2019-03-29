@@ -7,7 +7,6 @@ import 'package:gitbbs/model/event/comments_count_changed_event.dart';
 import 'package:gitbbs/model/event/refresh_list_event.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
 import 'package:gitbbs/network/IssueState.dart';
-import 'package:gitbbs/network/github/GithubHttpRequest.dart';
 import 'package:gitbbs/ui/main/home/action.dart';
 import 'package:gitbbs/ui/main/home/inner_action.dart';
 import 'package:gitbbs/ui/main/home/page_state.dart';

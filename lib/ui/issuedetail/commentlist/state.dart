@@ -4,7 +4,6 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:gitbbs/model/GitIssue.dart';
 import 'package:gitbbs/model/entry/comment_list_data.dart';
 import 'package:gitbbs/model/git_comment.dart';
-import 'package:gitbbs/network/github/model/GithubComment.dart';
 
 class CommentListState implements Cloneable<CommentListState> {
   GitIssue issue;

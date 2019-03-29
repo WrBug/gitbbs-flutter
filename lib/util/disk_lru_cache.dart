@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:convert';
 import 'package:gitbbs/util/lru_cache.dart';
 import 'package:path_provider/path_provider.dart';

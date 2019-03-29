@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:gitbbs/constant/GitConstant.dart';
 import 'package:gitbbs/constant/NetworkConstant.dart';
 import 'package:gitbbs/model/cachemanager/user_cache_manager.dart';
 import 'package:gitbbs/network/Request.dart';
@@ -51,8 +52,24 @@ class TokenInterceptor extends Interceptor {
   @override
   onRequest(RequestOptions options) {
     if (!options.headers.containsKey('Authorization')) {
-      options.headers['Authorization'] = 'token ${UserCacheManager.getToken()}';
+      var token = UserCacheManager.getToken();
+      if (token?.isNotEmpty == true) {
+        options.headers['Authorization'] =
+            'token ${UserCacheManager.getToken()}';
+      } else {
+        if (options.headers.containsKey(DEFAULT_TOKEN_KEY)) {
+          options.headers['Authorization'] =
+              'token ${options.headers[DEFAULT_TOKEN_KEY]}';
+          options.headers.remove(DEFAULT_TOKEN_KEY);
+        }
+      }
     }
     return super.onRequest(options);
+  }
+
+  @override
+  onError(DioError err) {
+    if (err.response.statusCode == 401) {}
+    return super.onError(err);
   }
 }

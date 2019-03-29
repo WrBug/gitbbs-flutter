@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:gitbbs/model/entry/comment_edit_data.dart';
 import 'package:gitbbs/model/event/comments_count_changed_event.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
-import 'package:gitbbs/network/github/GithubHttpRequest.dart';
 import 'package:gitbbs/ui/editcomment/edit_comment_page.dart';
 import 'package:gitbbs/ui/issuedetail/commentlist/action.dart';
 import 'package:gitbbs/ui/issuedetail/commentlist/state.dart';

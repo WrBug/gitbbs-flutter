@@ -10,6 +10,7 @@ Reducer<FavoriteListState> buildReducer() {
 
 FavoriteListState _initData(FavoriteListState state, Action action) {
   FavoriteListState newState = state.clone();
-  newState.list = List.of(action.payload.reversed);
+  newState.list =
+      action.payload?.reversed == null ? [] : List.of(action.payload.reversed);
   return newState;
 }

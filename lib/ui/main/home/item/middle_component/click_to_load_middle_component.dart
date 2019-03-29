@@ -1,7 +1,6 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:gitbbs/constant/ColorConstant.dart';
-import 'package:gitbbs/model/GitIssue.dart';
 import 'package:gitbbs/model/entry/midddle_issues_data.dart';
 import 'package:gitbbs/ui/main/home/action.dart';
 

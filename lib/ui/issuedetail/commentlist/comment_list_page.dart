@@ -1,8 +1,5 @@
 import 'package:fish_redux/fish_redux.dart';
-import 'package:flutter/material.dart';
-import 'package:gitbbs/model/GitIssue.dart';
 import 'package:gitbbs/model/entry/comment_list_data.dart';
-import 'package:gitbbs/network/github/model/GithubComment.dart';
 import 'package:gitbbs/ui/issuedetail/commentlist/adapter/comment_list_adapter.dart';
 import 'package:gitbbs/ui/issuedetail/commentlist/effect.dart';
 import 'package:gitbbs/ui/issuedetail/commentlist/reducer.dart';

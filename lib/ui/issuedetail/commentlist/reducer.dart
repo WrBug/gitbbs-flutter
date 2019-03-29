@@ -1,8 +1,6 @@
 import 'package:fish_redux/fish_redux.dart';
-import 'package:gitbbs/model/GitIssue.dart';
 import 'package:gitbbs/model/PagingData.dart';
 import 'package:gitbbs/model/git_comment.dart';
-import 'package:gitbbs/network/github/model/GithubComment.dart';
 import 'package:gitbbs/ui/issuedetail/commentlist/action.dart';
 import 'package:gitbbs/ui/issuedetail/commentlist/state.dart';
 import 'package:gitbbs/model/cachemanager/issue_cache_manager.dart';

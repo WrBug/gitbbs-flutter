@@ -28,10 +28,23 @@ class UserCacheManager {
       _token = token;
       _mmkvChannel.getUser().then((user) {
         _user = user;
+        _lruCache = DiskLruCache(10, user?.getName());
         EventBusHelper.fire(UserUpdatedEvent(user, _authFailed));
         _checkToken(_user?.getName());
       });
     });
+  }
+
+  static removeCache() {
+    _user = null;
+    _mmkvChannel.saveUser(null);
+    _mmkvChannel.saveToken('');
+    _favoriteGist = null;
+    _authFailed = true;
+    _favoriteIssueList = null;
+    _token = '';
+    _issueMap = null;
+    init();
   }
 
   static saveToken(String token, String username) {

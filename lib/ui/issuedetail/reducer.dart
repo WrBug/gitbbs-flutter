@@ -4,7 +4,6 @@ import 'package:gitbbs/model/db/gitissue_data_base.dart';
 import 'package:gitbbs/model/event/comments_count_changed_event.dart';
 import 'package:gitbbs/ui/issuedetail/action.dart';
 import 'package:gitbbs/ui/issuedetail/bean/issue_cache.dart';
-import 'package:gitbbs/ui/issuedetail/commentlist/action.dart';
 import 'package:gitbbs/ui/issuedetail/state.dart';
 
 Reducer<IssueDetailState> buildReducer() {

@@ -3,7 +3,6 @@ import 'package:gitbbs/model/cachemanager/edit_text_cache_manager.dart';
 import 'package:gitbbs/model/event/comments_count_changed_event.dart';
 import 'package:gitbbs/model/git_comment.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
-import 'package:gitbbs/network/github/GithubHttpRequest.dart';
 import 'package:gitbbs/ui/editcomment/action.dart';
 import 'package:gitbbs/ui/editcomment/state.dart';
 import 'package:gitbbs/ui/widget/loading.dart';

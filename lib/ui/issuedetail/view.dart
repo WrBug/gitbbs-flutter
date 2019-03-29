@@ -1,10 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:gitbbs/constant/ColorConstant.dart';
 import 'package:gitbbs/model/GitIssue.dart';
-import 'package:gitbbs/model/cachemanager/user_cache_manager.dart';
 import 'package:gitbbs/ui/issuedetail/action.dart';
 import 'package:gitbbs/ui/issuedetail/state.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
