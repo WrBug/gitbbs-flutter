@@ -238,7 +238,7 @@ class GithubHttpRequest implements GitHttpRequest {
     if (response.data.containsKey('errors')) {
       return 0;
     }
-    int count = response.data['data']['repository']['issue']['totalCount'];
+    int count = response.data['data']['repository']['issues']['totalCount'];
     UserCacheManager.updateIssuesCount(count);
     return count;
   }
