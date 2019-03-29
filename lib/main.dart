@@ -6,9 +6,9 @@ import 'package:gitbbs/model/GitUser.dart';
 import 'package:gitbbs/model/cachemanager/user_cache_manager.dart';
 import 'package:gitbbs/ui/editissue/bean/edit_issue_info.dart';
 import 'package:gitbbs/ui/editissue/edit_issue_page.dart';
-import 'package:gitbbs/ui/favoritelist/favorite_list_page.dart';
+import 'package:gitbbs/ui/main/favoritelist/favorite_list_page.dart';
 import 'package:gitbbs/ui/main/home/home_page.dart';
-import 'package:gitbbs/ui/userinfo/user_info_page.dart';
+import 'package:gitbbs/ui/main/userinfo/user_info_page.dart';
 
 void main() {
   UserCacheManager.init();

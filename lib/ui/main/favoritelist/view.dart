@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/bezier_circle_header.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:gitbbs/ui/favoritelist/action.dart';
-import 'package:gitbbs/ui/favoritelist/state.dart';
+import 'package:gitbbs/ui/main/favoritelist/action.dart';
+import 'package:gitbbs/ui/main/favoritelist/state.dart';
 
 Widget buildView(
     FavoriteListState state, Dispatch dispatch, ViewService viewService) {

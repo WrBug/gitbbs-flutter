@@ -1,10 +1,10 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:gitbbs/model/GitIssue.dart';
 import 'package:gitbbs/model/entry/midddle_issues_data.dart';
-import 'package:gitbbs/ui/main/home/item/middle_component/click_to_load_middle_component.dart';
-import 'package:gitbbs/ui/main/home/item/component.dart';
-import 'package:gitbbs/ui/main/home/item/divide_component.dart';
-import 'package:gitbbs/ui/main/home/item/header_component.dart';
+import 'package:gitbbs/ui/widget/issue_item_component/component.dart';
+import 'package:gitbbs/ui/widget/issue_item_component/divide_component.dart';
+import 'package:gitbbs/ui/widget/issue_item_component/header_component.dart';
+import 'package:gitbbs/ui/main/home/middle_component/click_to_load_middle_component.dart';
 import 'package:gitbbs/ui/main/home/page_state.dart';
 
 const TYPE_HEADER = 'header';
@@ -26,7 +26,6 @@ class IssueListAdapter extends DynamicFlowAdapter<PageState> {
 }
 
 class _IssueConnector implements Connector<PageState, List<ItemBean>> {
-
   @override
   List<ItemBean> get(PageState state) {
     if (state.list?.isNotEmpty == true) {

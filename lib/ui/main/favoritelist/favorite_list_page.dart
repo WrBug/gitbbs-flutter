@@ -1,9 +1,9 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
-import 'package:gitbbs/ui/favoritelist/adapter/favorite_list_adapter.dart';
-import 'package:gitbbs/ui/favoritelist/effect.dart';
-import 'package:gitbbs/ui/favoritelist/reducer.dart';
-import 'package:gitbbs/ui/favoritelist/state.dart';
+import 'package:gitbbs/ui/main/favoritelist/adapter/favorite_list_adapter.dart';
+import 'package:gitbbs/ui/main/favoritelist/effect.dart';
+import 'package:gitbbs/ui/main/favoritelist/reducer.dart';
+import 'package:gitbbs/ui/main/favoritelist/state.dart';
 import 'view.dart';
 
 class FavoriteListPage

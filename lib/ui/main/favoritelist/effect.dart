@@ -2,8 +2,8 @@ import 'package:fish_redux/fish_redux.dart';
 import 'package:gitbbs/model/cachemanager/user_cache_manager.dart';
 import 'package:gitbbs/model/event/refresh_list_event.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
-import 'package:gitbbs/ui/favoritelist/action.dart';
-import 'package:gitbbs/ui/favoritelist/state.dart';
+import 'package:gitbbs/ui/main/favoritelist/action.dart';
+import 'package:gitbbs/ui/main/favoritelist/state.dart';
 import 'package:gitbbs/util/event_bus_helper.dart';
 
 Effect<FavoriteListState> buildEffect() {

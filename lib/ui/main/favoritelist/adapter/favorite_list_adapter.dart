@@ -1,7 +1,7 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:gitbbs/model/GitIssue.dart';
-import 'package:gitbbs/ui/favoritelist/adapter/favorite_component.dart';
-import 'package:gitbbs/ui/favoritelist/state.dart';
+import 'package:gitbbs/ui/main/favoritelist/adapter/favorite_component.dart';
+import 'package:gitbbs/ui/main/favoritelist/state.dart';
 import 'package:gitbbs/ui/issuedetail/commentlist/adapter/divide_component.dart';
 
 const TYPE_ISSUE = 'TYPE_ISSUE';

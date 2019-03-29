@@ -1,6 +1,6 @@
 import 'package:fish_redux/fish_redux.dart';
-import 'package:gitbbs/ui/favoritelist/action.dart';
-import 'package:gitbbs/ui/favoritelist/state.dart';
+import 'package:gitbbs/ui/main/favoritelist/action.dart';
+import 'package:gitbbs/ui/main/favoritelist/state.dart';
 
 Reducer<FavoriteListState> buildReducer() {
   return asReducer<FavoriteListState>(<Object, Reducer<FavoriteListState>>{

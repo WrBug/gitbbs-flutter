@@ -1,6 +1,6 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:gitbbs/model/event/UserUpdatedEvent.dart';
-import 'package:gitbbs/ui/userinfo/bean/user_update_info.dart';
+import 'package:gitbbs/ui/main/userinfo/bean/user_update_info.dart';
 
 enum UserInfoAction {
   goLogin,
@@ -8,7 +8,7 @@ enum UserInfoAction {
   logout,
   goMessageCenter,
   goMyIssuesPage,
-  goMyFavorite,
+  goGithubPage,
   goHistory,
   onUserStatusChanged,
   onRefreshed
@@ -26,8 +26,8 @@ class UserInfoActionCreator {
   static Action goMyIssuesPageAction() =>
       const Action(UserInfoAction.goMyIssuesPage);
 
-  static Action goMyFavoriteAction() =>
-      const Action(UserInfoAction.goMyFavorite);
+  static Action goGithubPageAction() =>
+      const Action(UserInfoAction.goGithubPage);
 
   static Action goHistoryAction() => const Action(UserInfoAction.goHistory);
 

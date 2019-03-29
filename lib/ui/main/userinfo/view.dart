@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_easyrefresh/material_header.dart';
 import 'package:gitbbs/constant/ColorConstant.dart';
-import 'package:gitbbs/ui/userinfo/action.dart';
-import 'package:gitbbs/ui/userinfo/user_info_state.dart';
+import 'package:gitbbs/ui/main/userinfo/action.dart';
+import 'package:gitbbs/ui/main/userinfo/user_info_state.dart';
 import 'package:gitbbs/ui/widget/avatar_img.dart';
 
 Widget buildView(
@@ -16,21 +16,19 @@ Widget buildView(
           children: <Widget>[
             _headerBuild(state, dispatch, viewService),
             Container(height: 20, color: Color(0x0f000000)),
-            Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
             _itemBuild('消息中心', Icons.notifications_active, dispatch,
                 UserInfoActionCreator.goMessageCenterAction()),
-            Divider(height: 1),
-            _itemBuild('我的收藏', Icons.favorite, dispatch,
-                UserInfoActionCreator.goMyFavoriteAction(),
+            _itemBuild('我的文章', Icons.book, dispatch,
+                UserInfoActionCreator.goMyIssuesPageAction(),
                 summary:
-                    '${state.favoriteCount == null ? '' : state.favoriteCount}'),
-            Divider(height: 1),
+                    '${state.gitUser?.issuesCount == null ? '' : state.gitUser?.issuesCount}'),
             _itemBuild('浏览历史', Icons.history, dispatch,
                 UserInfoActionCreator.goHistoryAction(),
                 summary: state.todayHistoryCount == null
                     ? ''
                     : '今日浏览${state.todayHistoryCount}'),
-            Divider(height: 1),
+            _itemBuild('项目Github主页', Icons.web, dispatch,
+                UserInfoActionCreator.goGithubPageAction()),
             _itemBuild('退出登录', Icons.exposure_neg_1, dispatch,
                 UserInfoActionCreator.logoutAction()),
           ],
@@ -47,27 +45,32 @@ Widget buildView(
 
 _itemBuild(String text, IconData icon, Dispatch dispatch, Action action,
     {String summary = ''}) {
-  return InkWell(
-    child: Padding(
-      padding: EdgeInsets.all(20),
-      child: Row(
-        children: <Widget>[
-          Icon(
-            icon,
-            color: icon_content_color,
+  return Column(
+    children: <Widget>[
+      InkWell(
+        child: Padding(
+          padding: EdgeInsets.all(20),
+          child: Row(
+            children: <Widget>[
+              Icon(
+                icon,
+                color: icon_content_color,
+              ),
+              Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
+              Expanded(
+                  child: Text(
+                text,
+                style: TextStyle(color: text_content_color, fontSize: 16),
+              )),
+              Text(summary,
+                  style: TextStyle(color: text_summary_color, fontSize: 14))
+            ],
           ),
-          Padding(padding: EdgeInsets.fromLTRB(10, 0, 0, 0)),
-          Expanded(
-              child: Text(
-            text,
-            style: TextStyle(color: text_content_color, fontSize: 16),
-          )),
-          Text(summary,
-              style: TextStyle(color: text_summary_color, fontSize: 14))
-        ],
+        ),
+        onTap: () => dispatch(action),
       ),
-    ),
-    onTap: () => dispatch(action),
+      Divider(height: 1),
+    ],
   );
 }
 

@@ -2,12 +2,14 @@ import 'dart:async';
 
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
+import 'package:gitbbs/constant/GitConstant.dart';
 import 'package:gitbbs/model/cachemanager/user_cache_manager.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
 import 'package:gitbbs/ui/login/login.dart';
-import 'package:gitbbs/ui/userinfo/action.dart';
-import 'package:gitbbs/ui/userinfo/bean/user_update_info.dart';
-import 'package:gitbbs/ui/userinfo/user_info_state.dart';
+import 'package:gitbbs/ui/main/userinfo/action.dart';
+import 'package:gitbbs/ui/main/userinfo/bean/user_update_info.dart';
+import 'package:gitbbs/ui/main/userinfo/user_info_state.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Effect<UserInfoState> buildEffect() {
   return combineEffects(<Object, Effect<UserInfoState>>{
@@ -15,7 +17,8 @@ Effect<UserInfoState> buildEffect() {
     Lifecycle.dispose: _dispose,
     UserInfoAction.goLogin: _goLogin,
     UserInfoAction.refresh: _refresh,
-    UserInfoAction.logout: _logout
+    UserInfoAction.logout: _logout,
+    UserInfoAction.goGithubPage: _goGithubPage
   });
 }
 
@@ -49,6 +52,13 @@ void _refresh(Action action, Context<UserInfoState> ctx) async {
 
 void _goLogin(Action action, Context<UserInfoState> ctx) {
   LoginPage.checkLoginAndStart(ctx.context);
+}
+
+void _goGithubPage(Action action, Context<UserInfoState> ctx) async {
+  const url = GITHUB_URL;
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {}
 }
 
 void _logout(Action action, Context<UserInfoState> ctx) {

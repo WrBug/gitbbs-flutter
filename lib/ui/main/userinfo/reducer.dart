@@ -1,8 +1,8 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:gitbbs/model/event/UserUpdatedEvent.dart';
-import 'package:gitbbs/ui/userinfo/action.dart';
-import 'package:gitbbs/ui/userinfo/bean/user_update_info.dart';
-import 'package:gitbbs/ui/userinfo/user_info_state.dart';
+import 'package:gitbbs/ui/main/userinfo/action.dart';
+import 'package:gitbbs/ui/main/userinfo/bean/user_update_info.dart';
+import 'package:gitbbs/ui/main/userinfo/user_info_state.dart';
 
 Reducer<UserInfoState> buildReducer() {
   return asReducer(<Object, Reducer<UserInfoState>>{

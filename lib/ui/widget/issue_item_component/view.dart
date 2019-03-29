@@ -3,18 +3,17 @@ import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:gitbbs/constant/ColorConstant.dart';
 import 'package:gitbbs/model/GitIssue.dart';
-import 'package:gitbbs/ui/favoritelist/adapter/action.dart';
-import 'package:gitbbs/ui/favoritelist/adapter/effect.dart';
+import 'package:gitbbs/ui/widget/issue_item_component/action.dart';
 import 'package:gitbbs/ui/widget/avatar_img.dart';
 
-class FavoriteComponent extends Component<GitIssue> {
-  FavoriteComponent() : super(view: _buildView, effect: buildEffect());
-}
-
-Widget _buildView(GitIssue gitIssue, dispatch, ViewService viewService) {
+Widget buildView(
+  GitIssue gitIssue,
+  Dispatch dispatch,
+  ViewService viewService,
+) {
   return InkWell(
       onTap: () {
-        dispatch(FavoriteItemActionCreator.getDetailAction());
+        dispatch(IssueItemActionCreator.onGetDetailAction(gitIssue));
       },
       child: Padding(
         padding: EdgeInsets.fromLTRB(10, 8, 10, 8),
@@ -26,29 +25,13 @@ Widget _buildView(GitIssue gitIssue, dispatch, ViewService viewService) {
               maxLines: 2,
               style: TextStyle(
                   color: text_title_color,
-                  fontSize: 20,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold),
             ),
-            _contentPreviewBuild(gitIssue),
             _bottomInfoBuild(gitIssue)
           ],
         ),
       ));
-}
-
-_contentPreviewBuild(GitIssue gitIssue) {
-  return (gitIssue.bodyText ?? '') == ''
-      ? Container(
-          height: 0,
-        )
-      : Padding(
-          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-          child: Text(
-            gitIssue.bodyText ?? '',
-            maxLines: 3,
-            style: TextStyle(color: text_summary_color, fontSize: 14),
-          ),
-        );
 }
 
 _bottomInfoBuild(GitIssue gitIssue) {
