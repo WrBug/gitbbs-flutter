@@ -29,7 +29,7 @@ class UserInfoState implements Cloneable<UserInfoState> {
 UserInfoState initState(GlobalKey<ScaffoldState> key) {
   return UserInfoState()
     ..gitUser = UserCacheManager.getUser()
-    ..authFailed = UserCacheManager.isAuthFailed()
+    ..authFailed = UserCacheManager.isAuthFailed() == true
     ..easyRefreshKey = GlobalKey()
     ..headerKey = GlobalKey()
     ..scaffoldKey = key;

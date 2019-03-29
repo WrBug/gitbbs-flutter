@@ -9,6 +9,7 @@ import 'package:gitbbs/ui/login/login.dart';
 import 'package:gitbbs/ui/main/userinfo/action.dart';
 import 'package:gitbbs/ui/main/userinfo/bean/user_update_info.dart';
 import 'package:gitbbs/ui/main/userinfo/user_info_state.dart';
+import 'package:gitbbs/ui/userissues/user_issue_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Effect<UserInfoState> buildEffect() {
@@ -18,7 +19,8 @@ Effect<UserInfoState> buildEffect() {
     UserInfoAction.goLogin: _goLogin,
     UserInfoAction.refresh: _refresh,
     UserInfoAction.logout: _logout,
-    UserInfoAction.goGithubPage: _goGithubPage
+    UserInfoAction.goGithubPage: _goGithubPage,
+    UserInfoAction.goMyIssuesPage: _goMyIssuesPage
   });
 }
 
@@ -52,6 +54,10 @@ void _refresh(Action action, Context<UserInfoState> ctx) async {
 
 void _goLogin(Action action, Context<UserInfoState> ctx) {
   LoginPage.checkLoginAndStart(ctx.context);
+}
+
+void _goMyIssuesPage(Action action, Context<UserInfoState> ctx) {
+  UserIssuePage.start(ctx.context, ctx.state.gitUser?.getName());
 }
 
 void _goGithubPage(Action action, Context<UserInfoState> ctx) async {

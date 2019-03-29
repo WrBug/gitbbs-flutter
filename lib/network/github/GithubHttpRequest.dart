@@ -92,7 +92,6 @@ class GithubHttpRequest implements GitHttpRequest {
       IssueCacheManager.saveIssueCache(issue.getNumber(), issue.body);
       GitIssueDataBase.createInstance().save(gitIssue: issue);
     }catch (e){
-      e.hashCode;
     }
     return issue;
   }

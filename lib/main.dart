@@ -76,7 +76,7 @@ class _MainPageState extends State<MainPage> {
     ];
     _user = UserCacheManager.getUser();
     subscription = UserCacheManager.addUserChangedListener().listen((event) {
-      if (!event.authFailed) {
+      if (event.authFailed != true) {
         setState(() {
           _user = event.user;
         });

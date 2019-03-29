@@ -20,7 +20,8 @@ class UserCacheManager {
   static GitHttpRequest _request = GitHttpRequest.getInstance();
   static DiskLruCache _lruCache = DiskLruCache(10, 'user');
   static GithubGist _favoriteGist;
-  static bool _authFailed = true;
+  static bool _authFailed;
+
   static Map<String, GitIssue> _issueMap;
   static List<GitIssue> _favoriteIssueList;
 

@@ -15,7 +15,7 @@ class LoginPage extends Page<LoginPageState, dynamic> {
             view: buildView);
 
   static Future checkLoginAndStart(BuildContext context) {
-    if (UserCacheManager.isAuthFailed() == false) {
+    if (UserCacheManager.isAuthFailed() != true) {
       return Future.value(true);
     }
     return Navigator.of(context).push(

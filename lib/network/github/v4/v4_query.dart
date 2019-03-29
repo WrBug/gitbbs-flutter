@@ -19,10 +19,11 @@ String getIssuesQuery(IssueState issueState, int size,
   if (after != null && after != '') {
     afterStr = '"$after"';
   }
+  String creatorStr = creator == null ? 'null' : '"$creator"';
   return """
           {
       repository(owner: "$REPO_OWNER", name: "$REPO_NAME") {
-        issues(first: $size,labels:$labels, states: $states,orderBy:{field: CREATED_AT, direction: DESC},before:$beforeStr,after:$afterStr) {
+        issues(filterBy:{createdBy:$creatorStr},first: $size,labels:$labels, states: $states,orderBy:{field: CREATED_AT, direction: DESC},before:$beforeStr,after:$afterStr) {
           edges {
             cursor
             node {
