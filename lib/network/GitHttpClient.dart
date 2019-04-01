@@ -72,7 +72,7 @@ class TokenInterceptor extends Interceptor {
 
   @override
   onError(DioError err) {
-    if (err.response.statusCode == 401) {
+    if (err?.response?.statusCode == 401) {
       UserCacheManager.removeCache();
       err.request.headers.clear();
     }

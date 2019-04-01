@@ -40,7 +40,7 @@ IssueDetailState _update(IssueDetailState state, Action action) {
 
 IssueDetailState _updateCache(IssueDetailState state, Action action) {
   IssueCache map = action.payload;
-  if (state.body != '') {
+  if (state.body?.isNotEmpty == true) {
     return state;
   }
   final IssueDetailState newState = state.clone();
@@ -61,6 +61,6 @@ IssueDetailState _onCommentsCountChanged(
   } else {
     newState.getIssue().comments--;
   }
-  GitIssueDataBase.createInstance().save(gitIssue: newState.issue);
+  GitIssueDataBase.createInstance().save(newState.issue);
   return newState;
 }

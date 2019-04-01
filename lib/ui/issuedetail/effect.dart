@@ -45,6 +45,7 @@ void _init(Action action, Context<IssueDetailState> ctx) async {
     UserCacheManager.removeFavorite(ctx.state.originIssue.getId());
     return;
   }
+
   ctx.dispatch(IssueDetailActionCreator.update(issue));
 }
 

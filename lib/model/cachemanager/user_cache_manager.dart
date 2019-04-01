@@ -125,6 +125,7 @@ class UserCacheManager {
 
   static _checkToken(String username) {
     if (_token == '' || _token == null) {
+      _authFailed=true;
       return;
     }
     _request.doAuthenticated(_token, username).then((user) {

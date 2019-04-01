@@ -34,6 +34,7 @@ class GitIssueDataBase {
   static const String column_labels = "labels";
   static const String column_hasMore = "hasMore";
   static const String column_is_author = 'isAuthor';
+  static const String column_browse_date = 'browseDate';
   static const List<String> columns = [
     column_id,
     column_number,
@@ -49,6 +50,7 @@ class GitIssueDataBase {
     column_comments,
     column_hasMore,
     column_is_author,
+    column_browse_date
   ];
 
   static GitIssueDataBase createInstance() {
@@ -68,8 +70,8 @@ class GitIssueDataBase {
     Directory directory = await getApplicationDocumentsDirectory();
     String path = join(directory.path, db_name);
     var dataBase = await openDatabase(path,
-        version: 2, onCreate: _onCreate, onUpgrade: _onUpgrade);
-    print('数据库创建成功，version:2');
+        version: 3, onCreate: _onCreate, onUpgrade: _onUpgrade);
+    print('数据库创建成功，version:3');
     print('path: $path');
     return dataBase;
   }
@@ -78,12 +80,14 @@ class GitIssueDataBase {
     print('_onUpgrade');
     for (var version = oldVersion; version < newVersion; version++) {
       switch (version) {
+        case 2:
+          db.execute(
+              '''alter table $tableName add column $column_browse_date integer''');
+          break;
         case 1:
-          {
-            db.execute('''
-      alter table $tableName add column $column_is_author integer
-    ''');
-          }
+          db.execute(
+              '''alter table $tableName add column $column_is_author integer''');
+          break;
       }
     }
   }
@@ -105,7 +109,8 @@ class GitIssueDataBase {
     $column_comments integer,
     $column_labels text,
     $column_hasMore integer,
-    $column_is_author integer)
+    $column_is_author integer,
+    $column_browse_date integer)
     ''');
     print('$tableName is created');
     await db.execute('''
@@ -131,12 +136,55 @@ class GitIssueDataBase {
     return true;
   }
 
-  Future<bool> save({GitIssue gitIssue, List<GitIssue> list}) async {
+  Future<int> getTodayHistoryCount() async {
+    Database database = await db;
+    var now = DateTime.now();
+    var time = DateTime(now.year, now.month, now.day);
+    int zeroTime = time.millisecondsSinceEpoch;
+    var map = await database.query(tableName,
+        where: '$column_browse_date >= ?', whereArgs: [zeroTime]);
+    return map.length;
+  }
+
+  Future<bool> updateBrowseDate(GitIssue gitIssue) async {
+    if (gitIssue == null) {
+      return false;
+    }
+    var time = DateTime.now().millisecondsSinceEpoch;
+    Database database = await db;
+    database.update(tableName, {column_browse_date: time},
+        where: '$column_number=?', whereArgs: [gitIssue.getNumber()]);
+    return true;
+  }
+
+  Future<bool> save(GitIssue gitIssue, {bool updateBrowseDate}) async {
+    if (gitIssue == null) {
+      return false;
+    }
+    Database database = await db;
+    var map = _toMap(gitIssue);
+    if (map == null) {
+      return false;
+    }
+    if (updateBrowseDate) {
+      var time = DateTime.now().millisecondsSinceEpoch;
+      map[column_browse_date] = time;
+    }
+    Map<String, dynamic> query = await _findByNumber(map[column_number]);
+    if (query != null) {
+      Map<String, dynamic> m = Map.from(query);
+      m.addAll(map);
+      database.update(tableName, m,
+          where: '$column_number=?', whereArgs: [gitIssue.getNumber()]);
+    } else {
+      database.insert(tableName, map);
+    }
+  }
+
+  Future<bool> saveAll(List<GitIssue> list) async {
     List<GitIssue> issues = List();
     if (list?.isNotEmpty == true) {
       issues.addAll(List.of(list));
-    } else if (gitIssue != null) {
-      issues.add(gitIssue.clone());
     } else {
       return Future.value(true);
     }

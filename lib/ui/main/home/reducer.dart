@@ -51,7 +51,7 @@ PageState _refreshMiddleData(PageState state, Action action) {
   state.progressingList.remove(issuesData.afterIssue);
   state.list.insertAll(index + 1, data.data);
   final PageState newState = state.clone();
-  GitIssueDataBase.createInstance().save(list: changedList);
+  GitIssueDataBase.createInstance().saveAll(changedList);
   return newState;
 }
 

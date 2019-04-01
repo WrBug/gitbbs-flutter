@@ -27,10 +27,12 @@ Widget buildView(
                 summary: state.todayHistoryCount == null
                     ? ''
                     : '今日浏览${state.todayHistoryCount}'),
-            _itemBuild('项目Github主页', Icons.web, dispatch,
+            _itemBuild('访问Github主页', Icons.web, dispatch,
                 UserInfoActionCreator.goGithubPageAction()),
-            _itemBuild('退出登录', Icons.exposure_neg_1, dispatch,
-                UserInfoActionCreator.logoutAction()),
+            state.gitUser != null
+                ? _itemBuild('退出登录', Icons.exposure_neg_1, dispatch,
+                    UserInfoActionCreator.logoutAction())
+                : Container(),
           ],
         ),
       ),

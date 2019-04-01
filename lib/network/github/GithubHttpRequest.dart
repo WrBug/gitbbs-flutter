@@ -55,7 +55,7 @@ class GithubHttpRequest implements GitHttpRequest {
       issue.cursor = map['cursor'];
       issues.add(issue);
     });
-    GitIssueDataBase.createInstance().save(list: issues);
+    GitIssueDataBase.createInstance().saveAll(issues);
     return PagingData(issues.length == size, issues);
   }
 
@@ -88,11 +88,10 @@ class GithubHttpRequest implements GitHttpRequest {
     }
     Map map = response.data['data']['repository']['issue'];
     var issue = V4Convert.toIssue(map);
-    try{
+    try {
       IssueCacheManager.saveIssueCache(issue.getNumber(), issue.body);
-      GitIssueDataBase.createInstance().save(gitIssue: issue);
-    }catch (e){
-    }
+      GitIssueDataBase.createInstance().save(issue, updateBrowseDate: true);
+    } catch (e) {}
     return issue;
   }
 

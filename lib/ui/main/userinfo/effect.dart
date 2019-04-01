@@ -4,6 +4,7 @@ import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:gitbbs/constant/GitConstant.dart';
 import 'package:gitbbs/model/cachemanager/user_cache_manager.dart';
+import 'package:gitbbs/model/db/gitissue_data_base.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
 import 'package:gitbbs/ui/login/login.dart';
 import 'package:gitbbs/ui/main/userinfo/action.dart';
@@ -48,8 +49,10 @@ void _refresh(Action action, Context<UserInfoState> ctx) async {
   GitHttpRequest request = GitHttpRequest.getInstance();
   var count = await request.getUserIssuesCount(ctx.state.gitUser.getName());
   var favoriteCount = (await UserCacheManager.getFavoriteList()).length;
+  var historyCount =
+      await GitIssueDataBase.createInstance().getTodayHistoryCount();
   ctx.dispatch(UserInfoActionCreator.onRefreshedAction(
-      UserUpdateInfo(favoriteCount, count, 0)));
+      UserUpdateInfo(favoriteCount, count, historyCount)));
 }
 
 void _goLogin(Action action, Context<UserInfoState> ctx) {
