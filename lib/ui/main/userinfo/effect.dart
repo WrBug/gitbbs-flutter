@@ -6,6 +6,7 @@ import 'package:gitbbs/constant/GitConstant.dart';
 import 'package:gitbbs/model/cachemanager/user_cache_manager.dart';
 import 'package:gitbbs/model/db/gitissue_data_base.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
+import 'package:gitbbs/ui/browsehistory/browse_history_page.dart';
 import 'package:gitbbs/ui/login/login.dart';
 import 'package:gitbbs/ui/main/userinfo/action.dart';
 import 'package:gitbbs/ui/main/userinfo/bean/user_update_info.dart';
@@ -21,7 +22,8 @@ Effect<UserInfoState> buildEffect() {
     UserInfoAction.refresh: _refresh,
     UserInfoAction.logout: _logout,
     UserInfoAction.goGithubPage: _goGithubPage,
-    UserInfoAction.goMyIssuesPage: _goMyIssuesPage
+    UserInfoAction.goMyIssuesPage: _goMyIssuesPage,
+    UserInfoAction.goHistory:_goHistory
   });
 }
 
@@ -68,6 +70,9 @@ void _goGithubPage(Action action, Context<UserInfoState> ctx) async {
   if (await canLaunch(url)) {
     await launch(url);
   } else {}
+}
+void _goHistory(Action action, Context<UserInfoState> ctx)  {
+  BrowseHistoryPage.start(ctx.context);
 }
 
 void _logout(Action action, Context<UserInfoState> ctx) {

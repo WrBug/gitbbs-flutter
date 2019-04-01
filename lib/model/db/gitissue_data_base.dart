@@ -136,13 +136,44 @@ class GitIssueDataBase {
     return true;
   }
 
+  Future<PagingData<GitIssue>> getBrowseHistories(
+      {int beforeTime, GitIssue beforeIssue, int size = 50}) async {
+    Database database = await db;
+    if (beforeTime == null) {
+      if (beforeIssue == null) {
+        beforeTime = DateTime.now().millisecondsSinceEpoch;
+      } else {
+        var map = await _findByNumber(beforeIssue.getNumber());
+        beforeTime = map[column_browse_date];
+      }
+    }
+    List<GitIssue> issues = List();
+    try {
+      var list = await database.query(tableName,
+          orderBy: '$column_browse_date desc',
+          where: '$column_browse_date < ?',
+          whereArgs: [beforeTime],
+          limit: size);
+      for (var map in list) {
+        var issue = _toGitIssue(map);
+        if (issue != null) {
+          issues.add(issue);
+        }
+      }
+    } catch (e) {} finally {
+      database.close();
+    }
+    return PagingData(issues.length >= size, issues);
+  }
+
   Future<int> getTodayHistoryCount() async {
     Database database = await db;
     var now = DateTime.now();
     var time = DateTime(now.year, now.month, now.day);
     int zeroTime = time.millisecondsSinceEpoch;
     var map = await database.query(tableName,
-        where: '$column_browse_date >= ?', whereArgs: [zeroTime]);
+        where: '$column_browse_date >= ?',
+        whereArgs: [zeroTime]);
     return map.length;
   }
 
@@ -179,6 +210,7 @@ class GitIssueDataBase {
     } else {
       database.insert(tableName, map);
     }
+    return true;
   }
 
   Future<bool> saveAll(List<GitIssue> list) async {
@@ -302,13 +334,15 @@ class GitIssueDataBase {
     issue.author = GithubV4User.fromJson(jsonDecode(map[column_author]));
     List<GithubLabel> list = List();
     if (map[column_labels] != null) {
-      List<Map> labelMap = jsonDecode(map[column_labels]);
-      if (labelMap.length == 0) {
-        labelMap.forEach((map) {
-          var label = GithubLabel.fromJson(map);
-          list.add(label);
-        });
-      }
+      try {
+        List<dynamic> labelMap = jsonDecode(map[column_labels]);
+        if (labelMap.length == 0) {
+          labelMap.forEach((map) {
+            var label = GithubLabel.fromJson(map);
+            list.add(label);
+          });
+        }
+      } catch (e) {}
     }
     issue.labels = list;
     issue.comments = map[column_comments];

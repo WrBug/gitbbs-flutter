@@ -9,6 +9,7 @@ import 'package:gitbbs/ui/editissue/edit_issue_page.dart';
 import 'package:gitbbs/ui/main/favoritelist/favorite_list_page.dart';
 import 'package:gitbbs/ui/main/home/home_page.dart';
 import 'package:gitbbs/ui/main/userinfo/user_info_page.dart';
+import 'package:fish_redux/fish_redux.dart';
 
 void main() {
   UserCacheManager.init();
@@ -19,12 +20,13 @@ class App extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return AppProvider(
+        child: MaterialApp(
       theme: ThemeData(
         primarySwatch: app_primary,
       ),
       home: MainPage(),
-    );
+    ));
   }
 }
 
