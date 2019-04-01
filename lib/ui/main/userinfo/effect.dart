@@ -11,6 +11,7 @@ import 'package:gitbbs/ui/login/login.dart';
 import 'package:gitbbs/ui/main/userinfo/action.dart';
 import 'package:gitbbs/ui/main/userinfo/bean/user_update_info.dart';
 import 'package:gitbbs/ui/main/userinfo/user_info_state.dart';
+import 'package:gitbbs/ui/messagecenter/messagelist/message_list_page.dart';
 import 'package:gitbbs/ui/userissues/user_issue_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -23,7 +24,8 @@ Effect<UserInfoState> buildEffect() {
     UserInfoAction.logout: _logout,
     UserInfoAction.goGithubPage: _goGithubPage,
     UserInfoAction.goMyIssuesPage: _goMyIssuesPage,
-    UserInfoAction.goHistory:_goHistory
+    UserInfoAction.goHistory: _goHistory,
+    UserInfoAction.goMessageCenter: _messageCenter
   });
 }
 
@@ -50,7 +52,6 @@ void _refresh(Action action, Context<UserInfoState> ctx) async {
   }
 
   GitHttpRequest request = GitHttpRequest.getInstance();
-  request.getOfficialMessageList();
   var count = await request.getUserIssuesCount(ctx.state.gitUser.getName());
   var favoriteCount = (await UserCacheManager.getFavoriteList()).length;
   var historyCount =
@@ -73,8 +74,13 @@ void _goGithubPage(Action action, Context<UserInfoState> ctx) async {
     await launch(url);
   } else {}
 }
-void _goHistory(Action action, Context<UserInfoState> ctx)  {
+
+void _goHistory(Action action, Context<UserInfoState> ctx) {
   BrowseHistoryPage.start(ctx.context);
+}
+
+void _messageCenter(Action action, Context<UserInfoState> ctx) {
+  MessageListPage.start(ctx.context);
 }
 
 void _logout(Action action, Context<UserInfoState> ctx) {

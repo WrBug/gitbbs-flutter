@@ -6,4 +6,4 @@ const default_token = 'c3a8f4035dfe909356036797e946fd99c1cb99a6';
 const default_token_key = 'defaultToken';
 const github_url = "https://github.com/WrBug/gitbbs-flutter";
 const server_label_file = "server/label.json";
-const server_messages_dir = "server/message";
+const server_messages_file = "server/message/message.json";

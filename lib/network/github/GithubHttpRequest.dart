@@ -19,6 +19,7 @@ import 'package:gitbbs/network/IssueState.dart';
 import 'package:gitbbs/network/github/model/GithubComment.dart';
 import 'package:gitbbs/network/github/model/GithubUser.dart';
 import 'package:gitbbs/network/github/model/GithubV4Issue.dart';
+import 'package:gitbbs/network/github/model/github_message.dart';
 import 'package:gitbbs/network/github/model/label_info.dart';
 import 'package:gitbbs/network/github/v4/GithubV4NetWorkAdapter.dart';
 import 'package:gitbbs/network/github/v4/v4_convert.dart';
@@ -238,11 +239,14 @@ class GithubHttpRequest implements GitHttpRequest {
   }
 
   @override
-  Future<List<GitContentFile>> getOfficialMessageList() async {
+  Future getOfficialMessageList() async {
     var response =
-        await _client.execute(_adapter.getRepoFile(server_label_file));
-    List list = response.data;
-    var files = list.map((map) => GitHubContentFile.fromJson(map)).toList();
+        await _client.execute(_adapter.getRepoFile(server_messages_file));
+    String content = response.data['content'];
+    content = Utf8Decoder().convert(base64Decode(content.replaceAll("\n", '')));
+    List list = jsonDecode(content);
+    var files =
+        list.map<GithubMessage>((map) => GithubMessage.fromJson(map)).toList();
     return files;
   }
 

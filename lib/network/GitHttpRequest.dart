@@ -2,10 +2,12 @@ import 'package:gitbbs/model/GitIssue.dart';
 import 'package:gitbbs/model/GitUser.dart';
 import 'package:gitbbs/model/PagingData.dart';
 import 'package:gitbbs/model/git_comment.dart';
+import 'package:gitbbs/model/git_content_file.dart';
 import 'package:gitbbs/network/IssueState.dart';
 import 'package:gitbbs/network/github/GithubHttpRequest.dart';
 import 'package:gitbbs/network/github/model/github_gist.dart';
 import 'package:gitbbs/network/github/model/github_gist_file.dart';
+import 'package:gitbbs/network/github/model/github_message.dart';
 import 'package:gitbbs/network/github/model/label_info.dart';
 
 abstract class GitHttpRequest {
@@ -44,7 +46,7 @@ abstract class GitHttpRequest {
 
   Future getOfficialMessageList();
 
-  Future getOfficialMessage(String path);
+  Future<String> getOfficialMessage(String path);
 
   Future<int> getUserIssuesCount(String login);
 
