@@ -22,7 +22,7 @@ String getIssuesQuery(IssueState issueState, int size,
   String creatorStr = creator == null ? 'null' : '"$creator"';
   return """
           {
-      repository(owner: "$REPO_OWNER", name: "$REPO_NAME") {
+      repository(owner: "$repo_owner", name: "$repo_name") {
         issues(filterBy:{createdBy:$creatorStr},first: $size,labels:$labels, states: $states,orderBy:{field: CREATED_AT, direction: DESC},before:$beforeStr,after:$afterStr) {
           edges {
             cursor
@@ -42,7 +42,7 @@ String getIssuesQuery(IssueState issueState, int size,
 String getIssueQuery(int number) {
   return '''
     {
-  repository(owner: "$REPO_OWNER", name: "$REPO_NAME") {
+  repository(owner: "$repo_owner", name: "$repo_name") {
     issue(number:$number){
         ${_getIssueContent(fields: ['body', 'bodyText'])}
     }
@@ -95,7 +95,7 @@ String getCommentsQuery(int number, String before, int size) {
   }
   return '''
 {
-  repository(owner: "$REPO_OWNER", name: "$REPO_NAME") {
+  repository(owner: "$repo_owner", name: "$repo_name") {
     issue(number:$number){
       comments(last:$size,before:$cursor){
         edges{
@@ -194,7 +194,7 @@ String getGistsQuery(String login) {
 String getIssuesCountQuery(String login) {
   return '''
       {
-  repository(owner:"$REPO_OWNER",name:"$REPO_NAME"){
+  repository(owner:"$repo_owner",name:"$repo_name"){
     issues(filterBy:{createdBy:"$login"}){
       totalCount
     },

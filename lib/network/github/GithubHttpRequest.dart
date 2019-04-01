@@ -8,6 +8,8 @@ import 'package:gitbbs/model/cachemanager/user_cache_manager.dart';
 import 'package:gitbbs/model/db/gitissue_data_base.dart';
 import 'package:gitbbs/model/git_comment.dart';
 import 'package:gitbbs/model/cachemanager/git_gist_cache_manager.dart';
+import 'package:gitbbs/model/git_content_file.dart';
+import 'package:gitbbs/network/github/model/github_content_file.dart';
 import 'package:gitbbs/network/github/model/github_gist.dart';
 import 'package:gitbbs/network/github/model/github_gist_file.dart';
 import 'package:gitbbs/model/cachemanager/issue_cache_manager.dart';
@@ -207,13 +209,13 @@ class GithubHttpRequest implements GitHttpRequest {
       if ((map['isPublic'] == true) && (map['isFork'] == true)) {
         List files = map['files'];
         for (var fileMap in files) {
-          if (fileMap['name'] == FAVORITE_GITS_FILE_NAME) {
+          if (fileMap['name'] == favorite_gist_file_name) {
             gist = GithubGist()
               ..name = map['name']
               ..isPublic = true
               ..isFork = true;
             Map<String, String> files = Map();
-            files[FAVORITE_GITS_FILE_NAME] = fileMap['text'];
+            files[favorite_gist_file_name] = fileMap['text'];
             gist.files = files;
             GitGistCacheManager.configId = gist.name;
             GitGistCacheManager.configDescription = map['description'];
@@ -227,11 +229,29 @@ class GithubHttpRequest implements GitHttpRequest {
 
   @override
   Future<LabelInfo> getLabelsConfig() async {
-    var response = await _client.execute(_adapter.getLabelsConfig());
+    var response =
+        await _client.execute(_adapter.getRepoFile(server_label_file));
     String content = response.data['content'];
     content = Utf8Decoder().convert(base64Decode(content.replaceAll("\n", '')));
     var labelInfo = LabelInfo.fromJson(jsonDecode(content));
     return labelInfo;
+  }
+
+  @override
+  Future<List<GitContentFile>> getOfficialMessageList() async {
+    var response =
+        await _client.execute(_adapter.getRepoFile(server_label_file));
+    List list = response.data;
+    var files = list.map((map) => GitHubContentFile.fromJson(map)).toList();
+    return files;
+  }
+
+  @override
+  Future<String> getOfficialMessage(String path) async {
+    var response = await _client.execute(_adapter.getRepoFile(path));
+    String content = response.data['content'];
+    content = Utf8Decoder().convert(base64Decode(content.replaceAll("\n", '')));
+    return content;
   }
 
   @override

@@ -1,4 +1,3 @@
-
 import 'package:gitbbs/constant/GitConstant.dart';
 import 'package:gitbbs/model/cachemanager/git_gist_cache_manager.dart';
 import 'package:gitbbs/network/IssueState.dart';
@@ -94,7 +93,7 @@ class GithubV4NetWorkAdapter extends GitNetworkRequestAdapter {
 
   @override
   Request forkConfigGist() {
-    return Request('/gists/$GITS_CONFIG_ID/forks', {}, Method.POST);
+    return Request('/gists/$gist_config_id/forks', {}, Method.POST);
   }
 
   Request saveConfigGist(Map<String, GithubGistFile> map) {
@@ -109,10 +108,11 @@ class GithubV4NetWorkAdapter extends GitNetworkRequestAdapter {
   }
 
   @override
-  Request getLabelsConfig() {
-    return Request('/repos/$owner/$repoName/contents/label.json',
+  Request getRepoFile(String path) {
+    return Request('/repos/$owner/$repoName/contents/$path',
         {'ref': 'master'}, Method.GET);
   }
+
 
   @override
   Request getUserIssuesCount(String login) {

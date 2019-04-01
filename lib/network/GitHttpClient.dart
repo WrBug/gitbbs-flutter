@@ -57,15 +57,15 @@ class TokenInterceptor extends Interceptor {
         options.headers['Authorization'] =
             'token ${UserCacheManager.getToken()}';
       } else {
-        if (options.headers.containsKey(DEFAULT_TOKEN_KEY)) {
+        if (options.headers.containsKey(default_token_key)) {
           options.headers['Authorization'] =
-              'token ${options.headers[DEFAULT_TOKEN_KEY]}';
-          options.headers.remove(DEFAULT_TOKEN_KEY);
+              'token ${options.headers[default_token_key]}';
+          options.headers.remove(default_token_key);
         }
       }
     }
-    if (options.headers.containsKey(DEFAULT_TOKEN_KEY)) {
-      options.headers.remove(DEFAULT_TOKEN_KEY);
+    if (options.headers.containsKey(default_token_key)) {
+      options.headers.remove(default_token_key);
     }
     return super.onRequest(options);
   }

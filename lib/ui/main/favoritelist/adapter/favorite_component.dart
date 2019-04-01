@@ -53,7 +53,7 @@ _contentPreviewBuild(GitIssue gitIssue) {
 
 _bottomInfoBuild(GitIssue gitIssue) {
   return Padding(
-      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+      padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[

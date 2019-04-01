@@ -108,7 +108,7 @@ class UserCacheManager {
     _issueMap = null;
     _favoriteIssueList = null;
     DiskLruCache.getDefault()
-        .put(FAVORITE_GITS_FILE_NAME, jsonEncode(gist.toJson()));
+        .put(favorite_gist_file_name, jsonEncode(gist.toJson()));
   }
 
   static GitUser getUser() {
@@ -154,21 +154,21 @@ class UserCacheManager {
 
   static void _saveFavoriteLocal() {
     _favoriteGist.files = {
-      FAVORITE_GITS_FILE_NAME: jsonEncode(_favoriteIssueList)
+      favorite_gist_file_name: jsonEncode(_favoriteIssueList)
     };
-    _lruCache.put(FAVORITE_GITS_FILE_NAME, jsonEncode(_favoriteGist.toJson()));
+    _lruCache.put(favorite_gist_file_name, jsonEncode(_favoriteGist.toJson()));
   }
 
   static void _saveFavoriteNetwork() {
     GithubGistFile file = GithubGistFile();
     file.content = jsonEncode(_favoriteIssueList);
-    file.filename = FAVORITE_GITS_FILE_NAME;
+    file.filename = favorite_gist_file_name;
     _request.saveConfigGist({file.filename: file});
   }
 
   static Future _initFavoriteList() async {
     if (_favoriteGist == null) {
-      String json = await _lruCache.get(FAVORITE_GITS_FILE_NAME);
+      String json = await _lruCache.get(favorite_gist_file_name);
       if (json == '') {
         return null;
       }
@@ -180,7 +180,7 @@ class UserCacheManager {
     if (_favoriteGist == null) {
       return null;
     }
-    String json = _favoriteGist.files[FAVORITE_GITS_FILE_NAME];
+    String json = _favoriteGist.files[favorite_gist_file_name];
     List list = jsonDecode(json);
 
     list.forEach((map) {

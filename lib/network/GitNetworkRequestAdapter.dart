@@ -5,8 +5,8 @@ import 'package:gitbbs/network/github/model/github_gist_file.dart';
 import 'Request.dart';
 
 abstract class GitNetworkRequestAdapter {
-  final owner = REPO_OWNER;
-  final repoName = REPO_NAME;
+  final owner = repo_owner;
+  final repoName = repo_name;
 
   String getApiUrl();
 
@@ -14,6 +14,7 @@ abstract class GitNetworkRequestAdapter {
       IssueState issueState, String before, String after, int size);
 
   Request createIssue(String title, String body, List<String> label);
+
   Request deleteIssue(String issueId);
 
   Request getIssue(int number);
@@ -34,7 +35,7 @@ abstract class GitNetworkRequestAdapter {
 
   Request saveConfigGist(Map<String, GithubGistFile> map);
 
-  Request getLabelsConfig();
+  Request getRepoFile(String path);
 
   Request getUserIssuesCount(String login);
 }

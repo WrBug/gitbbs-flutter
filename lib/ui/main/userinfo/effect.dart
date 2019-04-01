@@ -48,7 +48,9 @@ void _refresh(Action action, Context<UserInfoState> ctx) async {
   if (ctx.state.gitUser == null) {
     return;
   }
+
   GitHttpRequest request = GitHttpRequest.getInstance();
+  request.getOfficialMessageList();
   var count = await request.getUserIssuesCount(ctx.state.gitUser.getName());
   var favoriteCount = (await UserCacheManager.getFavoriteList()).length;
   var historyCount =
@@ -66,7 +68,7 @@ void _goMyIssuesPage(Action action, Context<UserInfoState> ctx) {
 }
 
 void _goGithubPage(Action action, Context<UserInfoState> ctx) async {
-  const url = GITHUB_URL;
+  const url = github_url;
   if (await canLaunch(url)) {
     await launch(url);
   } else {}
