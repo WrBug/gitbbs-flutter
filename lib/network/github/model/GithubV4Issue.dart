@@ -29,6 +29,7 @@ class GithubV4Issue extends GitIssue {
   List<GithubLabel> labels;
   bool hasMore;
   String body;
+  String url;
   bool isAuthor;
 
   @override

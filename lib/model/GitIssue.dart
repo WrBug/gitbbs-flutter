@@ -20,7 +20,7 @@ abstract class GitIssue implements Cloneable<GitIssue> {
   List<GithubLabel> labels;
 
   bool isAuthor;
-
+  String url;
   int comments;
   String bodyText;
   String body;

@@ -103,7 +103,9 @@ Row tabs(BuildContext context, GitIssue issue, Dispatch dispatch,
         ),
       ),
       InkWell(
-        onTap: () {},
+        onTap: () {
+          dispatch(IssueDetailActionCreator.shareIssueAction());
+        },
         child: Padding(
             padding: EdgeInsets.all(10),
             child: Column(

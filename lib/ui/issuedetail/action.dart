@@ -8,6 +8,7 @@ enum IssueDetailAction {
   update,
   showAuthorPopMenu,
   updateCache,
+  shareIssue,
   addComment,
   toggleFavorite,
   toggleCommentsVisible,
@@ -24,7 +25,9 @@ class IssueDetailActionCreator {
   static Action update(GitIssue issue) {
     return Action(IssueDetailAction.update, payload: issue);
   }
-
+  static Action shareIssueAction() {
+    return Action(IssueDetailAction.shareIssue);
+  }
   static Action toggleFavoriteAction() {
     return Action(IssueDetailAction.toggleFavorite);
   }

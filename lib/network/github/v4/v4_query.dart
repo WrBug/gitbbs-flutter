@@ -63,6 +63,7 @@ String _getIssueContent({List<String> fields}) {
     id
     number
     closed
+    url
     ${fields == null ? "" : fields.join('\n')}
     closedAt
     locked

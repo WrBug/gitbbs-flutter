@@ -12,6 +12,7 @@ class V4Convert {
     issue.publishedAt = node['publishedAt'];
     issue.updatedAt = node['updatedAt'];
     issue.id = node['id'];
+    issue.url = node['url'];
     issue.number = node['number'];
     issue.closed = node['closed'];
     issue.body = node['body'];

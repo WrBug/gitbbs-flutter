@@ -34,6 +34,8 @@ dependencies:
     path: fish-redux
   markdown_editor:
     path: markdown_editor
+  share: ^0.6.0+1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

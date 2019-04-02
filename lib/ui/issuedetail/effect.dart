@@ -17,11 +17,13 @@ import 'package:gitbbs/ui/login/login.dart';
 import 'package:gitbbs/ui/widget/loading.dart';
 import 'package:gitbbs/util/event_bus_helper.dart';
 import 'package:gitbbs/model/cachemanager/issue_cache_manager.dart';
+import 'package:share/share.dart';
 
 Effect<IssueDetailState> buildEffect() {
   return combineEffects(<Object, Effect<IssueDetailState>>{
     Lifecycle.initState: _init,
     IssueDetailAction.toggleCommentsVisible: _toggleCommentVisible,
+    IssueDetailAction.shareIssue: _shareIssue,
     IssueDetailAction.addComment: _addComment,
     IssueDetailAction.toggleFavorite: _toggleFavorite,
     IssueDetailAction.showAuthorPopMenu: _showAuthorPopMenuAction
@@ -141,6 +143,10 @@ void _toggleFavorite(Action action, Context<IssueDetailState> ctx) async {
     ctx.state.scaffoldKey.currentState
         .showSnackBar(SnackBar(content: Text('请登陆后再试!')));
   }
+}
+
+void _shareIssue(Action action, Context<IssueDetailState> ctx) async {
+  Share.share('''给你推荐一篇文章：${ctx.state.getIssue().url}''');
 }
 
 void _toggleCommentVisible(Action action, Context<IssueDetailState> ctx) async {
