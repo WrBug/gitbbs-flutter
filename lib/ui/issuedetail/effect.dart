@@ -146,7 +146,8 @@ void _toggleFavorite(Action action, Context<IssueDetailState> ctx) async {
 }
 
 void _shareIssue(Action action, Context<IssueDetailState> ctx) async {
-  Share.share('''给你推荐一篇文章：${ctx.state.getIssue().url}''');
+  Share.share(
+      '''给你推荐一篇文章：${ctx.state.getIssue().getTitle()}\n${ctx.state.getIssue().url}''');
 }
 
 void _toggleCommentVisible(Action action, Context<IssueDetailState> ctx) async {

@@ -43,9 +43,9 @@ class UserCacheManager {
     _mmkvChannel.saveToken('');
     _favoriteGist = null;
     _authFailed = true;
-    _favoriteIssueList.clear();
+    _favoriteIssueList?.clear();
     _token = '';
-    _issueMap.clear();
+    _issueMap?.clear();
     init();
   }
 

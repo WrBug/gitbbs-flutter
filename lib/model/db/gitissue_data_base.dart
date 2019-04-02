@@ -17,6 +17,7 @@ class GitIssueDataBase {
   //定义表名
   final String tableName = "git_issue";
   static const String db_name = 'gitbbs.db';
+  static const int db_version = 1;
 
   //定义字段名
   static const String column_id = "iId";
@@ -35,11 +36,13 @@ class GitIssueDataBase {
   static const String column_hasMore = "hasMore";
   static const String column_is_author = 'isAuthor';
   static const String column_browse_date = 'browseDate';
+  static const String column_url = "url";
   static const List<String> columns = [
     column_id,
     column_number,
     column_title,
     column_cursor,
+    column_url,
     column_publishedAt,
     column_updatedAt,
     column_issue_id,
@@ -59,7 +62,6 @@ class GitIssueDataBase {
 
   Future get db async {
     if (_dataBase != null) {
-      print('数据库已存在');
       return _dataBase;
     } else
       _dataBase = await initDb();
@@ -70,26 +72,12 @@ class GitIssueDataBase {
     Directory directory = await getApplicationDocumentsDirectory();
     String path = join(directory.path, db_name);
     var dataBase = await openDatabase(path,
-        version: 3, onCreate: _onCreate, onUpgrade: _onUpgrade);
-    print('数据库创建成功，version:3');
-    print('path: $path');
+        version: db_version, onCreate: _onCreate, onUpgrade: _onUpgrade);
     return dataBase;
   }
 
   FutureOr _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    print('_onUpgrade');
-    for (var version = oldVersion; version < newVersion; version++) {
-      switch (version) {
-        case 2:
-          db.execute(
-              '''alter table $tableName add column $column_browse_date integer''');
-          break;
-        case 1:
-          db.execute(
-              '''alter table $tableName add column $column_is_author integer''');
-          break;
-      }
-    }
+    for (var version = oldVersion; version < newVersion; version++) {}
   }
 
   //新建数据库表
@@ -102,6 +90,7 @@ class GitIssueDataBase {
     $column_publishedAt text,
     $column_updatedAt text,
     $column_issue_id text,
+    $column_url text,
     $column_closed integer,
     $column_closedAt text ,
     $column_locked integer ,
@@ -112,14 +101,12 @@ class GitIssueDataBase {
     $column_is_author integer,
     $column_browse_date integer)
     ''');
-    print('$tableName is created');
     await db.execute('''
     CREATE UNIQUE INDEX cursor on $tableName ($column_cursor);
     ''');
     await db.execute('''
     CREATE UNIQUE INDEX issue_number on $tableName ($column_number);
     ''');
-    print('$tableName INDEX created');
   }
 
   Future<bool> deleteByNumber(int number) async {
@@ -172,8 +159,7 @@ class GitIssueDataBase {
     var time = DateTime(now.year, now.month, now.day);
     int zeroTime = time.millisecondsSinceEpoch;
     var map = await database.query(tableName,
-        where: '$column_browse_date >= ?',
-        whereArgs: [zeroTime]);
+        where: '$column_browse_date >= ?', whereArgs: [zeroTime]);
     return map.length;
   }
 
@@ -308,6 +294,7 @@ class GitIssueDataBase {
       map[column_issue_id] = issue.id;
       map[column_closed] = issue?.closed == true ? 1 : 0;
       map[column_closedAt] = issue.closedAt;
+      map[column_url] = issue.url;
       map[column_locked] = issue?.locked == true ? 1 : 0;
       map[column_author] = jsonEncode(issue.author);
       map[column_labels] = jsonEncode(issue.labels);
@@ -327,6 +314,7 @@ class GitIssueDataBase {
     issue.publishedAt = map[column_publishedAt];
     issue.updatedAt = map[column_updatedAt];
     issue.id = map[column_issue_id];
+    issue.url = map[column_url];
     issue.closed = map[column_closed] == 1;
     issue.closedAt = map[column_closedAt];
     issue.locked = map[column_locked] == 1;
