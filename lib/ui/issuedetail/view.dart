@@ -8,6 +8,7 @@ import 'package:gitbbs/ui/issuedetail/state.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:gitbbs/ui/widget/avatar_img.dart';
 import 'package:gitbbs/ui/widget/loading.dart';
+import 'package:gitbbs/ui/widget/loading_view.dart';
 
 Widget buildView(
     IssueDetailState state, Dispatch dispatch, ViewService viewService) {
@@ -143,12 +144,13 @@ Widget _mainBodyBuild(IssueDetailState state) {
 
 Widget _bodyBuild(IssueDetailState state) {
   String body = state.body;
-  return body == null
-      ? Padding(
-          padding: EdgeInsets.fromLTRB(0, 150, 0, 0),
-          child: getLoadingView(),
-        )
-      : MarkdownBody(data: body);
+  if (body == null) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(0, 150, 0, 0),
+      child: LoadingView(),
+    );
+  }
+  return MarkdownBody(data: body);
 }
 
 Widget _headerBuild(GitIssue issue) {

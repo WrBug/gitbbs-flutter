@@ -71,18 +71,3 @@ class LoadingDialog extends Dialog {
     return dialog;
   }
 }
-
-Widget getLoadingView() {
-  return Padding(
-    padding: const EdgeInsets.all(10),
-    child: Column(
-      children: <Widget>[
-        CircularProgressIndicator(),
-        Padding(
-          padding: EdgeInsets.all(10),
-        ),
-        Text('正在获取数据')
-      ],
-    ),
-  );
-}

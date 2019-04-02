@@ -125,7 +125,7 @@ class UserCacheManager {
 
   static _checkToken(String username) {
     if (_token == '' || _token == null) {
-      _authFailed=true;
+      _authFailed = true;
       return;
     }
     _request.doAuthenticated(_token, username).then((user) {
@@ -136,7 +136,7 @@ class UserCacheManager {
         EventBusHelper.fire(UserUpdatedEvent(user, _authFailed));
       }
     }).catchError((e) {
-      if ((e is DioError) && (e.response.statusCode == 401)) {
+      if ((e is DioError) && (e.response?.statusCode == 401)) {
         _authFailed = true;
         EventBusHelper.fire(UserUpdatedEvent(null, true));
       } else {

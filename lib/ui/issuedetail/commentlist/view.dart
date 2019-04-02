@@ -6,24 +6,25 @@ import 'package:flutter_easyrefresh/material_header.dart';
 import 'package:gitbbs/ui/issuedetail/commentlist/action.dart';
 import 'package:gitbbs/ui/issuedetail/commentlist/state.dart';
 import 'package:gitbbs/ui/widget/loading.dart';
+import 'package:gitbbs/ui/widget/loading_view.dart';
 
 Widget buildView(
     CommentListState state, Dispatch dispatch, ViewService viewService) {
+  if (state.init) {
+    return Center(
+      child: LoadingView(),
+    );
+  }
   final ListAdapter adapter = viewService.buildAdapter();
   if (state.easyRefreshKey.currentState != null) {
     state.easyRefreshKey.currentState.callRefreshFinish();
   }
   return EasyRefresh(
       key: state.easyRefreshKey,
-      child: state.init
-          ? Padding(
-              padding: EdgeInsets.fromLTRB(0, 150, 0, 0),
-              child: getLoadingView(),
-            )
-          : ListView.builder(
-              itemBuilder: adapter.itemBuilder,
-              itemCount: adapter.itemCount,
-            ),
+      child: ListView.builder(
+        itemBuilder: adapter.itemBuilder,
+        itemCount: adapter.itemCount,
+      ),
       autoLoad: state.hasNext,
       refreshHeader: MaterialHeader(
         key: state.headerKey,
