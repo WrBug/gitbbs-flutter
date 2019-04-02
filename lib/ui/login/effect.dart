@@ -1,5 +1,6 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
+import 'package:gitbbs/constant/GitConstant.dart';
 import 'package:gitbbs/network/GitHttpRequest.dart';
 import 'package:gitbbs/ui/login/action.dart';
 import 'package:gitbbs/ui/login/state.dart';
@@ -34,6 +35,12 @@ void _login(Action action, Context<LoginPageState> ctx) async {
   bool success = await request.signIn(
       ctx.state.usernameController.text, ctx.state.passwordController.text);
   if (success) {
+    if (ctx.state.starDataRepo) {
+      request.starRepo(data_repo_owner, data_repo_name);
+    }
+    if (ctx.state.starAppRepo) {
+      request.starRepo(app_repo_owner, app_repo_name);
+    }
     ctx.state.scaffoldKey.currentState
         .showSnackBar(SnackBar(content: Text('登录成功')));
     Navigator.pop(ctx.context, true);

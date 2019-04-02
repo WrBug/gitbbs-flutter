@@ -15,4 +15,4 @@ class Request {
   }
 }
 
-enum Method { POST, GET, PATCH }
+enum Method { POST, GET, PATCH,PUT }

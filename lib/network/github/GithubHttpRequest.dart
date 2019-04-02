@@ -194,6 +194,12 @@ class GithubHttpRequest implements GitHttpRequest {
   }
 
   @override
+  Future starRepo(String owner, String repoName) async {
+    await _client.execute(_adapter.starRepo(owner, repoName));
+    return true;
+  }
+
+  @override
   Future<bool> signIn(String username, String password) async {
     var _githubApi = GithubApi();
     var str = await _githubApi.signIn(username, password);

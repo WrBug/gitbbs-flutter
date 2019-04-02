@@ -22,8 +22,7 @@ Effect<PageState> buildEffect() {
   });
 }
 
-void _dispose(Action action, Context<PageState> ctx) {
-}
+void _dispose(Action action, Context<PageState> ctx) {}
 
 void _init(Action action, Context<PageState> ctx) {
   EventBusHelper.on<CommentCountChangedEvent>().listen((event) {
@@ -33,16 +32,19 @@ void _init(Action action, Context<PageState> ctx) {
     _onLoadData(action, ctx);
   });
   EventBusHelper.on<LoadLocalIssueEvent>().listen((event) {
-    _loadCache(ctx, ctx.state.list.length);
+    _loadCache(action, ctx, ctx.state.list.length);
   });
-  _loadCache(ctx, 20);
+  _loadCache(action, ctx, 20);
 }
 
-void _loadCache(Context<PageState> ctx, int size) {
+void _loadCache(Action action, Context<PageState> ctx, int size) async {
   var db = GitIssueDataBase.createInstance();
-  db.getList(size: size).then((initToDos) {
+  var initToDos = await db.getList(size: size);
+  if (initToDos.data.isEmpty) {
+    _onLoadData(action, ctx);
+  } else {
     ctx.dispatch(PageInnerActionCreator.loadInitData(initToDos.data));
-  });
+  }
 }
 
 void _onLoadMiddleData(Action action, Context<PageState> ctx) async {

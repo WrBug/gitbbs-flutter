@@ -43,13 +43,11 @@ class MmkvChannel {
     }
   }
 
-  Future saveUser(GitUser user) async {
+   saveUser(GitUser user) async {
     try {
-      String result = await platform
+     await platform
           .invokeMethod('saveUser', {'user': user?.toJsonString()});
-      return result;
     } on PlatformException {
-      return Future.value();
     }
   }
 }

@@ -7,6 +7,9 @@ import io.flutter.plugin.common.MethodChannel
 
 abstract class FlutterChannel {
     companion object {
+        /// 修改以下参数，务必将flutter和iOS相应值也修改， 建议保持默认
+        /// iOS ： ios/Runner/FlutterBridge/FlutterChannel.swift
+        /// flutter：lib/constant/NativeBridgeConstant.dart
         private const val prefix = "com.wrbug.gitbbs"
     }
 
@@ -15,7 +18,6 @@ abstract class FlutterChannel {
     }
 
     fun inject(messenger: BinaryMessenger) {
-        Log.i("aaaaaa", "注入${getChannel()}")
         MethodChannel(messenger, prefix + "/" + getChannel()).setMethodCallHandler(handler)
     }
 

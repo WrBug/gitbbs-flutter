@@ -8,6 +8,10 @@
 
 import Foundation
 import Flutter
+
+/// 修改以下参数，务必将flutter和iOS相应值也修改， 建议保持默认
+/// android ： android/app/src/main/kotlin/com/wrbug/gitbbs/flutterbridge/FlutterChannel.kt
+/// flutter：lib/constant/NativeBridgeConstant.dart
 let prefix:String="com.wrbug.gitbbs";
 class FlutterChannel {
     

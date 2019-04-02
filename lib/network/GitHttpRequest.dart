@@ -30,6 +30,8 @@ abstract class GitHttpRequest {
 
   Future<bool> signIn(String username, String password);
 
+  Future starRepo(String owner, String repoName);
+
   Future<GitComment> addComment(String issueId, String body);
 
   Future<bool> modifyComment(String commentId, String body);

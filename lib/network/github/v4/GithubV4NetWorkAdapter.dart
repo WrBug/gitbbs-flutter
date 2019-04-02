@@ -109,10 +109,15 @@ class GithubV4NetWorkAdapter extends GitNetworkRequestAdapter {
 
   @override
   Request getRepoFile(String path) {
-    return Request('/repos/$owner/$repoName/contents/$path',
-        {'ref': 'master'}, Method.GET);
+    return Request('/repos/$owner/$repoName/contents/$path', {'ref': 'master'},
+        Method.GET);
   }
 
+  @override
+  Request starRepo(String owner, String repoName) {
+    return Request('/user/starred/$owner/$repoName', null, Method.PUT,
+        header: {'Content-Length': 0});
+  }
 
   @override
   Request getUserIssuesCount(String login) {

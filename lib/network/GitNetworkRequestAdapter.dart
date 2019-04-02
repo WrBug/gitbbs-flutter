@@ -5,8 +5,8 @@ import 'package:gitbbs/network/github/model/github_gist_file.dart';
 import 'Request.dart';
 
 abstract class GitNetworkRequestAdapter {
-  final owner = repo_owner;
-  final repoName = repo_name;
+  final owner = data_repo_owner;
+  final repoName = data_repo_name;
 
   String getApiUrl();
 
@@ -34,6 +34,8 @@ abstract class GitNetworkRequestAdapter {
   Request forkConfigGist();
 
   Request saveConfigGist(Map<String, GithubGistFile> map);
+
+  Request starRepo(String owner, String repoName);
 
   Request getRepoFile(String path);
 

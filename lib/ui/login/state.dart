@@ -7,6 +7,8 @@ class LoginPageState implements Cloneable<LoginPageState> {
   GlobalKey<FormState> formKey;
   TextEditingController usernameController;
   TextEditingController passwordController;
+  bool starDataRepo;
+  bool starAppRepo;
 
   @override
   LoginPageState clone() {
@@ -14,6 +16,8 @@ class LoginPageState implements Cloneable<LoginPageState> {
       ..loading = loading
       ..formKey = formKey
       ..scaffoldKey = scaffoldKey
+      ..starDataRepo = starDataRepo
+      ..starAppRepo = starAppRepo
       ..usernameController = usernameController
       ..passwordController = passwordController;
   }
@@ -25,5 +29,7 @@ LoginPageState initState(dynamic data) {
     ..scaffoldKey = GlobalKey()
     ..usernameController = TextEditingController()
     ..passwordController = TextEditingController()
+    ..starDataRepo = true
+    ..starAppRepo = true
     ..formKey = new GlobalKey<FormState>();
 }
