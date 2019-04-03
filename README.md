@@ -24,7 +24,7 @@
 
 ##### Android 下载
 
-[https://github.com/gitbbsgroup/gitbbs-forum/releases](https://github.com/gitbbsgroup/gitbbs-forum/releases)
+[https://github.com/WrBug/gitbbs-flutter/releases](https://github.com/WrBug/gitbbs-flutter/releases)
 
 ##### iOS 下载
 
